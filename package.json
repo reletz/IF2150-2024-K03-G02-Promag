@@ -1,0 +1,19 @@
+{
+  "name": "if2150-2024-k03-g02-promag",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "if2150-2024-k03-g02-promag": "file:"
+  }
+}

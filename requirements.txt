@@ -1,0 +1,2 @@
+npm install electron --save-dev
+npm install tailwindcss postcss autoprefixer
