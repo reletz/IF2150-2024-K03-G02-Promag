@@ -1,19 +1,23 @@
 {
-  "name": "if2150-2024-k03-g02-promag",
+  "name": "promag",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
+  "description": "Aplikasi Electron dengan Tailwind CSS",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "build:css": "npx tailwindcss -i ./src/style.css -o ./src/dist/style.css --watch"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "electron": "^33.2.1"
+  },
   "dependencies": {
-    "if2150-2024-k03-g02-promag": "file:"
+    "autoprefixer": "^10.4.20",
+    "IF2150-2024-K03-G02_PROMAG": "file:",
+    "postcss": "^8.4.49",
+    "promag": "file:",
+    "PROMAG": "file:",
+    "tailwindcss": "^3.4.16"
   }
 }
