@@ -1,0 +1,23 @@
+{
+  "name": "promag",
+  "version": "1.0.0",
+  "description": "Aplikasi Electron dengan Tailwind CSS",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron .",
+    "build:css": "npx tailwindcss -i ./src/style.css -o ./src/dist/style.css --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^33.2.1"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.20",
+    "IF2150-2024-K03-G02_PROMAG": "file:",
+    "postcss": "^8.4.49",
+    "promag": "file:",
+    "PROMAG": "file:",
+    "tailwindcss": "^3.4.16"
+  }
+}
