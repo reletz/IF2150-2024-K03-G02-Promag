@@ -4,14 +4,12 @@
 <br />
 <div align="center">
   <a href="https://github.com/reletz/IF2150-2024-K03-G02-Promag">
-    <img src="assets/PromagLogo.png" alt="Logo" width="80" height="80">
+    <img src="assets/PromagLogo.png" alt="Logo" width="233" height="124">
   </a>
 
 <h3 align="center">IF2150-2024-K03-G02_PROMAG</h3>
 
   <p align="center">
-    
-    <br />
   </p>
 </div>
 
@@ -22,7 +20,7 @@ Promag adalah aplikasi manajemen proyek yang dirancang untuk membantu dalam peng
 
 ### Built With
 
-- [![Electron][Electron.js]][Electron-url]
+[![Electron][Electron.js]][Electron-url]
 
 <!-- GETTING STARTED -->
 
@@ -45,8 +43,7 @@ Promag adalah aplikasi manajemen proyek yang dirancang untuk membantu dalam peng
    ```sh
    npm install
    ```
-3. Run program
-    With hot reload:
+3. Run program<br> With hot reload:
     ```sh
     npm run dev
     ```
