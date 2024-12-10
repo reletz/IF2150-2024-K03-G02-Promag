@@ -52,7 +52,7 @@ Promag adalah aplikasi manajemen proyek yang dirancang untuk membantu dalam peng
     npm start
     ```
 
-### Contributors:
+## Contributors:
 
 1. Dita Maheswari (13523125)
 2. Samantha Laqueenna (13523138)
