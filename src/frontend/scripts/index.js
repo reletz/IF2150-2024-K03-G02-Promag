@@ -1,6 +1,6 @@
-// tugaspage.js
+// renderer.js
 
-import { createButton } from "./components/Button.js";
+import { createButton } from "../components/Button.js";
 
 function navigateToProyekPage() {
   window.electronAPI.navigateToProyekPage();
@@ -8,6 +8,6 @@ function navigateToProyekPage() {
 
 // ===== BUTTON: NAVIGATE TO PROYEK PAGE =====
 const mainButtonContainer = document.getElementById("navigate-to-proyekpage-button");
-const backButton = createButton("Back to Proyek Page", navigateToProyekPage, "large");
+const backButton = createButton("Go to Proyek Page", navigateToProyekPage, "large");
 
 mainButtonContainer.appendChild(backButton);

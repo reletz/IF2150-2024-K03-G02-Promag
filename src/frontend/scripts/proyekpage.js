@@ -1,6 +1,4 @@
-// tugaspage.js
-
-import { createButton } from "./components/Button.js";
+import { createButton } from "../components/Button.js";
 
 function navigateToMainPage() {
   window.electronAPI.navigateToMainPage();
