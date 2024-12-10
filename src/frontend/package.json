@@ -2,7 +2,7 @@
   "name": "promag",
   "version": "1.0.0",
   "description": "Aplikasi Electron dengan Tailwind CSS",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "electron .",
     "build:css": "npx tailwindcss -i ./src/style.css -o ./src/dist/style.css --watch"
