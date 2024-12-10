@@ -1,10 +1,10 @@
-// index.js (Main Process)
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, globalShortcut } = require("electron");
 const path = require("path");
 
 // Enable electron-reload for hot reloading
-require('electron-reload')(__dirname, {
-  electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+require("electron-reload")(__dirname, {
+  electron: path.join(__dirname, "node_modules", ".bin", "electron"),
+  hardResetMethod: "exit",
 });
 
 let mainWindow;
@@ -14,7 +14,7 @@ function createWindow() {
     width: 1920,
     height: 1080,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"), // Ensure correct path
+      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
     },
@@ -23,11 +23,29 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+
+  // Register a global shortcut to reload the window
+  globalShortcut.register("CommandOrControl+R", () => {
+    if (mainWindow) {
+      mainWindow.reload();
+    }
+  });
+});
+
+app.on("will-quit", () => {
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll();
+});
 
 // Handle IPC messages for navigation
 ipcMain.on("navigate-to-tugaspage", () => {
   mainWindow.loadFile("tugaspage.html");
+});
+
+ipcMain.on("navigate-to-proyekpage", () => {
+  mainWindow.loadFile("proyekpage.html");
 });
 
 ipcMain.on("navigate-to-main", () => {

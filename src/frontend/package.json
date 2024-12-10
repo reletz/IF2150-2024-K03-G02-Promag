@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "build:css": "npx tailwindcss -i ./src/style.css -o ./src/dist/style.css --watch",
-    "dev": "nodemon --watch . --exec \"electron .\""
+    "dev": "nodemon --watch main.js --exec \"electron .\""
   },
   "author": "",
   "license": "ISC",

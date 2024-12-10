@@ -63,3 +63,18 @@ p {
 .custom-button:hover {
   background-color: #bfdcae;
 }
+
+.custom-button.small {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.custom-button.medium {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.custom-button.large {
+  padding: 16px 32px;
+  font-size: 18px;
+}

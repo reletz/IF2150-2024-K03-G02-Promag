@@ -2,16 +2,12 @@
 
 import { createButton } from "./components/Button.js";
 
-function navigateToTugasPage() {
-  window.electronAPI.navigateToTugasPage();
+function navigateToProyekPage() {
+  window.electronAPI.navigateToProyekPage();
 }
 
-// ===== NAVIGATE TO TUGAS PAGE BUTTON =====
-const buttonContainer = document.getElementById("go-to-tugaspage-button");
-const navigateButton = createButton("Go to Tugas Page");
+// ===== BUTTON: NAVIGATE TO PROYEK PAGE =====
+const mainButtonContainer = document.getElementById("navigate-to-proyekpage-button");
+const backButton = createButton("Go to Proyek Page", navigateToProyekPage, "large");
 
-navigateButton.addEventListener("click", () => {
-  navigateToTugasPage();
-});
-
-buttonContainer.appendChild(navigateButton);
+mainButtonContainer.appendChild(backButton);

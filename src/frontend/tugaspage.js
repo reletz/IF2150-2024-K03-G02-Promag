@@ -2,16 +2,12 @@
 
 import { createButton } from "./components/Button.js";
 
-function navigateToMainPage() {
-  window.electronAPI.navigateToMainPage();
+function navigateToProyekPage() {
+  window.electronAPI.navigateToProyekPage();
 }
 
-// ===== NAVIGATE TO MAIN BUTTON =====
-const buttonContainer = document.getElementById("back-to-main-button");
-const backButton = createButton("Go to Main Page");
+// ===== BUTTON: NAVIGATE TO PROYEK PAGE =====
+const mainButtonContainer = document.getElementById("navigate-to-proyekpage-button");
+const backButton = createButton("Back to Proyek Page", navigateToProyekPage, "large");
 
-backButton.addEventListener("click", () => {
-  navigateToMainPage();
-});
-
-buttonContainer.appendChild(backButton);
+mainButtonContainer.appendChild(backButton);
