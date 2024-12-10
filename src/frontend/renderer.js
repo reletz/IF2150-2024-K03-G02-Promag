@@ -1,10 +1,17 @@
-import { createButton } from './components/Button.js';
+// renderer.js
 
-const buttonContainer = document.getElementById('button-1');
-const button = createButton('Click Me');
+import { createButton } from "./components/Button.js";
 
-button.addEventListener('click', () => {
-  console.log('Button clicked!');
+function navigateToTugasPage() {
+  window.electronAPI.navigateToTugasPage();
+}
+
+// ===== NAVIGATE TO TUGAS PAGE BUTTON =====
+const buttonContainer = document.getElementById("go-to-tugaspage-button");
+const navigateButton = createButton("Go to Tugas Page");
+
+navigateButton.addEventListener("click", () => {
+  navigateToTugasPage();
 });
 
-buttonContainer.appendChild(button);
+buttonContainer.appendChild(navigateButton);
