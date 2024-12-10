@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-button {
+    background-color: #D1EECC;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 9999px; /* Fully rounded corners */
+    cursor: pointer;
+    font-size: 16px;
+  }
