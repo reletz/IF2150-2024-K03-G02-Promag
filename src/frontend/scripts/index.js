@@ -147,6 +147,16 @@ function renderPaginationControls(currentPage) {
     });
 
     paginationContainer.appendChild(nextButton);
+
+    const addProyekButon = document.createElement("button");
+    addProyekButon.textContent = "Add Project";
+    addProyekButon.className = "pagination-button";
+
+    addProyekButon.addEventListener("click", () => {
+      window.location.href = `addproyek.html?`;
+    });
+
+    paginationContainer.appendChild(addProyekButon);
   }
 }
 
