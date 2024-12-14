@@ -8,10 +8,12 @@
  */
 export function createButton(text, onClick, size = "medium") {
   const button = document.createElement("button");
-  button.className = `custom-button ${size}`.trim();
+  button.className = `custom-button ${size}`.trim(); // Corrected line
   button.textContent = text;
+
   if (onClick && typeof onClick === "function") {
     button.addEventListener("click", onClick);
   }
+
   return button;
 }
