@@ -1,6 +1,6 @@
-// preload.js
+// src/frontend/preload.js
 
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld("electronAPI", {
   navigateToTugasPage: () => ipcRenderer.send("navigate-to-tugaspage"),

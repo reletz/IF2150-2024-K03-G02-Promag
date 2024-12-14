@@ -1,11 +1,333 @@
-import { createButton } from "../components/buttonComponent.js";
+// src/frontend/scripts/tugaspage.js
 
-function navigateToProyekPage() {
-  window.electronAPI.navigateToProyekPage();
+import { createButton, createDropdown } from "../components/buttonComponent.js";
+
+// ===== NAVIGATION FUNCTIONS =====
+function navigateBackToProjectPage() {
+  if (currentProjectId !== null) {
+    window.location.href = `proyekpage.html?id=${currentProjectId}`;
+  } else {
+    console.error("Current Project ID is not set.");
+    alert("Cannot navigate back. Project ID is missing.");
+  }
 }
 
-// ===== BUTTON: NAVIGATE TO PROYEK PAGE =====
-const proyekButtonContainer = document.getElementById("navigate-to-proyekpage-button");
-const backButton = createButton("Back to Proyek Page", navigateToProyekPage, "large");
+let currentProjectId = null;
+let currentTaskId = null;
 
-proyekButtonContainer.appendChild(backButton);
+// ===== RENDER TASK DETAILS =====
+async function renderTaskDetails() {
+  const params = new URLSearchParams(window.location.search);
+  const projectId = parseInt(params.get("projectId"), 10); // Changed from "id" to "projectId"
+  const taskId = parseInt(params.get("taskId"), 10);
+
+  // Debugging: Log the retrieved parameters
+  console.log(`Retrieved projectId: ${projectId}, taskId: ${taskId}`);
+
+  if (isNaN(projectId) || isNaN(taskId)) {
+    console.error("Invalid or missing project/task ID in the URL.");
+    displayErrorMessage("Invalid project or task ID specified.");
+    return;
+  }
+
+  const data = await window.electronAPI.getProjectData();
+
+  const project = data.projects.find((proj) => proj.id === projectId);
+  if (!project) {
+    console.error(`Project with ID "${projectId}" not found.`);
+    displayErrorMessage("Project not found.");
+    return;
+  }
+
+  const task = project.tasks.find((t) => t.id === taskId);
+  if (!task) {
+    console.error(`Task with ID "${taskId}" not found.`);
+    displayErrorMessage("Task not found.");
+    return;
+  }
+
+  currentProjectId = project.id;
+  currentTaskId = task.id;
+
+  displayHeader(task);
+  displayBody(task);
+  displayFooter(task);
+}
+
+// ===== DISPLAY HEADER =====
+function displayHeader(task) {
+  const header = document.getElementById("header");
+
+  // Clear any existing content
+  header.innerHTML = "";
+
+  const headerTitle = document.createElement("h1");
+  headerTitle.textContent = task.title;
+
+  header.appendChild(headerTitle);
+
+  // Deadline Capsule
+  const deadlineCapsule = document.createElement("div");
+  deadlineCapsule.classList.add("deadline-capsule");
+  // Format deadline date and time
+  const deadline = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
+  deadlineCapsule.textContent = `Deadline: ${deadline.toLocaleDateString()} ${deadline.toLocaleTimeString()}`;
+  header.appendChild(deadlineCapsule);
+
+  // Priority Dropdown
+  const priorityDropdown = document.createElement("div");
+  priorityDropdown.classList.add("priorityDropdown");
+
+  const priorities = ["High", "Medium", "Low"];
+  const prioritySelect = createDropdown(
+    "prioritySelect",
+    priorities,
+    task.priority.charAt(0).toUpperCase() + task.priority.slice(1)
+  );
+  prioritySelect.addEventListener("change", (e) => {
+    const newPriority = e.target.value.toLowerCase();
+    updateTaskPriority(newPriority);
+  });
+  priorityDropdown.appendChild(prioritySelect);
+  header.appendChild(priorityDropdown);
+
+  // Status Display
+  const statusDisplay = document.createElement("div");
+  statusDisplay.classList.add("statusDisplay");
+
+  const statuses = ["Not Started", "On Progress", "Finished"];
+  const statusSelect = createDropdown("statusSelect", statuses, task.complete ? "Finished" : "On Progress");
+  statusSelect.addEventListener("change", (e) => {
+    const newStatus = e.target.value;
+    updateTaskStatus(newStatus);
+  });
+  statusDisplay.appendChild(statusSelect);
+  header.appendChild(statusDisplay);
+}
+
+// ===== DISPLAY BODY =====
+function displayBody(task) {
+  const bodySection = document.getElementById("body-section");
+
+  // ===== COMMENTS DISPLAY =====
+  const commentsDisplay = document.createElement("div");
+  commentsDisplay.classList.add("commentsDisplay");
+  commentsDisplay.id = "commentsDisplay";
+
+  if (task.comments && task.comments.length > 0) {
+    task.comments.forEach((comment, index) => {
+      const commentDiv = document.createElement("div");
+      commentDiv.classList.add("comment");
+      commentDiv.textContent = `${index + 1}. ${comment}`;
+      commentsDisplay.appendChild(commentDiv);
+    });
+  } else {
+    const noComments = document.createElement("p");
+    noComments.textContent = "No comments yet.";
+    commentsDisplay.appendChild(noComments);
+  }
+
+  bodySection.appendChild(commentsDisplay);
+
+  // ===== ADD COMMENT =====
+  const insertComment = document.createElement("div");
+  insertComment.classList.add("insertComment");
+
+  const textarea = document.createElement("textarea");
+  textarea.id = "newComment";
+  textarea.placeholder = "Add a comment...";
+  insertComment.appendChild(textarea);
+
+  bodySection.appendChild(insertComment);
+
+  const addCommentButton = document.createElement("div");
+  addCommentButton.classList.add("addCommentButton");
+
+  const addCommentBtn = document.createElement("button");
+  addCommentBtn.id = "addCommentBtn";
+  addCommentBtn.classList.add("custom-button", "small");
+  addCommentBtn.textContent = "Add Comment";
+  addCommentButton.appendChild(addCommentBtn);
+
+  bodySection.appendChild(addCommentButton);
+
+  // ===== ADD COMMENT EVENT LISTENER =====
+  addCommentBtn.addEventListener("click", () => {
+    const newCommentInput = document.getElementById("newComment");
+    const newComment = newCommentInput.value.trim();
+    if (newComment === "") {
+      alert("Please enter a comment.");
+      return;
+    }
+    addComment(newComment);
+    newCommentInput.value = "";
+  });
+}
+
+// ===== DISPLAY FOOTER =====
+function displayFooter(task) {
+  const footer = document.getElementById("footer");
+
+  // Clear any existing content
+  footer.innerHTML = "";
+
+  const footerRow = document.createElement("div");
+  footerRow.classList.add("row");
+
+  // ===== DELETE TASK BUTTON =====
+  const deleteTugasDiv = document.createElement("div");
+  deleteTugasDiv.classList.add("deleteTugas");
+
+  const deleteButton = createButton("DELETE TASK", deleteTask, "medium");
+  deleteTugasDiv.appendChild(deleteButton);
+
+  // ===== UPLOAD DOCUMENT BUTTON =====
+  const uploadDocumentDiv = document.createElement("div");
+  uploadDocumentDiv.classList.add("uploadDocument");
+
+  const uploadButton = createButton("UPLOAD DOCUMENT", uploadDocument, "medium");
+  uploadDocumentDiv.appendChild(uploadButton);
+
+  // ===== BACK TO PROJECT BUTTON =====
+  const backButtonContainer = document.createElement("div");
+  backButtonContainer.id = "backButtonContainer";
+
+  const backButton = createButton("BACK TO PROJECT", navigateBackToProjectPage, "medium");
+  backButtonContainer.appendChild(backButton);
+
+  footerRow.appendChild(deleteTugasDiv);
+  footerRow.appendChild(uploadDocumentDiv);
+  footerRow.appendChild(backButtonContainer);
+
+  footer.appendChild(footerRow);
+}
+
+// ===== ADD COMMENT =====
+async function addComment(comment) {
+  try {
+    const response = await window.electronAPI.addCommentToTask(currentProjectId, currentTaskId, comment);
+    if (response.success) {
+      const data = await window.electronAPI.getProjectData();
+      const project = data.projects.find((proj) => proj.id === currentProjectId);
+      const task = project.tasks.find((t) => t.id === currentTaskId);
+      updateCommentsDisplay(task);
+    } else {
+      alert(response.message || "Failed to add comment.");
+    }
+  } catch (error) {
+    console.error("Error adding comment:", error);
+  }
+}
+
+// ===== UPDATE COMMENTS DISPLAY =====
+function updateCommentsDisplay(task) {
+  const commentsDisplay = document.getElementById("commentsDisplay");
+  commentsDisplay.innerHTML = ""; // Clear existing comments
+
+  if (task.comments && task.comments.length > 0) {
+    task.comments.forEach((comment, index) => {
+      const commentDiv = document.createElement("div");
+      commentDiv.classList.add("comment");
+      commentDiv.textContent = `${index + 1}. ${comment}`;
+      commentsDisplay.appendChild(commentDiv);
+    });
+  } else {
+    const noComments = document.createElement("p");
+    noComments.textContent = "No comments yet.";
+    commentsDisplay.appendChild(noComments);
+  }
+}
+
+// ===== UPDATE TASK PRIORITY =====
+async function updateTaskPriority(newPriority) {
+  try {
+    const response = await window.electronAPI.updateTaskPriority(currentProjectId, currentTaskId, newPriority);
+    if (!response.success) {
+      alert(response.message || "Failed to update priority.");
+    } else {
+      // Optionally, update the priority display or notify the user
+      console.log("Priority updated successfully.");
+    }
+  } catch (error) {
+    console.error("Error updating priority:", error);
+  }
+}
+
+// ===== UPDATE TASK STATUS =====
+async function updateTaskStatus(newStatus) {
+  const isComplete = newStatus === "Finished";
+  try {
+    const response = await window.electronAPI.updateTaskStatus(currentProjectId, currentTaskId, isComplete);
+    if (!response.success) {
+      alert(response.message || "Failed to update status.");
+    } else {
+      // Optionally, update the status display or notify the user
+      console.log("Status updated successfully.");
+    }
+  } catch (error) {
+    console.error("Error updating status:", error);
+  }
+}
+
+// ===== DELETE TASK =====
+async function deleteTask() {
+  const confirmDelete = confirm("Are you sure you want to delete this task?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await window.electronAPI.deleteTask(currentProjectId, currentTaskId);
+    if (response.success) {
+      alert("Task deleted successfully.");
+      navigateBackToProjectPage();
+    } else {
+      alert(response.message || "Failed to delete task.");
+    }
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    alert("Failed to delete task.");
+  }
+}
+
+// ===== UPLOAD DOCUMENT =====
+async function uploadDocument() {
+  try {
+    const result = await window.electronAPI.openFileDialog();
+    if (result && result.filePaths && result.filePaths.length > 0) {
+      const filePath = result.filePaths[0];
+      const response = await window.electronAPI.uploadDocumentToTask(currentProjectId, currentTaskId, filePath);
+
+      if (response.success) {
+        alert("Document uploaded successfully.");
+        // Optionally, update the UI to reflect the uploaded document
+      } else {
+        alert(response.message || "Failed to upload document.");
+      }
+    } else {
+      console.log("File selection was canceled.");
+    }
+  } catch (error) {
+    console.error("Error uploading document:", error);
+    alert("Failed to upload document.");
+  }
+}
+
+// ===== DISPLAY ERROR MESSAGE =====
+function displayErrorMessage(message) {
+  const header = document.getElementById("header");
+  header.innerHTML = "";
+
+  const errorMsg = document.createElement("p");
+  errorMsg.textContent = message;
+  errorMsg.style.color = "red";
+  errorMsg.style.fontSize = "18px";
+  errorMsg.style.textAlign = "center";
+  errorMsg.style.marginTop = "20px";
+
+  header.appendChild(errorMsg);
+}
+
+// ===== INITIALIZE =====
+document.addEventListener("DOMContentLoaded", () => {
+  // Render Task Details (Header, Body, Footer)
+  renderTaskDetails();
+});
