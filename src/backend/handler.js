@@ -3,7 +3,6 @@
 const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs").promises;
-const fsSync = require("fs");
 
 let mainWindow;
 
@@ -192,6 +191,18 @@ ipcMain.handle("update-task-status", async (event, { projectId, taskId, isComple
   return { success: false, message: "Project or Task not found." };
 });
 
+// Add Task
+ipcMain.handle("add-task", async (event, projectId, task) => {
+  const data = await loadData();
+  const project = data.projects.find((p) => p.id === projectId);
+  if (project) {
+    project.tasks.push(task);
+    await saveData(data);
+    return { success: true };
+  }
+  return { success: false, message: "Project not found." };
+});
+
 // Delete Task
 ipcMain.handle("delete-task", async (event, { projectId, taskId }) => {
   const data = await loadData();
@@ -253,6 +264,35 @@ ipcMain.handle("upload-document", async (event, { projectId, taskId, filePath })
     console.error("Error uploading document:", error);
     return { success: false, message: "Failed to upload document." };
   }
+});
+
+ipcMain.handle("add-project", async (event, project) => {
+  const data = await loadData();
+  data.projects.push(project);
+  await saveData(data);
+  return { success: true };
+});
+
+ipcMain.handle("edit-project", async (event, project) => {
+  const data = await loadData();
+  const index = data.projects.findIndex((p) => p.id === project.id);
+  if (index !== -1) {
+    data.projects[index] = project;
+    await saveData(data);
+    return { success: true };
+  }
+  return { success: false, message: "Project not found." };
+});
+
+ipcMain.handle("delete-project", async (event, projectId) => {
+  const data = await loadData();
+  const index = data.projects.findIndex((p) => p.id === projectId);
+  if (index !== -1) {
+    data.projects.splice(index, 1);
+    await saveData(data);
+    return { success: true };
+  }
+  return { success: false, message: "Project not found." };
 });
 
 module.exports = {
