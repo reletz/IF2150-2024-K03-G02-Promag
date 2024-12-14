@@ -15,5 +15,6 @@
     "nodemon": "^3.1.7"
   },
   "dependencies": {
+    "promag": "file:"
   }
 }
