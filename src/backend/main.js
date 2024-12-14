@@ -174,22 +174,33 @@ ipcMain.handle("update-task-priority", async (event, { projectId, taskId, priori
 });
 
 // Update Task Status
-ipcMain.handle("update-task-status", async (event, { projectId, taskId, isComplete }) => {
-  if (typeof isComplete !== "boolean") {
-    return { success: false, message: "Invalid status value." };
-  }
+ipcMain.handle("update-task-status", async (event, { projectId, taskId, newStatus }) => {
+  try {
+    const data = await loadData(); // Function to load data.json
 
-  const data = await loadData();
-  const project = data.projects.find((p) => p.id === projectId);
-  if (project) {
-    const task = project.tasks.find((t) => t.id === taskId);
-    if (task) {
-      task.complete = isComplete;
-      await saveData(data);
-      return { success: true };
+    const project = data.projects.find((p) => p.id === projectId);
+    if (!project) {
+      return { success: false, message: "Project not found." };
     }
+
+    const task = project.tasks.find((t) => t.id === taskId);
+    if (!task) {
+      return { success: false, message: "Task not found." };
+    }
+
+    if (![0, 1, 2].includes(newStatus)) {
+      return { success: false, message: "Invalid status value." };
+    }
+
+    task.complete = newStatus;
+
+    await saveData(data); // Function to save data.json
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating task status:", error);
+    return { success: false, message: "Failed to update task status." };
   }
-  return { success: false, message: "Project or Task not found." };
 });
 
 // Delete Task

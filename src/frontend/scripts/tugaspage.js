@@ -18,10 +18,9 @@ let currentTaskId = null;
 // ===== RENDER TASK DETAILS =====
 async function renderTaskDetails() {
   const params = new URLSearchParams(window.location.search);
-  const projectId = parseInt(params.get("projectId"), 10); // Changed from "id" to "projectId"
+  const projectId = parseInt(params.get("projectId"), 10);
   const taskId = parseInt(params.get("taskId"), 10);
 
-  // Debugging: Log the retrieved parameters
   console.log(`Retrieved projectId: ${projectId}, taskId: ${taskId}`);
 
   if (isNaN(projectId) || isNaN(taskId)) {
@@ -75,7 +74,6 @@ function displayHeader(task) {
 
   const deadlineCapsule = document.createElement("span");
   deadlineCapsule.classList.add("date-capsule");
-  // Format deadline date and time
   const deadlineDate = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
   deadlineCapsule.textContent = `Deadline: ${deadlineDate.toLocaleDateString()} ${deadlineDate.toLocaleTimeString()}`;
 
@@ -101,10 +99,14 @@ function displayHeader(task) {
   const progressDropdown = document.createElement("div");
   progressDropdown.classList.add("progressDropdown");
 
-  const statuses = ["Not Started", "On Progress", "Finished"];
-  const statusSelect = createDropdown("statusSelect", statuses, task.complete ? "Finished" : "On Progress");
+  const statuses = [
+    { label: "Not Started", value: 0 },
+    { label: "On Progress", value: 1 },
+    { label: "Finished", value: 2 },
+  ];
+  const statusSelect = createDropdownWithValues("statusSelect", statuses, task.complete);
   statusSelect.addEventListener("change", (e) => {
-    const newStatus = e.target.value;
+    const newStatus = parseInt(e.target.value, 10);
     updateTaskStatus(newStatus);
   });
   progressDropdown.appendChild(statusSelect);
@@ -120,7 +122,7 @@ function displayHeader(task) {
   row.appendChild(deadline);
   row.appendChild(priorityDropdown);
   row.appendChild(progressDropdown);
-  row.appendChild(backButtonDiv); // Append Back Button to the same row
+  row.appendChild(backButtonDiv);
 
   // ===== Title =====
   const titleContainer = document.createElement("div");
@@ -147,6 +149,25 @@ function displayHeader(task) {
 
   // Append Header Container to Main Header
   header.appendChild(headerContainer);
+}
+
+// ===== CREATE DROPDOWN WITH VALUES =====
+function createDropdownWithValues(id, options, selectedValue) {
+  const select = document.createElement("select");
+  select.id = id;
+  select.classList.add("dropdown");
+
+  options.forEach((option) => {
+    const opt = document.createElement("option");
+    opt.value = option.value;
+    opt.textContent = option.label;
+    if (option.value === selectedValue) {
+      opt.selected = true;
+    }
+    select.appendChild(opt);
+  });
+
+  return select;
 }
 
 // ===== DISPLAY BODY =====
@@ -227,13 +248,15 @@ function displayFooter(task) {
   footer.innerHTML = "";
 
   const footerRow = document.createElement("div");
-  footerRow.classList.add("row", "footerRow"); // Added 'footerRow' class for specific styling
+  footerRow.classList.add("row", "footerRow");
 
   // ===== DELETE TASK BUTTON =====
   const deleteTugasDiv = document.createElement("div");
   deleteTugasDiv.classList.add("deleteTugas");
 
   const deleteButton = createLightButton("DELETE TASK", deleteTask, "medium");
+  deleteButton.style.backgroundColor = "red"; // Red background
+  deleteButton.style.color = "white"; // White text
   deleteTugasDiv.appendChild(deleteButton);
 
   // ===== DOCUMENT BUTTON =====
@@ -264,7 +287,7 @@ function displayFooter(task) {
     // Extract the filename using JavaScript string methods
     const fileName = task.documentSrc.split("/").pop();
     uploadedFileLink.textContent = fileName;
-    uploadedFileLink.style.color = "black"; // Set font color to black for readability
+    uploadedFileLink.style.color = "black"; // Black font
 
     uploadedFileLink.addEventListener("click", () => downloadDocument(task.documentSrc));
 
@@ -274,7 +297,7 @@ function displayFooter(task) {
   // ===== APPEND TO FOOTER ROW =====
   footerRow.appendChild(deleteTugasDiv);
   footerRow.appendChild(documentDiv);
-  footerRow.appendChild(uploadedDocumentDiv); // Append uploaded document to the footer row
+  footerRow.appendChild(uploadedDocumentDiv);
 
   footer.appendChild(footerRow);
 }
@@ -422,7 +445,6 @@ async function updateTaskPriority(newPriority) {
     if (!response.success) {
       alert(response.message || "Failed to update priority.");
     } else {
-      // Optionally, update the priority display or notify the user
       console.log("Priority updated successfully.");
     }
   } catch (error) {
@@ -432,13 +454,12 @@ async function updateTaskPriority(newPriority) {
 
 // ===== UPDATE TASK STATUS =====
 async function updateTaskStatus(newStatus) {
-  const isComplete = newStatus === "Finished";
   try {
-    const response = await window.electronAPI.updateTaskStatus(currentProjectId, currentTaskId, isComplete);
+    const response = await window.electronAPI.updateTaskStatus(currentProjectId, currentTaskId, newStatus);
+
     if (!response.success) {
       alert(response.message || "Failed to update status.");
     } else {
-      // Optionally, update the status display or notify the user
       console.log("Status updated successfully.");
     }
   } catch (error) {
@@ -482,6 +503,5 @@ function displayErrorMessage(message) {
 
 // ===== INITIALIZE =====
 document.addEventListener("DOMContentLoaded", () => {
-  // Render Task Details (Header, Body, Footer)
   renderTaskDetails();
 });
