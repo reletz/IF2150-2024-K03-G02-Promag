@@ -16,36 +16,16 @@ function navigateToTugasPage(projectId, taskId = null) {
 }
 
 // ===== BUTTON: NAVIGATE TO MAIN PAGE =====
-const mainButtonContainer = document.getElementById("navigate-to-main-button");
+const footer = document.getElementById("footer");
 const backButton = createButton("Back to Main Page", navigateToMainPage, "medium");
 
-if (mainButtonContainer) {
-  mainButtonContainer.appendChild(backButton);
+if (footer) {
+  footer.appendChild(backButton);
 } else {
-  console.error("Main Button Container not found.");
+  console.error("Footer Container not found.");
 }
 
-// ===== BUTTON: NAVIGATE TO TUGAS PAGE =====
-const tugasButtonContainer = document.getElementById("navigate-to-tugaspage-button");
 let currentProjectId = null;
-
-const navigateButton = createButton(
-  "Go to Tugas Page",
-  () => {
-    if (currentProjectId !== null) {
-      navigateToTugasPage(currentProjectId);
-    } else {
-      console.error("Current Project ID is not set.");
-    }
-  },
-  "medium"
-);
-
-if (tugasButtonContainer) {
-  tugasButtonContainer.appendChild(navigateButton);
-} else {
-  console.error("Tugas Button Container not found.");
-}
 
 // ===== RENDER PROJECT DETAILS =====
 async function renderProjectDetails() {
@@ -71,17 +51,16 @@ async function renderProjectDetails() {
   const latestDeadline = getLatestTaskDeadline(project.tasks);
   if (latestDeadline) {
     project.endDate = latestDeadline.toISOString().split("T")[0];
-    project.endTime = latestDeadline.toTimeString().split(" ")[0];
   } else {
     project.endDate = null;
-    project.endTime = null;
   }
 
   currentProjectId = project.id;
-  displayProjectDetails(project);
+  displayHeader(project);
+  displayTaskList(project);
 }
 
-// ===== GET LATEST TASK DEADLINE =====
+// ===== HELPER FUNCTION TO GET LATEST TASK DEADLINE =====
 function getLatestTaskDeadline(tasks) {
   if (!tasks || tasks.length === 0) return null;
 
@@ -94,11 +73,9 @@ function getLatestTaskDeadline(tasks) {
   return deadlines.reduce((latest, current) => (current > latest ? current : latest), deadlines[0]);
 }
 
-// ===== DISPLAY PROJECT DETAILS =====
-function displayProjectDetails(project) {
-  const container = document.getElementById("project-details");
-
-  container.innerHTML = "";
+// ===== DISPLAY HEADER =====
+function displayHeader(project) {
+  const header = document.getElementById("header");
 
   const title = document.createElement("h1");
   title.textContent = project.title;
@@ -109,28 +86,30 @@ function displayProjectDetails(project) {
   const endDate = document.createElement("p");
   endDate.textContent = `End Date: ${project.endDate || "Ongoing"}`;
 
-  const endTime = document.createElement("p");
-  endTime.textContent = `End Time: ${project.endTime || ""}`;
-
   const description = document.createElement("p");
   description.textContent = project.description;
 
-  container.appendChild(title);
-  container.appendChild(startDate);
-  container.appendChild(endDate);
-  container.appendChild(endTime);
-  container.appendChild(description);
+  header.appendChild(title);
+  header.appendChild(startDate);
+  header.appendChild(endDate);
+  header.appendChild(description);
+}
 
-  // ===== DISPLAY TASKS =====
+// ===== DISPLAY TASK LIST =====
+function displayTaskList(project) {
+  const taskList = document.getElementById("task-list");
+
   if (project.tasks && project.tasks.length > 0) {
     const tasksHeader = document.createElement("h2");
-    tasksHeader.textContent = "Tasks";
-    container.appendChild(tasksHeader);
+    tasksHeader.textContent = "Progress";
+    taskList.appendChild(tasksHeader);
 
-    const tasksList = document.createElement("ul");
+    const tasksContainer = document.createElement("div");
+    tasksContainer.classList.add("tasks-container");
 
     project.tasks.forEach((task) => {
-      const taskItem = document.createElement("li");
+      const taskItem = document.createElement("div");
+      taskItem.classList.add("task-item");
 
       const taskTitle = document.createElement("h3");
       taskTitle.textContent = task.title;
@@ -139,7 +118,7 @@ function displayProjectDetails(project) {
       taskDescription.textContent = task.description;
 
       const taskButton = createButton(
-        "View Task",
+        "Details",
         () => {
           navigateToTugasPage(project.id, task.id);
         },
@@ -150,26 +129,27 @@ function displayProjectDetails(project) {
       taskItem.appendChild(taskDescription);
       taskItem.appendChild(taskButton);
 
-      tasksList.appendChild(taskItem);
+      tasksContainer.appendChild(taskItem);
     });
 
-    container.appendChild(tasksList);
+    taskList.appendChild(tasksContainer);
   } else {
     const noTasks = document.createElement("p");
     noTasks.textContent = "No tasks for this project.";
-    container.appendChild(noTasks);
+    taskList.appendChild(noTasks);
   }
 }
 
+// ===== DISPLAY ERROR MESSAGE =====
 function displayErrorMessage(message) {
-  const container = document.getElementById("project-details");
-  container.innerHTML = "";
+  const header = document.getElementById("header");
+  header.innerHTML = "";
 
   const errorMsg = document.createElement("p");
   errorMsg.textContent = message;
   errorMsg.style.color = "red";
 
-  container.appendChild(errorMsg);
+  header.appendChild(errorMsg);
 }
 
 // ===== INITIALIZE =====
