@@ -2,9 +2,9 @@ import { createButton } from "../components/buttonComponent.js";
 
 // ===== HELPER FUNCTION TO FORMAT DATE =====
 function formatDate(dateString) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const options = { day: "numeric", month: "long", year: "numeric" };
   const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', options);
+  return date.toLocaleDateString("id-ID", options);
 }
 
 // ===== GLOBAL VARIABLES =====
@@ -27,9 +27,13 @@ function navigateToTugasPage(taskId = null) {
 const footer = document.getElementById("footer");
 
 // Create More Action Button
-const moreActionButton = createButton("MORE ACTION", () => {
-  showActionPopup();
-}, "medium");
+const moreActionButton = createButton(
+  "MORE ACTION",
+  () => {
+    showActionPopup();
+  },
+  "medium"
+);
 
 // Create Back Button
 const backButton = createButton("BACK MAIN", navigateToMainPage, "medium");
@@ -202,20 +206,23 @@ function displayTaskList(project) {
       // ===== Status =====
       const statusDiv = document.createElement("div");
       statusDiv.classList.add("status-capsule");
-      
-      // Updated Status Text Based on 'complete' Value
+
       switch (task.complete) {
         case 0:
           statusDiv.textContent = "Not Started";
+          statusDiv.classList.add("status-not-started");
           break;
         case 1:
           statusDiv.textContent = "On Progress";
+          statusDiv.classList.add("status-on-progress");
           break;
         case 2:
           statusDiv.textContent = "Done";
+          statusDiv.classList.add("status-done");
           break;
         default:
           statusDiv.textContent = "Unknown";
+          statusDiv.classList.add("status-unknown");
       }
 
       // Append Title, Deadline, and Days Left to Row
@@ -236,15 +243,15 @@ function displayTaskList(project) {
       switch (task.priority.toLowerCase()) {
         case "high":
           priorityStatus.classList.add("priority-high");
-          priorityStatus.textContent = "High";
+          priorityStatus.textContent = "HIGH";
           break;
         case "medium":
           priorityStatus.classList.add("priority-medium");
-          priorityStatus.textContent = "Medium";
+          priorityStatus.textContent = "MEDIUM";
           break;
         case "low":
           priorityStatus.classList.add("priority-low");
-          priorityStatus.textContent = "Low";
+          priorityStatus.textContent = "LOW";
           break;
         default:
           priorityStatus.style.display = "none"; // Hide if priority is undefined
@@ -365,7 +372,9 @@ function showActionPopup() {
 
 // ===== CHECK FOR UPCOMING DEADLINES =====
 function checkForUpcomingDeadlines(project) {
-  const tasksToNotify = project.tasks.filter((task) => calculateDaysLeft(task.deadlineDate) < 3 && calculateDaysLeft(task.deadlineDate) > 0);
+  const tasksToNotify = project.tasks.filter(
+    (task) => calculateDaysLeft(task.deadlineDate) < 3 && calculateDaysLeft(task.deadlineDate) > 0
+  );
 
   if (tasksToNotify.length > 0) {
     showDeadlineNotification(tasksToNotify);
@@ -378,7 +387,7 @@ function showDeadlineNotification(tasksToNotify) {
 
   function displayNotification(index) {
     // Remove any existing overlay
-    const existingOverlay = document.querySelector('.deadline-popup-overlay');
+    const existingOverlay = document.querySelector(".deadline-popup-overlay");
     if (existingOverlay) {
       document.body.removeChild(existingOverlay);
     }

@@ -111,13 +111,13 @@ body.body-proyekpage {
 
 .task-info {
   position: relative;
-  padding-left: 54px;
+  padding-left: 75px;
 }
 
 .task-info::before {
-  content: '';
+  content: "";
   position: absolute;
-  left: 10px;
+  left: 25px;
   top: 50%;
   transform: translateY(-50%);
   width: 32px;
@@ -151,6 +151,7 @@ body.body-proyekpage {
 
 .priority-status {
   display: inline-block;
+  width: 80px; /* Set a fixed width suitable for your content */
   padding: 5px 10px;
   border-radius: 12px;
   font-size: 12px;
@@ -161,15 +162,15 @@ body.body-proyekpage {
 }
 
 .priority-high {
-  background-color: red;
+  background-color: #FF6264;
 }
 
 .priority-medium {
-  background-color: orange;
+  background-color: #FFC862;
 }
 
 .priority-low {
-  background-color: blue;
+  background-color: #007AFF;
 }
 
 .deadline-capsule {
@@ -343,9 +344,26 @@ body.body-proyekpage {
   font-weight: bold;
   color: #ffffff;
   text-align: center;
-  background-color: #ffa500; /* Orange background for status */
   margin-right: 8px;
   margin-left: 8px;
+  /* Remove the background-color here */
+}
+
+/* Status-specific background colors */
+.status-not-started {
+  background-color: grey;
+}
+
+.status-on-progress {
+  background-color: #FFC862;
+}
+
+.status-done {
+  background-color: green;
+}
+
+.status-unknown {
+  background-color: grey;
 }
 
 /* Deadline Notification Popup Styles */

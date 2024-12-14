@@ -13,13 +13,12 @@
           "id": 101,
           "title": "Task 1",
           "description": "Description of Task 2",
-          "priority": "medium",
+          "priority": "high",
           "comments": [
             "Comment 1",
             "Comment 2"
           ],
-          "documentSrc": "uploads/1734194705949_python-id.pdf",
-          "complete": 1,
+          "complete": 2,
           "deadlineDate": "2024-12-16",
           "deadlineTime": "23:59:59"
         },
@@ -163,14 +162,13 @@
           "id": 201,
           "title": "Task 1",
           "description": "Description of Task 1",
-          "priority": "medium",
+          "priority": "high",
           "comments": [
             "Comment 2",
             "comment 3",
             "comment 4",
             "coment 5",
-            "oihoih",
-            "fayad ajg"
+            "oihoih"
           ],
           "documentSrc": "uploads/1734177283990_python-id.pdf",
           "complete": 2,
