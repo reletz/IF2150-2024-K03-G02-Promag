@@ -4,10 +4,7 @@ const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require("electro
 const path = require("path");
 const fs = require("fs");
 const {
-  initializeJSONCache,
   saveJSONCache,
-  addProject,
-  deleteProject,
 } = require('./handler');
 
 let mainWindow;
@@ -18,35 +15,13 @@ const uploadsDir = path.join(__dirname, "uploads");
 
 // Ensure the uploads directory exists
 async function ensureUploadsDir() {
-  try {
-    await fs.access(uploadsDir);
-    // Directory exists
-  } catch (error) {
-    // Directory does not exist, create it
-    await fs.mkdir(uploadsDir, { recursive: true });
-    console.log(`Created uploads directory at ${uploadsDir}`);
-  }
-}
+  const uploadsPath = path.join(__dirname, "uploads");
 
-// Load project data from JSON file
-async function loadData() {
   try {
-    const data = await fs.readFile(dataPath, "utf8");
-    return JSON.parse(data);
+    await fs.promises.mkdir(uploadsPath, { recursive: true });
+    console.log("Uploads directory ensured.");
   } catch (error) {
-    console.error("Error reading data.json:", error);
-    return { projects: [] }; // Return empty structure on error
-  }
-}
-
-// Save project data to JSON file
-async function saveData(data) {
-  try {
-    const jsonData = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataPath, jsonData, "utf8");
-    console.log("Data saved successfully.");
-  } catch (error) {
-    console.error("Error writing to data.json:", error);
+    console.error("Error ensuring uploads directory:", error.message);
   }
 }
 
@@ -129,17 +104,14 @@ ipcMain.on("navigate-to-tugaspage", (event, projectId, taskId) => {
 // IPC handler to get project data
 process.on('uncaughtException', (error) => {
   console.error('Uncaught exception:', error);
-  saveJSONCache(); // Simpan cache sebelum crash
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled rejection at:', promise, 'reason:', reason);
-  saveJSONCache(); // Simpan cache sebelum crash
   process.exit(1);
 });
 
 app.on('before-quit', () => {
-  saveJSONCache();
-  console.log('JSON cache saved before app quit');
+  console.log('Saved before app quit');
 });
