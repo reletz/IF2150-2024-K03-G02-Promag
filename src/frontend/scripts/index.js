@@ -4,21 +4,14 @@ let currentPage = 1;
 const itemsPerPage = 6;
 let totalPages = 1;
 
-// ===== HELPER FUNCTION TO FORMAT DATE =====
-function formatDate(dateString) {
-  const options = { day: "numeric", month: "long", year: "numeric" };
-  const date = new Date(dateString);
-  return date.toLocaleDateString("id-ID", options);
-}
-
 function navigateToProyekPage(projectId) {
   window.location.href = `proyekpage.html?id=${projectId}`;
 }
 
-async function renderProjects(page = currentPage) {
+async function renderProjects(page = 1) {
   const data = await window.electronAPI.getProjectData();
   const container = document.getElementById("project-container");
-  container.innerHTML = ""; // Clear previous content
+  container.innerHTML = ''; // Clear previous content
 
   // Calculate total pages
   totalPages = Math.ceil(data.projects.length / itemsPerPage);
@@ -65,13 +58,13 @@ async function renderProjects(page = currentPage) {
     // Date Capsule (Start Date - End Date)
     const dateCapsule = document.createElement("div");
     dateCapsule.className = "date-capsule";
-    dateCapsule.textContent = `${formatDate(project.startDate)} - ${project.endDate ? formatDate(project.endDate) : "Ongoing"}`;
+    dateCapsule.textContent = `${project.startDate} - ${project.endDate ? project.endDate : "Ongoing"}`;
 
     // Description with 30 characters limit
     const description = document.createElement("p");
     let truncatedDescription = project.description;
     if (truncatedDescription.length > 30) {
-      truncatedDescription = truncatedDescription.substring(0, 30) + "...";
+      truncatedDescription = truncatedDescription.substring(0, 30) + '...';
     }
     description.textContent = truncatedDescription;
 
@@ -135,7 +128,7 @@ function renderPaginationControls(currentPage) {
     projectRows.appendChild(paginationRow);
   }
 
-  paginationContainer.innerHTML = ""; // Clear previous controls
+  paginationContainer.innerHTML = ''; // Clear previous controls
 
   if (totalPages > 1) {
     // Back Button
@@ -170,6 +163,86 @@ function renderPaginationControls(currentPage) {
   }
 }
 
+// Function to render notifications for tasks with deadlines less than three days away
+async function renderNotifications() {
+  const data = await window.electronAPI.getProjectData();
+  const now = new Date();
+  const notifications = [];
+
+  for (const project of data.projects) {
+    for (const task of project.tasks) {
+      if (task.complete !== 2) {
+        const deadline = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
+        const timeDiff = deadline - now;
+        const daysLeft = timeDiff / (1000 * 60 * 60 * 24);
+
+        if (daysLeft > 0 && daysLeft <= 3) {
+          notifications.push({
+            projectTitle: project.title,
+            taskTitle: task.title,
+          });
+        }
+      }
+    }
+  }
+
+  if (notifications.length > 0) {
+    showNotificationPopup(notifications);
+  }
+}
+
+function showNotificationPopup(notifications) {
+  let currentNotificationIndex = 0;
+
+  function renderNotification() {
+    const { projectTitle, taskTitle } = notifications[currentNotificationIndex];
+
+    // Create notification pop-up
+    const overlay = document.createElement("div");
+    overlay.className = "action-popup-overlay";
+
+    const popup = document.createElement("div");
+    popup.className = "action-popup";
+
+    const closeButton = document.createElement("span");
+    closeButton.className = "close-button";
+    closeButton.innerHTML = "&times;";
+    closeButton.onclick = () => {
+      document.body.removeChild(overlay);
+    };
+
+    const header = document.createElement("h1");
+    header.textContent = "Deadline Tugas Mendekat";
+
+    const message = document.createElement("p");
+    message.textContent = `Jangan lupa mengerjakan ${taskTitle} di ${projectTitle}`;
+
+    popup.appendChild(closeButton);
+    popup.appendChild(header);
+    popup.appendChild(message);
+
+    if (currentNotificationIndex < notifications.length - 1) {
+      const nextButton = createButton("Next Notification", () => {
+        currentNotificationIndex++;
+        document.body.removeChild(overlay);
+        renderNotification();
+      }, "medium");
+      popup.appendChild(nextButton);
+    } else {
+      const okButton = createButton("Okay", () => {
+        document.body.removeChild(overlay);
+      }, "medium");
+      popup.appendChild(okButton);
+    }
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+  }
+
+  renderNotification();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderProjects(currentPage);
+  renderNotifications();
 });
