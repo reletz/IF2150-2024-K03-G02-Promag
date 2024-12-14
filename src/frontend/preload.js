@@ -7,5 +7,4 @@ contextBridge.exposeInMainWorld("electronAPI", {
   navigateToProyekPage: () => ipcRenderer.send("navigate-to-proyekpage"),
   navigateToMainPage: () => ipcRenderer.send("navigate-to-main"),
   getProjectData: () => ipcRenderer.invoke("get-project-data"),
-  getProjectData: () => ipcRenderer.invoke("get-project-data"),
 });

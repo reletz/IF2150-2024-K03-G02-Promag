@@ -1,7 +1,9 @@
+// src/frontend/scripts/index.js
+
 import { createButton } from "../components/buttonComponent.js";
 
-function navigateToProyekPage() {
-  window.electronAPI.navigateToProyekPage();
+function navigateToProyekPage(projectId) {
+  window.location.href = `proyekpage.html?id=${projectId}`;
 }
 
 async function renderProjects() {
@@ -25,21 +27,30 @@ async function renderProjects() {
     const title = document.createElement("h1");
     title.textContent = project.title;
 
+    const startDate = document.createElement("p");
+    startDate.textContent = `Start Date: ${project.startDate}`;
+
     const startTime = document.createElement("p");
     startTime.textContent = `Start Time: ${project.startTime}`;
 
+    const endDate = document.createElement("p");
+    endDate.textContent = `End Date: ${project.endDate || "Ongoing"}`;
+
     const endTime = document.createElement("p");
-    endTime.textContent = `End Time: ${project.endTime || "Ongoing"}`;
+    endTime.textContent = `End Time: ${project.endTime || ""}`;
 
     const description = document.createElement("p");
     description.textContent = project.description;
 
     projectContentDiv.appendChild(title);
+    projectContentDiv.appendChild(startDate);
     projectContentDiv.appendChild(startTime);
+    projectContentDiv.appendChild(endDate);
     projectContentDiv.appendChild(endTime);
     projectContentDiv.appendChild(description);
 
-    const button = createButton("Go to Proyek Page", navigateToProyekPage, "medium");
+    // Pass the project.id using an arrow function to preserve the current project's ID
+    const button = createButton("Details", () => navigateToProyekPage(project.id), "medium");
 
     projectDiv.appendChild(projectContentDiv);
     projectDiv.appendChild(button);
