@@ -6,9 +6,9 @@ let totalPages = 1;
 
 // ===== HELPER FUNCTION TO FORMAT DATE =====
 function formatDate(dateString) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const options = { day: "numeric", month: "long", year: "numeric" };
   const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', options);
+  return date.toLocaleDateString("id-ID", options);
 }
 
 function navigateToProyekPage(projectId) {
@@ -18,7 +18,7 @@ function navigateToProyekPage(projectId) {
 async function renderProjects(page = currentPage) {
   const data = await window.electronAPI.getProjectData();
   const container = document.getElementById("project-container");
-  container.innerHTML = ''; // Clear previous content
+  container.innerHTML = ""; // Clear previous content
 
   // Calculate total pages
   totalPages = Math.ceil(data.projects.length / itemsPerPage);
@@ -53,7 +53,7 @@ async function renderProjects(page = currentPage) {
     const description = document.createElement("p");
     let truncatedDescription = project.description;
     if (truncatedDescription.length > 30) {
-      truncatedDescription = truncatedDescription.substring(0, 30) + '...';
+      truncatedDescription = truncatedDescription.substring(0, 30) + "...";
     }
     description.textContent = truncatedDescription;
 
@@ -66,8 +66,8 @@ async function renderProjects(page = currentPage) {
 
     // Calculate progress percentage
     const totalTasks = project.tasks.length;
-  const completedTasks = project.tasks.filter(task => task.complete === 2).length;
-  const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+    const completedTasks = project.tasks.filter((task) => task.complete === 2).length;
+    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     progressBar.style.width = `${progressPercentage}%`;
 
     progressBarContainer.appendChild(progressBar);
@@ -122,7 +122,7 @@ function renderPaginationControls(currentPage) {
     projectRows.appendChild(paginationRow);
   }
 
-  paginationContainer.innerHTML = ''; // Clear previous controls
+  paginationContainer.innerHTML = ""; // Clear previous controls
 
   if (totalPages > 1) {
     // Back Button
