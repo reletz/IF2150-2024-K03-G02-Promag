@@ -1,16 +1,28 @@
 import { createButton } from "../components/buttonComponent.js";
 
+let currentPage = 1;
+const itemsPerPage = 6;
+let totalPages = 1;
+
 function navigateToProyekPage(projectId) {
   window.location.href = `proyekpage.html?id=${projectId}`;
 }
 
-async function renderProjects() {
+async function renderProjects(page = 1) {
   const data = await window.electronAPI.getProjectData();
-
   const container = document.getElementById("project-container");
-  container.innerHTML = ''; // Bersihkan konten sebelumnya
+  container.innerHTML = ''; // Clear previous content
+
+  // Calculate total pages
+  totalPages = Math.ceil(data.projects.length / itemsPerPage);
+
+  // Get projects for the current page
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const projectsToDisplay = data.projects.slice(startIndex, endIndex);
+
   let row;
-  data.projects.forEach((project, index) => {
+  projectsToDisplay.forEach((project, index) => {
     if (index % 3 === 0) {
       row = document.createElement("div");
       row.className = "project-row";
@@ -20,7 +32,7 @@ async function renderProjects() {
     const projectDiv = document.createElement("div");
     projectDiv.className = "project-container";
 
-    // Judul Proyek
+    // Project Title
     const title = document.createElement("h1");
     title.textContent = project.title;
     title.className = "project-title";
@@ -30,7 +42,7 @@ async function renderProjects() {
     dateCapsule.className = "date-capsule";
     dateCapsule.textContent = `${project.startDate} - ${project.endDate ? project.endDate : "Ongoing"}`;
 
-    // Deskripsi dengan pembatasan 30 karakter
+    // Description with 30 characters limit
     const description = document.createElement("p");
     let truncatedDescription = project.description;
     if (truncatedDescription.length > 30) {
@@ -45,7 +57,7 @@ async function renderProjects() {
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
 
-    // Hitung persentase progress
+    // Calculate progress percentage
     const totalTasks = project.tasks.length;
     const completedTasks = project.tasks.filter(task => task.complete).length;
     const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
@@ -53,29 +65,29 @@ async function renderProjects() {
 
     progressBarContainer.appendChild(progressBar);
 
-    // Persentase Progress
+    // Progress Percentage Text
     const progressPercentageText = document.createElement("span");
     progressPercentageText.className = "progress-percentage";
     progressPercentageText.textContent = `${Math.round(progressPercentage)}%`;
 
-    // Tombol Detail
+    // Detail Button
     const button = createButton("Detail", () => navigateToProyekPage(project.id), "medium");
 
-    // Container untuk Progress Bar dan Button
+    // Container for Progress Bar and Button
     const progressButtonContainer = document.createElement("div");
     progressButtonContainer.className = "progress-button-container";
 
-    // Tambahkan Progress Bar dan Persentase ke dalam Wrapper
+    // Add Progress Bar and Percentage to Wrapper
     const progressWrapper = document.createElement("div");
     progressWrapper.className = "progress-wrapper";
     progressWrapper.appendChild(progressBarContainer);
     progressWrapper.appendChild(progressPercentageText);
 
-    // Susun Progress dan Button
+    // Arrange Progress and Button
     progressButtonContainer.appendChild(progressWrapper);
     progressButtonContainer.appendChild(button);
 
-    // Susun elemen ke dalam projectDiv
+    // Assemble projectDiv elements
     projectDiv.appendChild(title);
     projectDiv.appendChild(dateCapsule);
     projectDiv.appendChild(description);
@@ -83,6 +95,61 @@ async function renderProjects() {
 
     row.appendChild(projectDiv);
   });
+
+  // Render Pagination Controls
+  renderPaginationControls(page);
 }
 
-renderProjects();
+function renderPaginationControls(currentPage) {
+  let paginationContainer = document.getElementById("pagination-container");
+
+  // If pagination container doesn't exist, create it and append below project container
+  if (!paginationContainer) {
+    paginationContainer = document.createElement("div");
+    paginationContainer.id = "pagination-container";
+    const projectRows = document.querySelector(".project-rows");
+    // Create a new row for pagination
+    const paginationRow = document.createElement("div");
+    paginationRow.className = "pagination-row";
+    paginationRow.appendChild(paginationContainer);
+    projectRows.appendChild(paginationRow);
+  }
+
+  paginationContainer.innerHTML = ''; // Clear previous controls
+
+  if (totalPages > 1) {
+    // Back Button
+    const backButton = document.createElement("button");
+    backButton.textContent = "Back";
+    backButton.className = "pagination-button";
+    backButton.disabled = currentPage <= 1;
+
+    backButton.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderProjects(currentPage);
+      }
+    });
+
+    paginationContainer.appendChild(backButton);
+
+    // Next Button
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.className = "pagination-button";
+    nextButton.disabled = currentPage >= totalPages;
+
+    nextButton.addEventListener("click", () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderProjects(currentPage);
+      }
+    });
+
+    paginationContainer.appendChild(nextButton);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderProjects(currentPage);
+});

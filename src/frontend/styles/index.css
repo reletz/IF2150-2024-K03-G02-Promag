@@ -1,7 +1,7 @@
 /* style.css */
 
 /* Utility Classes */
-.text-center {
+  .text-center {
     text-align: center;
   }
   
@@ -128,12 +128,16 @@
     color: #000000; /* Teks hitam */
     margin-bottom: 10px;
     font-size: 14px; /* Sesuaikan ukuran font */
+    white-space: nowrap; /* Mencegah pemisahan baris */
   }
   
+  
+/* Styling untuk Judul Proyek */
   .project-title {
     margin-bottom: 5px; /* Mengurangi jarak bawah */
     font-size: 24px; /* Menyesuaikan ukuran font */
     color: #ffffff; /* Warna teks putih */
+    margin-top: 0; /* Memastikan judul lebih ke atas */
   }
   
   .project-content {
@@ -205,4 +209,43 @@
   /* Pastikan judul proyek lebih ke atas */
   .project-container h1 {
     margin-top: 0;
+  }
+
+  /* Styling untuk Pagination Container */
+  #pagination-container {
+    display: flex;
+    justify-content: space-between; /* Space between Back and Next */
+    align-items: center;
+    width: 300px; /* Adjust as needed */
+    margin-top: 20px;
+    padding: 0 20px; /* Padding on left and right */
+  }
+
+  /* Styling untuk Pagination Button */
+  .pagination-button {
+    background-color: #d1eecc;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 9999px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    transition: background-color 0.15s ease;
+  }
+
+  .pagination-button:hover:not(:disabled) {
+    background-color: #bfdcae;
+  }
+
+  .pagination-button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+  }
+  
+  /* Styling untuk Pagination Row */
+  .pagination-row {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center the pagination container */
   }
