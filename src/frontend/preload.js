@@ -13,5 +13,4 @@ contextBridge.exposeInMainWorld('electronAPI', {
   deleteTask: (projectId, taskId) => ipcRenderer.invoke('delete-task', { projectId, taskId }),
   uploadDocumentToTask: (projectId, taskId, filePath) => ipcRenderer.invoke('upload-document', { projectId, taskId, filePath }),
   openFileDialog: () => ipcRenderer.invoke('dialog:openFile'),
-  // Add other necessary APIs here
 });
