@@ -27,12 +27,12 @@ function navigateToTugasPage(taskId = null) {
 const footer = document.getElementById("footer");
 
 // Create More Action Button
-const moreActionButton = createButton("MORE ACTION", () => {
+const moreActionButton = createButton("More Action", () => {
   showActionPopup();
 }, "medium");
 
 // Create Back Button
-const backButton = createButton("BACK MAIN", navigateToMainPage, "medium");
+const backButton = createButton("Back Main", navigateToMainPage, "medium");
 
 // Create Footer Container
 const footerContainer = document.createElement("div");
