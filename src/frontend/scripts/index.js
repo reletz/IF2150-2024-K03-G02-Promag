@@ -23,11 +23,12 @@ async function renderProjects() {
     // Judul Proyek
     const title = document.createElement("h1");
     title.textContent = project.title;
+    title.className = "project-title";
 
-    // Start Date Capsule
-    const startDateCapsule = document.createElement("div");
-    startDateCapsule.className = "start-date-capsule";
-    startDateCapsule.textContent = `Start Date: ${project.startDate}`;
+    // Date Capsule (Start Date - End Date)
+    const dateCapsule = document.createElement("div");
+    dateCapsule.className = "date-capsule";
+    dateCapsule.textContent = `${project.startDate} - ${project.endDate ? project.endDate : "Ongoing"}`;
 
     // Deskripsi dengan pembatasan 30 karakter
     const description = document.createElement("p");
@@ -76,7 +77,7 @@ async function renderProjects() {
 
     // Susun elemen ke dalam projectDiv
     projectDiv.appendChild(title);
-    projectDiv.appendChild(startDateCapsule);
+    projectDiv.appendChild(dateCapsule);
     projectDiv.appendChild(description);
     projectDiv.appendChild(progressButtonContainer);
 
