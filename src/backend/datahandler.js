@@ -52,9 +52,16 @@ ipcMain.handle("dialog:openFile", async () => {
 
 // Get Project Data Handler
 ipcMain.handle("get-project-data", async () => {
-  const data = await loadData();
-  return data;
+  try {
+    const data = await loadData(); // Memuat semua data proyek dari file JSON
+    console.log("Fetched Project Data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching project data:", error);
+    return { projects: [] };
+  }
 });
+
 
 // Add Comment to Task
 ipcMain.handle("add-comment", async (event, { projectId, taskId, comment }) => {
@@ -111,18 +118,6 @@ ipcMain.handle("update-task-status", async (event, { projectId, taskId, isComple
     }
   }
   return { success: false, message: "Project or Task not found." };
-});
-
-// Add Task
-ipcMain.handle("add-task", async (event, projectId, task) => {
-  const data = await loadData();
-  const project = data.projects.find((p) => p.id === projectId);
-  if (project) {
-    project.tasks.push(task);
-    await saveData(data);
-    return { success: true };
-  }
-  return { success: false, message: "Project not found." };
 });
 
 // Delete Task
@@ -224,6 +219,31 @@ ipcMain.handle("delete-project", async (event, projectId) => {
     return { success: true };
   }
   return { success: false, message: "Project not found." };
+});
+
+ipcMain.handle("add-task", async (event, { projectId, newTask }) => {
+  try {
+    const data = await loadData(); // Ambil data proyek
+    const project = data.projects.find((proj) => proj.id === projectId);
+
+    if (!project) {
+      return { success: false, error: "Project not found" };
+    }
+
+    // Tambahkan tugas baru ke daftar tugas proyek
+    if (!project.tasks) {
+      project.tasks = [];
+    }
+    project.tasks.push(newTask);
+
+    // Simpan perubahan ke file
+    await saveData(data);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error adding task:", error);
+    return { success: false, error: "An error occurred while adding the task" };
+  }
 });
 
 module.exports = {

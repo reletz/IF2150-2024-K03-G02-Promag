@@ -99,6 +99,15 @@ ipcMain.on("navigate-to-tugaspage", (event, projectId, taskId) => {
   }
 });
 
+ipcMain.on("navigate-to-create-tugaspage", (event, projectId) => {
+  if (mainWindow) {
+    const createTugasPagePath = path.join(__dirname, "..", "frontend", "pages", "addtaskpage.html");
+    mainWindow.loadFile(createTugasPagePath).then(() => {
+      mainWindow.webContents.send("load-create-tugaspage", projectId);
+    });
+  }
+});
+
 // IPC handler to get project data
 process.on('uncaughtException', (error) => {
   console.error('Uncaught exception:', error);

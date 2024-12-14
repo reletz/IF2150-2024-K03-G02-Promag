@@ -14,8 +14,14 @@ function navigateToMainPage() {
   window.electronAPI.navigateToMainPage();
 }
 
-function navigateToAddTaskPage() {
-  window.location.href = `addtaskpage.html?`;
+function navigateToCreateTugasPage() {
+  if (!currentProjectId) {
+    console.error("Project ID is missing when navigating to Add Task page.");
+    alert("Project ID not found. Cannot navigate to Add Task page.");
+    return;
+  }
+
+  window.location.href = `addtaskpage.html?projectId=${currentProjectId}`;
 }
 
 function navigateToTugasPage(taskId = null) {
@@ -30,7 +36,7 @@ function navigateToTugasPage(taskId = null) {
 const footer = document.getElementById("footer");
 // ===== BUTTON: NAVIGATE TO MAIN PAGE & ADD TASK =====
 const backButton = createButton("BACK MAIN", navigateToMainPage, "medium");
-const addTask = createButton("ADD TASK", navigateToAddTaskPage, "medium");
+const addTask = createButton("ADD TASK", navigateToCreateTugasPage, "medium");
 const moreActionButton = createButton("MORE ACTION", () => {
   showActionPopup();
 }, "medium");

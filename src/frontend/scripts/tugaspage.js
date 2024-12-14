@@ -360,11 +360,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTaskDetails();
 });
 
-function showDeleteModal() {
-  const confirmModal = document.getElementById("confirm-modal");
-  confirmModal.style.display = "block"; // Tampilkan modal
-}
-
 function hideDeleteModal() {
   const confirmModal = document.getElementById("confirm-modal");
   confirmModal.style.display = "none"; // Sembunyikan modal
