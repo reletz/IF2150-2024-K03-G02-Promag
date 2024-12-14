@@ -13,13 +13,14 @@
           "id": 102,
           "title": "Task 2",
           "description": "Description of Task 2",
-          "priority": "medium",
+          "priority": "high",
           "comments": [
             "Comment 1",
-            "Comment 2"
+            "Comment 2",
+            "halo"
           ],
           "documentSrc": "",
-          "complete": true,
+          "complete": false,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         },
