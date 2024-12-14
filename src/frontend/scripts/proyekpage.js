@@ -65,17 +65,17 @@ async function renderProjectDetails() {
   // Fetch data
   const data = await window.electronAPI.getProjectData();
 
-  // Fetch project with specified ID
+  // Fetch project dengan ID tertentu
   const project = data.projects.find((proj) => proj.id === projectId);
 
-  // Project existence validation
+  // Validasi keberadaan project
   if (!project) {
-    console.error(`Project with ID "${projectId}" not found.`);
-    displayErrorMessage("Project not found.");
+    console.error(`Project dengan ID "${projectId}" tidak ditemukan.`);
+    displayErrorMessage("Project tidak ditemukan.");
     return;
   }
 
-  // Get latest task deadline from tasks
+  // Dapatkan deadline tugas terbaru
   const latestDeadline = getLatestTaskDeadline(project.tasks);
   if (latestDeadline) {
     project.endDate = latestDeadline.toISOString().split("T")[0];
@@ -86,6 +86,9 @@ async function renderProjectDetails() {
   currentProjectId = project.id;
   displayHeader(project);
   displayTaskList(project);
+
+  // Cek deadline mendatang
+  checkForUpcomingDeadlines(project);
 }
 
 // ===== FUNCTION TO GET LATEST TASK DEADLINE =====
@@ -138,7 +141,7 @@ function displayHeader(project) {
   const progressBar = document.createElement("div");
   progressBar.classList.add("progress-bar");
 
-  // Calculate progress
+  // Hitung progress
   const totalTasks = project.tasks.length;
   const completedTasks = project.tasks.filter((task) => task.complete).length;
   const progressPercent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
@@ -358,6 +361,75 @@ function showActionPopup() {
 
   // Append Overlay to Body
   document.body.appendChild(overlay);
+}
+
+// ===== CHECK FOR UPCOMING DEADLINES =====
+function checkForUpcomingDeadlines(project) {
+  const tasksToNotify = project.tasks.filter((task) => calculateDaysLeft(task.deadlineDate) < 3 && calculateDaysLeft(task.deadlineDate) > 0);
+
+  if (tasksToNotify.length > 0) {
+    showDeadlineNotification(tasksToNotify);
+  }
+}
+
+// ===== SHOW DEADLINE NOTIFICATION =====
+function showDeadlineNotification(tasksToNotify) {
+  let currentIndex = 0;
+
+  function displayNotification(index) {
+    // Remove any existing overlay
+    const existingOverlay = document.querySelector('.deadline-popup-overlay');
+    if (existingOverlay) {
+      document.body.removeChild(existingOverlay);
+    }
+
+    const task = tasksToNotify[index];
+
+    // Create Overlay
+    const overlay = document.createElement("div");
+    overlay.classList.add("deadline-popup-overlay");
+
+    // Create Popup Container
+    const popup = document.createElement("div");
+    popup.classList.add("deadline-popup");
+
+    // Create Header
+    const header = document.createElement("h1");
+    header.textContent = "Deadline Tugas Mendekat";
+
+    // Create Message
+    const message = document.createElement("p");
+    message.textContent = `Jangan lupa untuk selesaikan "${task.title}" sebelum deadline pada ${formatDate(task.deadlineDate)}.`;
+
+    // Create Button
+    const button = createButton("", null, "small");
+
+    if (tasksToNotify.length === 1 || index === tasksToNotify.length - 1) {
+      button.textContent = "Okay";
+      button.onclick = () => {
+        document.body.removeChild(overlay);
+      };
+    } else {
+      button.textContent = "Next Notification";
+      button.onclick = () => {
+        displayNotification(index + 1);
+      };
+    }
+
+    // Append Elements to Popup
+    popup.appendChild(header);
+    popup.appendChild(message);
+    popup.appendChild(button);
+
+    // Append Popup to Overlay
+    overlay.appendChild(popup);
+
+    // Append Overlay to Body
+    document.body.appendChild(overlay);
+  }
+
+  // Mulai dengan menampilkan notifikasi pertama
+  displayNotification(currentIndex);
 }
 
 // ===== INITIALIZE =====
