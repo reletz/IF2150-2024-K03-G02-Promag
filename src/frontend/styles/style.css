@@ -78,3 +78,68 @@ p {
   padding: 16px 32px;
   font-size: 18px;
 }
+
+/* project list style */
+.body-main {
+  font-family: "Montserrat", sans-serif;
+  background-color: #ffffff;
+  color: #57a99a;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+}
+
+.row {
+  display: flex;
+}
+
+.first-row {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  max-width: 50%;
+  height: auto;
+}
+
+.project-rows {
+  flex: 6;
+  flex-direction: column;
+}
+
+.project-row {
+  display: flex;
+  flex: 3;
+}
+
+.project-container {
+  flex: 1;
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #57a99a; /* Background color */
+  border-radius: 10px; /* Rounded corners */
+  color: white; /* Text color */
+  font-family: inherit; /* Pewarisan font dari .body-main */
+}
+
+.project-content {
+  margin-bottom: 10px; /* Space between content and button */
+}
+
+.project-container h2 {
+  margin-top: 0;
+}
+
+#navigate-to-proyekpage-button {
+  margin-top: 10px;
+}

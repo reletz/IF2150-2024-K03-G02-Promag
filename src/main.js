@@ -1,11 +1,6 @@
 const { app, BrowserWindow, ipcMain, globalShortcut } = require("electron");
 const path = require("path");
-
-// Enable electron-reload for hot reloading
-require("electron-reload")(path.join(__dirname, ".."), {
-  electron: path.join(__dirname, "..", "node_modules", ".bin", "electron"),
-  hardResetMethod: "exit",
-});
+const fs = require("fs");
 
 let mainWindow;
 
@@ -22,9 +17,6 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "frontend", "pages", "index.html"));
 
-  // Optional: Open DevTools for debugging
-  // mainWindow.webContents.openDevTools();
-
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
@@ -33,7 +25,6 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow();
 
-  // Register a global shortcut to reload the window
   globalShortcut.register("CommandOrControl+R", () => {
     if (mainWindow) {
       mainWindow.reload();
@@ -42,7 +33,6 @@ app.whenReady().then(() => {
 });
 
 app.on("will-quit", () => {
-  // Unregister all shortcuts.
   globalShortcut.unregisterAll();
 });
 
@@ -75,4 +65,11 @@ ipcMain.on("navigate-to-tugaspage", () => {
   if (mainWindow) {
     mainWindow.loadFile(path.join(__dirname, "frontend", "pages", "tugaspage.html"));
   }
+});
+
+// IPC handler to get project data
+ipcMain.handle("get-project-data", async () => {
+  const dataPath = path.join(__dirname, "backend", "data.json");
+  const data = fs.readFileSync(dataPath, "utf8");
+  return JSON.parse(data);
 });

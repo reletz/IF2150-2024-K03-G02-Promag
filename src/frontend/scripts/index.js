@@ -41,7 +41,8 @@ async function renderProjects() {
 
     const button = createButton("Go to Proyek Page", navigateToProyekPage, "medium");
 
-proyekButtonContainer.appendChild(backButton);
+    projectDiv.appendChild(projectContentDiv);
+    projectDiv.appendChild(button);
 
     row.appendChild(projectDiv);
   });
