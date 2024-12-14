@@ -1,19 +1,49 @@
+<!-- tugaspage.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Promag: Task Detail Page</title>
+    <title>Promag: Task Page</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="../styles/style.css" />
   </head>
-  <body>
-    <div>
-      <h1>Tugas Detail</h1>
-      <p>This is the new page description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    </div>
-    <div id="navigate-to-proyekpage-button"></div>
+  <body class="body-proyekpage">
+    <!-- ===== HEADER ===== -->
+    <header id="header">
+      <div class="row">
+        <div class="deadlineCapsule" id="deadlineCapsule"></div>
+        <div class="setPriorityStatusDropdown" id="priorityDropdown"></div>
+        <div class="notStartedOrOnProgressOrFinishedStatus" id="statusDisplay"></div>
+        <div class="tugasTitle" id="tugasTitle"></div>
+      </div>
+    </header>
+
+    <!-- ===== BODY ===== -->
+    <section id="body-section">
+      <div class="commentsDisplay" id="commentsDisplay"></div>
+      <div class="insertComment">
+        <textarea id="newComment" placeholder="Add a comment..."></textarea>
+      </div>
+      <div class="addCommentButton">
+        <button id="addCommentBtn" class="custom-button small">Add Comment</button>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer id="footer">
+      <div class="row">
+        <div class="deleteTugas" id="deleteTugas"></div>
+        <div class="uploadDocument" id="uploadDocument"></div>
+        <div></div>
+      </div>
+    </footer>
+
+    <!-- ===== Scripts ===== -->
     <script type="module" src="../scripts/tugaspage.js"></script>
   </body>
 </html>
