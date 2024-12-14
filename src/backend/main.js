@@ -1,49 +1,8 @@
 // src/backend/main.js
 
 const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require("electron");
+const { createWindow, ensureUploadsDir } = require('./handler');
 const path = require("path");
-const fs = require("fs");
-const {
-  saveJSONCache,
-} = require('./handler');
-
-let mainWindow;
-
-// Define paths
-const dataPath = path.join(__dirname, "data.json");
-const uploadsDir = path.join(__dirname, "uploads");
-
-// Ensure the uploads directory exists
-async function ensureUploadsDir() {
-  const uploadsPath = path.join(__dirname, "uploads");
-
-  try {
-    await fs.promises.mkdir(uploadsPath, { recursive: true });
-    console.log("Uploads directory ensured.");
-  } catch (error) {
-    console.error("Error ensuring uploads directory:", error.message);
-  }
-}
-
-// Create the main application window
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 768,
-    webPreferences: {
-      preload: path.join(__dirname, "..", "frontend", "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-  });
-
-  // Load the main index.html page
-  mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "index.html"));
-
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
-}
 
 // Register global shortcuts and create the window when the app is ready
 app.whenReady().then(async () => {

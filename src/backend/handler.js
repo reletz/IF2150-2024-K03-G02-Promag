@@ -254,3 +254,11 @@ ipcMain.handle("upload-document", async (event, { projectId, taskId, filePath })
     return { success: false, message: "Failed to upload document." };
   }
 });
+
+module.exports = {
+  createWindow,
+  loadData,
+  saveData,
+  ensureUploadsDir,
+  mainWindow,
+};
