@@ -1,5 +1,3 @@
-// src/frontend/scripts/proyekpage.js
-
 import { createButton } from "../components/buttonComponent.js";
 
 // ===== NAVIGATION APIs =====
@@ -17,10 +15,17 @@ function navigateToTugasPage(projectId, taskId = null) {
 
 // ===== BUTTON: NAVIGATE TO MAIN PAGE =====
 const footer = document.getElementById("footer");
-const backButton = createButton("BACK", navigateToMainPage, "medium");
+const backButton = createButton("BACK MAIN", navigateToMainPage, "medium");
+
+// Create Pagination Container
+const paginationContainer = document.createElement("div");
+paginationContainer.classList.add("pagination-container");
+
+// Append Back Button to Pagination Container
+paginationContainer.appendChild(backButton);
 
 if (footer) {
-  footer.appendChild(backButton);
+  footer.appendChild(paginationContainer);
 } else {
   console.error("Footer Container not found.");
 }
@@ -77,37 +82,90 @@ function getLatestTaskDeadline(tasks) {
 function displayHeader(project) {
   const header = document.getElementById("header");
 
+  const projectHeader = document.createElement("div");
+  projectHeader.classList.add("project-header");
+
   const title = document.createElement("h1");
   title.textContent = project.title;
 
-  const startDate = document.createElement("p");
-  startDate.textContent = `Start Date: ${project.startDate}`;
+  const startDateCapsule = document.createElement("span");
+  startDateCapsule.classList.add("date-capsule");
+  startDateCapsule.textContent = project.startDate;
 
-  const endDate = document.createElement("p");
-  endDate.textContent = `End Date: ${project.endDate || "Ongoing"}`;
+  const endDateCapsule = document.createElement("span");
+  endDateCapsule.classList.add("date-capsule");
+  endDateCapsule.textContent = project.endDate || "Ongoing";
+
+  projectHeader.appendChild(title);
+  projectHeader.appendChild(startDateCapsule);
+  projectHeader.appendChild(endDateCapsule);
+
+  header.appendChild(projectHeader);
 
   const description = document.createElement("p");
-  description.textContent = project.description;
-
-  header.appendChild(title);
-  header.appendChild(startDate);
-  header.appendChild(endDate);
+  const maxLength = 200;
+  description.textContent = project.description.length > maxLength
+    ? project.description.substring(0, maxLength) + '...'
+    : project.description;
   header.appendChild(description);
+
+  // ===== ADD PROGRESS BAR =====
+  const progressBarContainer = document.createElement("div");
+  progressBarContainer.classList.add("progress-bar-container");
+
+  const progressBar = document.createElement("div");
+  progressBar.classList.add("progress-bar");
+
+  // Calculate progress
+  const totalTasks = project.tasks.length;
+  const completedTasks = project.tasks.filter(task => task.complete).length;
+  const progressPercent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+  progressBar.style.width = `${progressPercent}%`;
+
+  progressBarContainer.appendChild(progressBar);
+  header.appendChild(progressBarContainer);
+
+  // ===== ADD PROGRESS LABELS =====
+  const progressLabels = document.createElement("div");
+  progressLabels.classList.add("progress-labels");
+
+  const progressText = document.createElement("span");
+  progressText.textContent = "Progress";
+
+  const progressPercentage = document.createElement("span");
+  progressPercentage.textContent = `${progressPercent}%`;
+
+  progressLabels.appendChild(progressText);
+  progressLabels.appendChild(progressPercentage);
+  header.appendChild(progressLabels);
 }
+
+// ===== DISPLAY TASK LIST =====
+let currentPage = 1;
+const tasksPerPage = 3;
 
 // ===== DISPLAY TASK LIST =====
 function displayTaskList(project) {
   const taskList = document.getElementById("task-list");
+  taskList.innerHTML = "";
 
   if (project.tasks && project.tasks.length > 0) {
-    const tasksHeader = document.createElement("h2");
-    tasksHeader.textContent = "Tasks";
-    taskList.appendChild(tasksHeader);
+    // ===== REMOVE TASKS HEADER =====
+    // const tasksHeader = document.createElement("h2");
+    // tasksHeader.textContent = "Tasks";
+    // taskList.appendChild(tasksHeader);
 
     const tasksContainer = document.createElement("div");
     tasksContainer.classList.add("tasks-container");
 
-    project.tasks.forEach((task) => {
+    // Calculate pagination
+    const totalTasks = project.tasks.length;
+    const totalPages = Math.ceil(totalTasks / tasksPerPage);
+    const startIndex = (currentPage - 1) * tasksPerPage;
+    const endIndex = startIndex + tasksPerPage;
+    const tasksToDisplay = project.tasks.slice(startIndex, endIndex);
+
+    tasksToDisplay.forEach((task) => {
       const taskItem = document.createElement("div");
       taskItem.classList.add("task-item");
 
@@ -140,8 +198,9 @@ function displayTaskList(project) {
       taskInfo.appendChild(row);
 
       const taskDescription = document.createElement("p");
-      taskDescription.textContent = task.description;
-
+      taskDescription.textContent = task.description.length > 200
+        ? task.description.substring(0, 200) + '...'
+        : task.description;
       taskInfo.appendChild(taskDescription);
 
       // ===== Priority Status =====
@@ -188,6 +247,34 @@ function displayTaskList(project) {
     });
 
     taskList.appendChild(tasksContainer);
+
+    // ===== ADD PAGINATION BUTTONS =====
+    if (totalPages > 1) {
+      // Remove existing pagination buttons
+      paginationContainer.innerHTML = "";
+      paginationContainer.appendChild(backButton);
+
+      // Previous Button
+      if (currentPage > 1) {
+        const prevButton = createButton("Previous", () => {
+          currentPage--;
+          displayTaskList(project);
+        }, "small");
+        paginationContainer.appendChild(prevButton);
+      }
+
+      // Next Button
+      if (currentPage < totalPages) {
+        const nextButton = createButton("Next", () => {
+          currentPage++;
+          displayTaskList(project);
+        }, "small");
+        paginationContainer.appendChild(nextButton);
+      }
+
+      taskList.appendChild(paginationContainer);
+    }
+
   } else {
     const noTasks = document.createElement("p");
     noTasks.textContent = "No tasks for this project.";
