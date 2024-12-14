@@ -1,10 +1,8 @@
 // src/backend/main.js
 
-const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs").promises;
-
-let mainWindow;
 
 // Define paths
 const dataPath = path.join(__dirname, "data.json");
@@ -43,81 +41,6 @@ async function saveData(data) {
     console.error("Error writing to data.json:", error);
   }
 }
-
-// Create the main application window
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 768,
-    webPreferences: {
-      preload: path.join(__dirname, "..", "frontend", "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-  });
-
-  // Load the main index.html page
-  mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "index.html"));
-
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
-}
-
-// Register global shortcuts and create the window when the app is ready
-app.whenReady().then(async () => {
-  await ensureUploadsDir(); // Ensure uploads directory is ready
-  createWindow();
-
-  // Register CommandOrControl+R to reload the main window
-  globalShortcut.register("CommandOrControl+R", () => {
-    if (mainWindow) {
-      mainWindow.reload();
-    }
-  });
-
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
-
-// Unregister all shortcuts and quit the app when all windows are closed
-app.on("will-quit", () => {
-  globalShortcut.unregisterAll();
-});
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
-
-// ===== IPC Handlers =====
-
-// Navigation Handlers
-ipcMain.on("navigate-to-main", () => {
-  if (mainWindow) {
-    mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "index.html"));
-  }
-});
-
-ipcMain.on("navigate-to-proyekpage", (event, projectId) => {
-  if (mainWindow) {
-    mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "proyekpage.html"));
-  }
-});
-
-ipcMain.on("navigate-to-tugaspage", (event, projectId, taskId) => {
-  if (mainWindow) {
-    const tugasPagePath = path.join(__dirname, "..", "frontend", "pages", "tugaspage.html");
-    mainWindow.loadFile(tugasPagePath).then(() => {
-      // Optionally, communicate the projectId and taskId to the renderer
-      mainWindow.webContents.send("load-tugaspage", { projectId, taskId });
-    });
-  }
-});
 
 // Dialog Handler
 ipcMain.handle("dialog:openFile", async () => {
@@ -304,9 +227,7 @@ ipcMain.handle("delete-project", async (event, projectId) => {
 });
 
 module.exports = {
-  createWindow,
   loadData,
   saveData,
   ensureUploadsDir,
-  mainWindow,
 };

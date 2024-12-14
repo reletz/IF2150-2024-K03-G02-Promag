@@ -51,18 +51,26 @@
 
 .back-button {
   background-color: #dcedc8;
+  border-radius: 5px;
   color: black;
+  border: none;
 }
 
 .back-button:hover {
   background-color: #c5e1a5;
+  border-radius: 5px;
+  border: none;
 }
 
 .delete-button {
   background-color: #ff5252;
+  border-radius: 5px;
   color: white;
+  border: none;
 }
 
 .delete-button:hover {
   background-color: #ff1744;
+  border-radius: 5px;
+  border: none;
 }

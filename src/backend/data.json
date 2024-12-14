@@ -13,10 +13,11 @@
           "id": 102,
           "title": "Task 2",
           "description": "Description of Task 2",
-          "priority": "medium",
+          "priority": "high",
           "comments": [
             "Comment 1",
-            "Comment 2"
+            "Comment 2",
+            "halo"
           ],
           "documentSrc": "",
           "complete": 0,
