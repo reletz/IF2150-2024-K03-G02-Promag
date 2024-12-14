@@ -17,7 +17,7 @@ function navigateToTugasPage(projectId, taskId = null) {
 
 // ===== BUTTON: NAVIGATE TO MAIN PAGE =====
 const footer = document.getElementById("footer");
-const backButton = createButton("Back to Main Page", navigateToMainPage, "medium");
+const backButton = createButton("BACK", navigateToMainPage, "medium");
 
 if (footer) {
   footer.appendChild(backButton);
@@ -60,7 +60,7 @@ async function renderProjectDetails() {
   displayTaskList(project);
 }
 
-// ===== HELPER FUNCTION TO GET LATEST TASK DEADLINE =====
+// ===== FUNCTION TO GET LATEST TASK DEADLINE =====
 function getLatestTaskDeadline(tasks) {
   if (!tasks || tasks.length === 0) return null;
 
@@ -101,7 +101,7 @@ function displayTaskList(project) {
 
   if (project.tasks && project.tasks.length > 0) {
     const tasksHeader = document.createElement("h2");
-    tasksHeader.textContent = "Progress";
+    tasksHeader.textContent = "Tasks";
     taskList.appendChild(tasksHeader);
 
     const tasksContainer = document.createElement("div");
@@ -111,12 +111,60 @@ function displayTaskList(project) {
       const taskItem = document.createElement("div");
       taskItem.classList.add("task-item");
 
+      // ===== Task Info =====
+      const taskInfo = document.createElement("div");
+      taskInfo.classList.add("task-info");
+
+      const row = document.createElement("div");
+      row.classList.add("row");
+
       const taskTitle = document.createElement("h3");
       taskTitle.textContent = task.title;
+
+      // ===== Deadline Date =====
+      const deadlineDate = document.createElement("div");
+      deadlineDate.classList.add("deadline-capsule");
+      deadlineDate.textContent = `${task.deadlineDate}`;
+
+      // ===== Days Left =====
+      const daysLeft = document.createElement("div");
+      daysLeft.classList.add("days-left-capsule");
+      const remainingDays = calculateDaysLeft(task.deadlineDate);
+      daysLeft.textContent = `${remainingDays} day${remainingDays !== 1 ? "s" : ""} left`;
+
+      // Append Title, Deadline, and Days Left to Row
+      row.appendChild(taskTitle);
+      row.appendChild(deadlineDate);
+      row.appendChild(daysLeft);
+
+      taskInfo.appendChild(row);
 
       const taskDescription = document.createElement("p");
       taskDescription.textContent = task.description;
 
+      taskInfo.appendChild(taskDescription);
+
+      // ===== Priority Status =====
+      const priorityStatus = document.createElement("div");
+      priorityStatus.classList.add("priority-status");
+      switch (task.priority.toLowerCase()) {
+        case "high":
+          priorityStatus.classList.add("priority-high");
+          priorityStatus.textContent = "High";
+          break;
+        case "medium":
+          priorityStatus.classList.add("priority-medium");
+          priorityStatus.textContent = "Medium";
+          break;
+        case "low":
+          priorityStatus.classList.add("priority-low");
+          priorityStatus.textContent = "Low";
+          break;
+        default:
+          priorityStatus.style.display = "none"; // Hide if priority is undefined
+      }
+
+      // ===== Details Button =====
       const taskButton = createButton(
         "Details",
         () => {
@@ -125,9 +173,16 @@ function displayTaskList(project) {
         "small"
       );
 
-      taskItem.appendChild(taskTitle);
-      taskItem.appendChild(taskDescription);
-      taskItem.appendChild(taskButton);
+      // ===== Task Actions =====
+      const taskActions = document.createElement("div");
+      taskActions.classList.add("task-actions");
+
+      taskActions.appendChild(priorityStatus);
+      taskActions.appendChild(taskButton);
+
+      // ===== Append to Task Item =====
+      taskItem.appendChild(taskInfo);
+      taskItem.appendChild(taskActions);
 
       tasksContainer.appendChild(taskItem);
     });
@@ -138,6 +193,15 @@ function displayTaskList(project) {
     noTasks.textContent = "No tasks for this project.";
     taskList.appendChild(noTasks);
   }
+}
+
+// ===== HELPER FUNCTION TO CALCULATE DAYS LEFT =====
+function calculateDaysLeft(deadlineDate) {
+  const today = new Date();
+  const deadline = new Date(deadlineDate);
+  const timeDiff = deadline - today;
+  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+  return daysLeft >= 0 ? daysLeft : 0;
 }
 
 // ===== DISPLAY ERROR MESSAGE =====

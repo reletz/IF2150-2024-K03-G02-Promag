@@ -79,6 +79,8 @@ body.body-proyekpage {
 /* Project List Styles */
 .row {
   display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .first-row {
@@ -146,26 +148,27 @@ body.body-proyekpage {
 #header {
   width: 100%;
   max-width: 1000px;
-  padding: 20px 0;
-  text-align: center;
+  padding: 20px 20px;
+  text-align: left; /* Left align text */
 }
 
 #header h1 {
   font-size: 36px;
-  margin-bottom: 10px;
+  margin-bottom: 5px; /* Minimized margin */
   color: #ffffff; /* White text for the header */
 }
 
 #header p {
   font-size: 18px;
-  margin-bottom: 5px;
+  margin-top: 0; /* Removed top margin */
+  margin-bottom: 5px; /* Minimized margin */
   color: #ffffff; /* White text for the header */
 }
 
 #task-list {
   width: 100%;
   max-width: 1000px;
-  padding: 20px 0;
+  padding: 20px 20px;
 }
 
 .tasks-container {
@@ -175,28 +178,108 @@ body.body-proyekpage {
 }
 
 .task-item {
-  background-color: #D1EECC; /* Task background color */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #d1eecc; /* Task background color */
   padding: 20px;
-  border-radius: 75px; /* Fully rounded container */
+  border-radius: 65px; /* Fully rounded container */
   color: #000000; /* Black text for better readability */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.task-item h3 {
-  margin-top: 0;
+.task-info {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px; /* Left padding */
+  text-align: left;
+}
+
+.task-info .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-info h3 {
   font-size: 20px;
 }
 
-.task-item p {
-  margin: 10px 0;
+.task-info p {
+  margin-top: 0px; /* Space between row and description */
   font-size: 16px;
+}
+
+.task-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 20px; /* Right padding */
+  padding-right: 30px; /* Right padding */
+}
+
+.priority-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.priority-high {
+  background-color: red;
+}
+
+.priority-medium {
+  background-color: orange;
+}
+
+.priority-low {
+  background-color: blue;
+}
+
+.deadline-capsule {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  background-color: #57A99A; /* Grey background */
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+.days-left-capsule {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  background-color: #57A99A; /* Blue background */
+}
+
+.task-actions .custom-button {
+  background-color: #57a99a; /* Button background color */
+  color: #ffffff; /* Button text color */
+  margin-top: 5px; /* Space between days left and button */
+}
+
+.task-actions .custom-button:hover {
+  background-color: #3f6c67; /* Darker than #57A99A */
 }
 
 /* Footer Styles */
 #footer {
   width: 100%;
   max-width: 1000px;
-  padding: 20px 0;
+  padding: 20px 20px;
   display: flex;
   justify-content: center;
 }
@@ -204,7 +287,7 @@ body.body-proyekpage {
 #footer .custom-button {
   max-width: 200px;
   width: 100%;
-  background-color: #4a8c89; /* Footer button background */
+  background-color: #d1eecc; /* Footer button background */
   color: #000000; /* Footer button text color */
 }
 
@@ -213,12 +296,34 @@ body.body-proyekpage {
 }
 
 /* Go to Tugas Page Button */
-#task-list .custom-button.small {
-  background-color: #57A99A;
-  color: #000000;
+#task-list .custom-button.medium {
+  background-color: #57a99a;
+  color: #ffffff;
   margin-top: 20px;
 }
 
 #task-list .custom-button.medium:hover {
-  background-color: #4a8c89;
+  background-color: #3f6c67;
+}
+
+/* Preserve Existing Project Classes */
+.project-row {
+  display: flex;
+  flex: 3;
+}
+
+.project-container {
+  flex: 1;
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #57a99a; /* Background color */
+  border-radius: 10px; /* Rounded corners */
+  color: white; /* Text color */
+  font-family: inherit; /* Inherit font from .body-main */
+}
+
+.project-content {
+  margin-bottom: 10px; /* Space between content and button */
 }
