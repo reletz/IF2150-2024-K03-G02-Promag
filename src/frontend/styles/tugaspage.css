@@ -22,7 +22,7 @@ body.body-tugaspage {
   max-width: 1000px;
   padding: 20px 20px;
   text-align: left; /* Left align text */
-  background-color: #57a99a; /* Ensure header has consistent background */
+  background-color: #57a99a; /* Consistent header background */
   color: #ffffff; /* White text for the header */
   box-sizing: border-box;
 
@@ -30,15 +30,83 @@ body.body-tugaspage {
   flex-direction: column;
 }
 
-/* Header Title */
-#header h1 {
+/* Header Container */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Inline Row: Deadline, Priority, Progress, Back Button */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Align Back Button to the right */
+.row .backButton {
+  margin-left: auto;
+}
+
+/* Deadline Styles */
+.deadline .date-capsule {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  background-color: #d1eecc;
+  color: #000000;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Priority Dropdown Styles */
+.priorityDropdown select {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Progress Dropdown Styles */
+.progressDropdown select {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Back Button Styles */
+.backButton .custom-button.small {
+  background-color: #d1eecc; /* Transparent background for "X" button */
+  color: #000000; /* Black text */
+  padding: 5px 10px;
+  border-radius: 100%;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.backButton .custom-button.small:hover {
+  background-color: #a8d5b0; /* Light green background on hover */
+}
+
+/* Title Styles */
+.title h1 {
   font-size: 36px;
-  margin-bottom: 5px; /* Minimized margin */
+  margin: 0;
   color: #ffffff; /* White text for the header */
 }
 
-/* Header Subtitle */
-#header p {
+/* Description Styles */
+.description p {
   font-size: 18px;
   margin-top: 0; /* Removed top margin */
   margin-bottom: 5px; /* Minimized margin */
@@ -53,6 +121,7 @@ body.body-tugaspage {
   background-color: #d1eecc; /* Body background color */
   color: #000000; /* Black text for better readability */
   box-sizing: border-box;
+  border-radius: 35px;
 
   display: flex;
   flex-direction: column;
@@ -87,7 +156,7 @@ body.body-tugaspage {
   width: 100%;
   min-height: 80px;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 20px;
   border: 1px solid #ccc;
   resize: vertical;
   box-sizing: border-box;
@@ -99,19 +168,35 @@ body.body-tugaspage {
   align-self: flex-end;
 }
 
+/* Button Styles */
 .custom-button.small {
-  background-color: #57a99a; /* Button background color */
-  color: #ffffff; /* Button text color */
+  background-color: #57a99a; /* Updated to light green background */
+  color: #ffffff; /* White text */
   padding: 8px 16px;
   border: none;
-  border-radius: 12px;
+  border-radius: 999px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
 }
 
 .custom-button.small:hover {
-  background-color: #3f6c67; /* Darker than #57A99A */
+  background-color: #458b7f; /* Darker shade on hover */
+}
+
+.custom-button.medium {
+  background-color: #d1eecc; /* Updated to light green background */
+  color: #000000; /* Black text for better readability */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button.medium:hover {
+  background-color: #a8d5b0; /* Darker shade on hover */
 }
 
 /* Footer Styles */
@@ -131,8 +216,9 @@ body.body-tugaspage {
 /* Footer Row */
 #footer .row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* Align items to the left */
   align-items: center;
+  gap: 20px; /* Added gap for spacing between buttons */
 }
 
 /* Delete Task Section */
@@ -140,47 +226,34 @@ body.body-tugaspage {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  /* Reusing task-item styles */
-  background-color: #d1eecc; /* Task background color */
-  padding: 15px 20px;
-  border-radius: 12px;
-  color: #000000; /* Black text for better readability */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deleteTugas .custom-button.medium {
+  background-color: #d1eecc; /* Light green background */
+  color: #000000; /* Black text */
+}
+
+.deleteTugas .custom-button.medium:hover {
+  background-color: #a8d5b0; /* Darker green on hover */
 }
 
 /* Upload Document Section */
 .uploadDocument {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* Align to the left */
   align-items: center;
-  /* Reusing task-item styles */
-  background-color: #d1eecc; /* Task background color */
-  padding: 15px 20px;
-  border-radius: 12px;
   color: #000000; /* Black text for better readability */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Back Button Container */
-#backButtonContainer {
-  display: flex;
-  justify-content: flex-end;
+.uploadDocument .custom-button.medium {
+  background-color: #d1eecc; /* Light green background */
+  color: #000000; /* Black text */
 }
 
-/* General Task Actions Buttons */
-.custom-button.medium {
-  background-color: #57a99a;
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.custom-button.medium:hover {
-  background-color: #3f6c67;
+.uploadDocument .custom-button.medium:hover {
+  background-color: #a8d5b0; /* Darker green on hover */
 }
 
 /* Responsive Design */
@@ -203,13 +276,154 @@ body.body-tugaspage {
     gap: 10px;
   }
 
-  #backButtonContainer {
-    justify-content: flex-start;
-  }
-
   .deleteTugas,
   .uploadDocument {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start; /* Ensure aligned to left */
   }
+
+  /* Adjusting Header Row for Mobile */
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .deadline,
+  .priorityDropdown,
+  .progressDropdown,
+  .backButton {
+    width: 100%;
+  }
+
+  .priorityDropdown select,
+  .progressDropdown select {
+    width: 100%;
+  }
+
+  .backButton {
+    align-self: flex-end; /* Align "X" to the end on mobile */
+  }
+}
+
+/* Comment Container */
+.commentContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff; /* White background for comments */
+  color: #000000; /* Black text */
+  padding: 10px;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Comment Text */
+.commentText {
+  flex: 1;
+  padding-left: 12px;
+}
+
+/* Delete Comment Button */
+.deleteCommentButton {
+  background-color: #ff4d4d; /* Red background */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.deleteCommentButton:hover {
+  background-color: #e60000; /* Darker red on hover */
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+  .commentContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .deleteCommentButton {
+    align-self: flex-end; /* Align delete button to the end on mobile */
+  }
+}
+
+/* tugaspage.css */
+
+/* Footer Row Styling */
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribute space between elements */
+  width: 100%;
+}
+
+/* Delete Task Button */
+.deleteTaskButton {
+  background-color: red; /* Red background */
+  color: white; /* White text for contrast */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.deleteTaskButton:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Add Document Button */
+.addDocumentButton {
+  background-color: #d1eecc;
+  color: black; /* Black text for better readability */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.addDocumentButton:hover {
+  background-color: #bfdcae;
+}
+
+/* Delete Document Button */
+.deleteDocumentButton {
+  background-color: red; /* Red background */
+  color: white; /* White text for contrast */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.deleteDocumentButton:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Uploaded Document Display */
+.uploadedDocument {
+  margin-left: 20px;
+}
+
+.uploadedDocument a {
+  color: black; /* Black font for better readability */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.uploadedDocument a:hover {
+  color: #458b7f;
 }

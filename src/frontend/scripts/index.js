@@ -4,18 +4,11 @@ let currentPage = 1;
 const itemsPerPage = 6;
 let totalPages = 1;
 
-// ===== HELPER FUNCTION TO FORMAT DATE =====
-function formatDate(dateString) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
-  const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', options);
-}
-
 function navigateToProyekPage(projectId) {
   window.location.href = `proyekpage.html?id=${projectId}`;
 }
 
-async function renderProjects(page = currentPage) {
+async function renderProjects(page = 1) {
   const data = await window.electronAPI.getProjectData();
   const container = document.getElementById("project-container");
   container.innerHTML = ''; // Clear previous content
@@ -29,7 +22,7 @@ async function renderProjects(page = currentPage) {
   const projectsToDisplay = data.projects.slice(startIndex, endIndex);
 
   let row;
-  projectsToDisplay.forEach((project, index) => {
+  for (const [index, project] of projectsToDisplay.entries()) {
     if (index % 3 === 0) {
       row = document.createElement("div");
       row.className = "project-row";
@@ -44,10 +37,28 @@ async function renderProjects(page = currentPage) {
     title.textContent = project.title;
     title.className = "project-title";
 
+    // Calculate progress percentage
+    const totalTasks = project.tasks.length;
+    const completedTasks = project.tasks.filter((task) => task.complete === 2).length;
+    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+    // Update project endDate and endTime if all tasks are complete
+    if (Math.round(progressPercentage) === 100 && !project.endDate) {
+      const now = new Date();
+      project.endDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+      project.endTime = now.toTimeString().split(" ")[0]; // HH:MM:SS
+
+      // Update the project data in the backend
+      const updateResponse = await window.electronAPI.updateProjectEndDate(project.id, project.endDate, project.endTime);
+      if (!updateResponse.success) {
+        console.error("Failed to update project's endDate and endTime.");
+      }
+    }
+
     // Date Capsule (Start Date - End Date)
     const dateCapsule = document.createElement("div");
     dateCapsule.className = "date-capsule";
-    dateCapsule.textContent = `${formatDate(project.startDate)} - ${project.endDate ? formatDate(project.endDate) : "Ongoing"}`;
+    dateCapsule.textContent = `${project.startDate} - ${project.endDate ? project.endDate : "Ongoing"}`;
 
     // Description with 30 characters limit
     const description = document.createElement("p");
@@ -63,11 +74,6 @@ async function renderProjects(page = currentPage) {
 
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
-
-    // Calculate progress percentage
-    const totalTasks = project.tasks.length;
-  const completedTasks = project.tasks.filter(task => task.complete === 2).length;
-  const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     progressBar.style.width = `${progressPercentage}%`;
 
     progressBarContainer.appendChild(progressBar);
@@ -101,7 +107,7 @@ async function renderProjects(page = currentPage) {
     projectDiv.appendChild(progressButtonContainer);
 
     row.appendChild(projectDiv);
-  });
+  }
 
   // Render Pagination Controls
   renderPaginationControls(page);
@@ -157,6 +163,86 @@ function renderPaginationControls(currentPage) {
   }
 }
 
+// Function to render notifications for tasks with deadlines less than three days away
+async function renderNotifications() {
+  const data = await window.electronAPI.getProjectData();
+  const now = new Date();
+  const notifications = [];
+
+  for (const project of data.projects) {
+    for (const task of project.tasks) {
+      if (task.complete !== 2) {
+        const deadline = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
+        const timeDiff = deadline - now;
+        const daysLeft = timeDiff / (1000 * 60 * 60 * 24);
+
+        if (daysLeft > 0 && daysLeft <= 3) {
+          notifications.push({
+            projectTitle: project.title,
+            taskTitle: task.title,
+          });
+        }
+      }
+    }
+  }
+
+  if (notifications.length > 0) {
+    showNotificationPopup(notifications);
+  }
+}
+
+function showNotificationPopup(notifications) {
+  let currentNotificationIndex = 0;
+
+  function renderNotification() {
+    const { projectTitle, taskTitle } = notifications[currentNotificationIndex];
+
+    // Create notification pop-up
+    const overlay = document.createElement("div");
+    overlay.className = "action-popup-overlay";
+
+    const popup = document.createElement("div");
+    popup.className = "action-popup";
+
+    const closeButton = document.createElement("span");
+    closeButton.className = "close-button";
+    closeButton.innerHTML = "&times;";
+    closeButton.onclick = () => {
+      document.body.removeChild(overlay);
+    };
+
+    const header = document.createElement("h1");
+    header.textContent = "Deadline Tugas Mendekat";
+
+    const message = document.createElement("p");
+    message.textContent = `Jangan lupa mengerjakan ${taskTitle} di ${projectTitle}`;
+
+    popup.appendChild(closeButton);
+    popup.appendChild(header);
+    popup.appendChild(message);
+
+    if (currentNotificationIndex < notifications.length - 1) {
+      const nextButton = createButton("Next Notification", () => {
+        currentNotificationIndex++;
+        document.body.removeChild(overlay);
+        renderNotification();
+      }, "medium");
+      popup.appendChild(nextButton);
+    } else {
+      const okButton = createButton("Okay", () => {
+        document.body.removeChild(overlay);
+      }, "medium");
+      popup.appendChild(okButton);
+    }
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+  }
+
+  renderNotification();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderProjects(currentPage);
+  renderNotifications();
 });

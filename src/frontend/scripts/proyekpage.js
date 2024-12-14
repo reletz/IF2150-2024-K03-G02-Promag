@@ -2,12 +2,12 @@ import { createButton } from "../components/buttonComponent.js";
 
 // ===== HELPER FUNCTION TO FORMAT DATE =====
 function formatDate(dateString) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const options = { day: "numeric", month: "long", year: "numeric" };
   const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', options);
+  return date.toLocaleDateString("id-ID", options);
 }
 // ===== GLOBAL VARIABLES =====
-let currentProjectId = null;
+let currentProjectId = null;;
 
 // ===== NAVIGATION APIs =====
 function navigateToMainPage() {
@@ -73,17 +73,17 @@ async function renderProjectDetails() {
   // Fetch data
   const data = await window.electronAPI.getProjectData();
 
-  // Fetch project with specified ID
+  // Fetch project dengan ID tertentu
   const project = data.projects.find((proj) => proj.id === projectId);
 
-  // Project existence validation
+  // Validasi keberadaan project
   if (!project) {
-    console.error(`Project with ID "${projectId}" not found.`);
-    displayErrorMessage("Project not found.");
+    console.error(`Project dengan ID "${projectId}" tidak ditemukan.`);
+    displayErrorMessage("Project tidak ditemukan.");
     return;
   }
 
-  // Get latest task deadline from tasks
+  // Dapatkan deadline tugas terbaru
   const latestDeadline = getLatestTaskDeadline(project.tasks);
   if (latestDeadline) {
     project.endDate = latestDeadline.toISOString().split("T")[0];
@@ -94,6 +94,9 @@ async function renderProjectDetails() {
   currentProjectId = project.id;
   displayHeader(project);
   displayTaskList(project);
+
+  // Cek deadline mendatang
+  checkForUpcomingDeadlines(project);
 }
 
 // ===== FUNCTION TO GET LATEST TASK DEADLINE =====
@@ -135,9 +138,8 @@ function displayHeader(project) {
 
   const description = document.createElement("p");
   const maxLength = 200;
-  description.textContent = project.description.length > maxLength
-    ? project.description.substring(0, maxLength) + '...'
-    : project.description;
+  description.textContent =
+    project.description.length > maxLength ? project.description.substring(0, maxLength) + "..." : project.description;
   header.appendChild(description);
 
   // ===== ADD PROGRESS BAR =====
@@ -147,9 +149,9 @@ function displayHeader(project) {
   const progressBar = document.createElement("div");
   progressBar.classList.add("progress-bar");
 
-  // Calculate progress
+  // Hitung progress
   const totalTasks = project.tasks.length;
-  const completedTasks = project.tasks.filter(task => task.complete).length;
+  const completedTasks = project.tasks.filter((task) => task.complete).length;
   const progressPercent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
   progressBar.style.width = `${progressPercent}%`;
 
@@ -219,20 +221,23 @@ function displayTaskList(project) {
       // ===== Status =====
       const statusDiv = document.createElement("div");
       statusDiv.classList.add("status-capsule");
-      
-      // Updated Status Text Based on 'complete' Value
+
       switch (task.complete) {
         case 0:
           statusDiv.textContent = "Not Started";
+          statusDiv.classList.add("status-not-started");
           break;
         case 1:
           statusDiv.textContent = "On Progress";
+          statusDiv.classList.add("status-on-progress");
           break;
         case 2:
           statusDiv.textContent = "Done";
+          statusDiv.classList.add("status-done");
           break;
         default:
           statusDiv.textContent = "Unknown";
+          statusDiv.classList.add("status-unknown");
       }
 
       // Append Title, Deadline, and Days Left to Row
@@ -244,9 +249,7 @@ function displayTaskList(project) {
       taskInfo.appendChild(row);
 
       const taskDescription = document.createElement("p");
-      taskDescription.textContent = task.description.length > 200
-        ? task.description.substring(0, 200) + '...'
-        : task.description;
+      taskDescription.textContent = task.description.length > 200 ? task.description.substring(0, 200) + "..." : task.description;
       taskInfo.appendChild(taskDescription);
 
       // ===== Priority Status =====
@@ -255,15 +258,15 @@ function displayTaskList(project) {
       switch (task.priority.toLowerCase()) {
         case "high":
           priorityStatus.classList.add("priority-high");
-          priorityStatus.textContent = "High";
+          priorityStatus.textContent = "HIGH";
           break;
         case "medium":
           priorityStatus.classList.add("priority-medium");
-          priorityStatus.textContent = "Medium";
+          priorityStatus.textContent = "MEDIUM";
           break;
         case "low":
           priorityStatus.classList.add("priority-low");
-          priorityStatus.textContent = "Low";
+          priorityStatus.textContent = "LOW";
           break;
         default:
           priorityStatus.style.display = "none"; // Hide if priority is undefined
@@ -380,6 +383,77 @@ function showActionPopup() {
 
   // Append Overlay to Body
   document.body.appendChild(overlay);
+}
+
+// ===== CHECK FOR UPCOMING DEADLINES =====
+function checkForUpcomingDeadlines(project) {
+  const tasksToNotify = project.tasks.filter(
+    (task) => calculateDaysLeft(task.deadlineDate) < 3 && calculateDaysLeft(task.deadlineDate) > 0
+  );
+
+  if (tasksToNotify.length > 0) {
+    showDeadlineNotification(tasksToNotify);
+  }
+}
+
+// ===== SHOW DEADLINE NOTIFICATION =====
+function showDeadlineNotification(tasksToNotify) {
+  let currentIndex = 0;
+
+  function displayNotification(index) {
+    // Remove any existing overlay
+    const existingOverlay = document.querySelector(".deadline-popup-overlay");
+    if (existingOverlay) {
+      document.body.removeChild(existingOverlay);
+    }
+
+    const task = tasksToNotify[index];
+
+    // Create Overlay
+    const overlay = document.createElement("div");
+    overlay.classList.add("deadline-popup-overlay");
+
+    // Create Popup Container
+    const popup = document.createElement("div");
+    popup.classList.add("deadline-popup");
+
+    // Create Header
+    const header = document.createElement("h1");
+    header.textContent = "Deadline Tugas Mendekat";
+
+    // Create Message
+    const message = document.createElement("p");
+    message.textContent = `Jangan lupa untuk selesaikan "${task.title}" sebelum deadline pada ${formatDate(task.deadlineDate)}.`;
+
+    // Create Button
+    const button = createButton("", null, "small");
+
+    if (tasksToNotify.length === 1 || index === tasksToNotify.length - 1) {
+      button.textContent = "Okay";
+      button.onclick = () => {
+        document.body.removeChild(overlay);
+      };
+    } else {
+      button.textContent = "Next Notification";
+      button.onclick = () => {
+        displayNotification(index + 1);
+      };
+    }
+
+    // Append Elements to Popup
+    popup.appendChild(header);
+    popup.appendChild(message);
+    popup.appendChild(button);
+
+    // Append Popup to Overlay
+    overlay.appendChild(popup);
+
+    // Append Overlay to Body
+    document.body.appendChild(overlay);
+  }
+
+  // Mulai dengan menampilkan notifikasi pertama
+  displayNotification(currentIndex);
 }
 
 // ===== INITIALIZE =====

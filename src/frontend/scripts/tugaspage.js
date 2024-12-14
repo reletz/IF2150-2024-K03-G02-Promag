@@ -1,6 +1,6 @@
 // src/frontend/scripts/tugaspage.js
 
-import { createButton, createDropdown } from "../components/buttonComponent.js";
+import { createButton, createLightButton, createDeleteButton, createDropdown } from "../components/buttonComponent.js";
 
 // ===== NAVIGATION FUNCTIONS =====
 function navigateBackToProjectPage() {
@@ -18,10 +18,9 @@ let currentTaskId = null;
 // ===== RENDER TASK DETAILS =====
 async function renderTaskDetails() {
   const params = new URLSearchParams(window.location.search);
-  const projectId = parseInt(params.get("projectId"), 10); // Changed from "id" to "projectId"
+  const projectId = parseInt(params.get("projectId"), 10);
   const taskId = parseInt(params.get("taskId"), 10);
 
-  // Debugging: Log the retrieved parameters
   console.log(`Retrieved projectId: ${projectId}, taskId: ${taskId}`);
 
   if (isNaN(projectId) || isNaN(taskId)) {
@@ -54,27 +53,33 @@ async function renderTaskDetails() {
   displayFooter(task);
 }
 
-// ===== DISPLAY HEADER =====
+// ===== ADAPTED displayHeader FUNCTION =====
 function displayHeader(task) {
   const header = document.getElementById("header");
 
-  // Clear any existing content
+  // Clear any existing content to prevent duplication
   header.innerHTML = "";
 
-  const headerTitle = document.createElement("h1");
-  headerTitle.textContent = task.title;
+  // ===== Header Container =====
+  const headerContainer = document.createElement("div");
+  headerContainer.classList.add("header");
 
-  header.appendChild(headerTitle);
+  // ===== Inline Row: Deadline, Priority, Progress, Back Button =====
+  const row = document.createElement("div");
+  row.classList.add("row");
 
-  // Deadline Capsule
-  const deadlineCapsule = document.createElement("div");
-  deadlineCapsule.classList.add("deadline-capsule");
-  // Format deadline date and time
-  const deadline = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
-  deadlineCapsule.textContent = `Deadline: ${deadline.toLocaleDateString()} ${deadline.toLocaleTimeString()}`;
-  header.appendChild(deadlineCapsule);
+  // ----- Deadline ----- //
+  const deadline = document.createElement("div");
+  deadline.classList.add("deadline");
 
-  // Priority Dropdown
+  const deadlineCapsule = document.createElement("span");
+  deadlineCapsule.classList.add("date-capsule");
+  const deadlineDate = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
+  deadlineCapsule.textContent = `Deadline: ${deadlineDate.toLocaleDateString()} ${deadlineDate.toLocaleTimeString()}`;
+
+  deadline.appendChild(deadlineCapsule);
+
+  // ----- Priority Dropdown ----- //
   const priorityDropdown = document.createElement("div");
   priorityDropdown.classList.add("priorityDropdown");
 
@@ -89,25 +94,88 @@ function displayHeader(task) {
     updateTaskPriority(newPriority);
   });
   priorityDropdown.appendChild(prioritySelect);
-  header.appendChild(priorityDropdown);
 
-  // Status Display
-  const statusDisplay = document.createElement("div");
-  statusDisplay.classList.add("statusDisplay");
+  // ----- Progress Dropdown ----- //
+  const progressDropdown = document.createElement("div");
+  progressDropdown.classList.add("progressDropdown");
 
-  const statuses = ["Not Started", "On Progress", "Finished"];
-  const statusSelect = createDropdown("statusSelect", statuses, task.complete ? "Finished" : "On Progress");
+  const statuses = [
+    { label: "Not Started", value: 0 },
+    { label: "On Progress", value: 1 },
+    { label: "Finished", value: 2 },
+  ];
+  const statusSelect = createDropdownWithValues("statusSelect", statuses, task.complete);
   statusSelect.addEventListener("change", (e) => {
-    const newStatus = e.target.value;
+    const newStatus = parseInt(e.target.value, 10);
     updateTaskStatus(newStatus);
   });
-  statusDisplay.appendChild(statusSelect);
-  header.appendChild(statusDisplay);
+  progressDropdown.appendChild(statusSelect);
+
+  // ----- Back Button ("X") ----- //
+  const backButtonDiv = document.createElement("div");
+  backButtonDiv.classList.add("backButton");
+
+  const backButton = createButton("X", navigateBackToProjectPage, "small");
+  backButtonDiv.appendChild(backButton);
+
+  // Append Deadline, Priority, Progress, and Back Button to Row
+  row.appendChild(deadline);
+  row.appendChild(priorityDropdown);
+  row.appendChild(progressDropdown);
+  row.appendChild(backButtonDiv);
+
+  // ===== Title =====
+  const titleContainer = document.createElement("div");
+  titleContainer.classList.add("title");
+
+  const title = document.createElement("h1");
+  title.textContent = task.title;
+  titleContainer.appendChild(title);
+
+  // ===== Description =====
+  const descriptionContainer = document.createElement("div");
+  descriptionContainer.classList.add("description");
+
+  const description = document.createElement("p");
+  const maxLength = 200;
+  description.textContent =
+    task.description.length > maxLength ? task.description.substring(0, maxLength) + "..." : task.description;
+  descriptionContainer.appendChild(description);
+
+  // Assemble Header Container
+  headerContainer.appendChild(row);
+  headerContainer.appendChild(titleContainer);
+  headerContainer.appendChild(descriptionContainer);
+
+  // Append Header Container to Main Header
+  header.appendChild(headerContainer);
+}
+
+// ===== CREATE DROPDOWN WITH VALUES =====
+function createDropdownWithValues(id, options, selectedValue) {
+  const select = document.createElement("select");
+  select.id = id;
+  select.classList.add("dropdown");
+
+  options.forEach((option) => {
+    const opt = document.createElement("option");
+    opt.value = option.value;
+    opt.textContent = option.label;
+    if (option.value === selectedValue) {
+      opt.selected = true;
+    }
+    select.appendChild(opt);
+  });
+
+  return select;
 }
 
 // ===== DISPLAY BODY =====
 function displayBody(task) {
   const bodySection = document.getElementById("body-section");
+
+  // Clear existing content if any
+  bodySection.innerHTML = "";
 
   // ===== COMMENTS DISPLAY =====
   const commentsDisplay = document.createElement("div");
@@ -117,8 +185,18 @@ function displayBody(task) {
   if (task.comments && task.comments.length > 0) {
     task.comments.forEach((comment, index) => {
       const commentDiv = document.createElement("div");
-      commentDiv.classList.add("comment");
-      commentDiv.textContent = `${index + 1}. ${comment}`;
+      commentDiv.classList.add("commentContainer");
+
+      const commentText = document.createElement("span");
+      commentText.classList.add("commentText");
+      commentText.textContent = `${index + 1}. ${comment}`;
+
+      const deleteCommentButton = createDeleteButton("Delete", () => deleteComment(index), "small");
+      deleteCommentButton.classList.add("deleteCommentButton");
+
+      commentDiv.appendChild(commentText);
+      commentDiv.appendChild(deleteCommentButton);
+
       commentsDisplay.appendChild(commentDiv);
     });
   } else {
@@ -140,28 +218,26 @@ function displayBody(task) {
 
   bodySection.appendChild(insertComment);
 
-  const addCommentButton = document.createElement("div");
-  addCommentButton.classList.add("addCommentButton");
+  const addCommentButton = createButton(
+    "Add Comment",
+    () => {
+      const newCommentInput = document.getElementById("newComment");
+      const newComment = newCommentInput.value.trim();
+      if (newComment === "") {
+        alert("Please enter a comment.");
+        return;
+      }
+      addComment(newComment);
+      newCommentInput.value = "";
+    },
+    "small"
+  );
 
-  const addCommentBtn = document.createElement("button");
-  addCommentBtn.id = "addCommentBtn";
-  addCommentBtn.classList.add("custom-button", "small");
-  addCommentBtn.textContent = "Add Comment";
-  addCommentButton.appendChild(addCommentBtn);
+  const addCommentButtonContainer = document.createElement("div");
+  addCommentButtonContainer.classList.add("addCommentButton");
+  addCommentButtonContainer.appendChild(addCommentButton);
 
-  bodySection.appendChild(addCommentButton);
-
-  // ===== ADD COMMENT EVENT LISTENER =====
-  addCommentBtn.addEventListener("click", () => {
-    const newCommentInput = document.getElementById("newComment");
-    const newComment = newCommentInput.value.trim();
-    if (newComment === "") {
-      alert("Please enter a comment.");
-      return;
-    }
-    addComment(newComment);
-    newCommentInput.value = "";
-  });
+  bodySection.appendChild(addCommentButtonContainer);
 }
 
 // ===== DISPLAY FOOTER =====
@@ -172,7 +248,7 @@ function displayFooter(task) {
   footer.innerHTML = "";
 
   const footerRow = document.createElement("div");
-  footerRow.classList.add("row");
+  footerRow.classList.add("row", "footerRow");
 
   // ===== DELETE TASK BUTTON =====
   const deleteTugasDiv = document.createElement("div");
@@ -185,23 +261,45 @@ function displayFooter(task) {
   }, "medium");
   deleteTugasDiv.appendChild(deleteButton);
 
-  // ===== UPLOAD DOCUMENT BUTTON =====
-  const uploadDocumentDiv = document.createElement("div");
-  uploadDocumentDiv.classList.add("uploadDocument");
+  // ===== DOCUMENT BUTTON =====
+  const documentDiv = document.createElement("div");
+  documentDiv.classList.add("documentDiv");
 
-  const uploadButton = createButton("UPLOAD DOCUMENT", uploadDocument, "medium");
-  uploadDocumentDiv.appendChild(uploadButton);
+  let documentButton;
+  if (task.documentSrc) {
+    // If document is uploaded, show "DELETE DOCUMENT" button
+    documentButton = createDeleteButton("DELETE DOCUMENT", () => deleteDocument(task.documentSrc), "medium");
+    documentButton.classList.add("deleteDocumentButton");
+  } else {
+    // If no document, show "ADD DOCUMENT" button
+    documentButton = createLightButton("ADD DOCUMENT", uploadDocument, "medium");
+    documentButton.classList.add("addDocumentButton");
+  }
 
-  // ===== BACK TO PROJECT BUTTON =====
-  const backButtonContainer = document.createElement("div");
-  backButtonContainer.id = "backButtonContainer";
+  documentDiv.appendChild(documentButton);
 
-  const backButton = createButton("BACK TO PROJECT", navigateBackToProjectPage, "medium");
-  backButtonContainer.appendChild(backButton);
+  // ===== UPLOADED DOCUMENT DISPLAY =====
+  const uploadedDocumentDiv = document.createElement("div");
+  uploadedDocumentDiv.classList.add("uploadedDocument");
 
+  if (task.documentSrc) {
+    const uploadedFileLink = document.createElement("a");
+    uploadedFileLink.href = "#";
+
+    // Extract the filename using JavaScript string methods
+    const fileName = task.documentSrc.split("/").pop();
+    uploadedFileLink.textContent = fileName;
+    uploadedFileLink.style.color = "black"; // Black font
+
+    uploadedFileLink.addEventListener("click", () => downloadDocument(task.documentSrc));
+
+    uploadedDocumentDiv.appendChild(uploadedFileLink);
+  }
+
+  // ===== APPEND TO FOOTER ROW =====
   footerRow.appendChild(deleteTugasDiv);
-  footerRow.appendChild(uploadDocumentDiv);
-  footerRow.appendChild(backButtonContainer);
+  footerRow.appendChild(documentDiv);
+  footerRow.appendChild(uploadedDocumentDiv);
 
   footer.appendChild(footerRow);
 }
@@ -248,6 +346,96 @@ async function addComment(comment) {
   }
 }
 
+// ===== DELETE COMMENT =====
+async function deleteComment(commentIndex) {
+  const confirmDelete = confirm("Are you sure you want to delete this comment?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await window.electronAPI.deleteCommentFromTask(currentProjectId, currentTaskId, commentIndex);
+
+    if (response.success) {
+      alert("Comment deleted successfully.");
+      const data = await window.electronAPI.getProjectData();
+      const project = data.projects.find((proj) => proj.id === currentProjectId);
+      const task = project.tasks.find((t) => t.id === currentTaskId);
+      updateCommentsDisplay(task);
+    } else {
+      alert(response.message || "Failed to delete comment.");
+    }
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    alert("Failed to delete comment.");
+  }
+}
+
+// ===== DOWNLOAD DOCUMENT =====
+async function downloadDocument(documentSrc) {
+  try {
+    const response = await window.electronAPI.downloadDocument(documentSrc);
+
+    if (response.success) {
+      alert("Document downloaded successfully.");
+    } else {
+      alert(response.message || "Failed to download document.");
+    }
+  } catch (error) {
+    console.error("Error downloading document:", error);
+    alert("Failed to download document.");
+  }
+}
+
+// ===== DELETE DOCUMENT =====
+async function deleteDocument(documentSrc) {
+  const confirmDelete = confirm("Are you sure you want to delete this document?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await window.electronAPI.deleteDocument(currentProjectId, currentTaskId);
+
+    if (response.success) {
+      alert("Document deleted successfully.");
+      // Refresh the footer to show "ADD DOCUMENT" button
+      const data = await window.electronAPI.getProjectData();
+      const project = data.projects.find((proj) => proj.id === currentProjectId);
+      const task = project.tasks.find((t) => t.id === currentTaskId);
+      displayFooter(task);
+    } else {
+      alert(response.message || "Failed to delete document.");
+    }
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    alert("Failed to delete document.");
+  }
+}
+
+// ===== UPLOAD DOCUMENT =====
+async function uploadDocument() {
+  try {
+    const result = await window.electronAPI.openFileDialog();
+    if (result && result.filePaths && result.filePaths.length > 0) {
+      const filePath = result.filePaths[0];
+      const response = await window.electronAPI.uploadDocumentToTask(currentProjectId, currentTaskId, filePath);
+
+      if (response.success) {
+        alert("Document uploaded successfully.");
+        // Update the UI to reflect the uploaded document
+        const data = await window.electronAPI.getProjectData();
+        const project = data.projects.find((proj) => proj.id === currentProjectId);
+        const task = project.tasks.find((t) => t.id === currentTaskId);
+        displayFooter(task);
+      } else {
+        alert(response.message || "Failed to upload document.");
+      }
+    } else {
+      console.log("File selection was canceled.");
+    }
+  } catch (error) {
+    console.error("Error uploading document:", error);
+    alert("Failed to upload document.");
+  }
+}
+
 // ===== UPDATE COMMENTS DISPLAY =====
 function updateCommentsDisplay(task) {
   const commentsDisplay = document.getElementById("commentsDisplay");
@@ -256,8 +444,18 @@ function updateCommentsDisplay(task) {
   if (task.comments && task.comments.length > 0) {
     task.comments.forEach((comment, index) => {
       const commentDiv = document.createElement("div");
-      commentDiv.classList.add("comment");
-      commentDiv.textContent = `${index + 1}. ${comment}`;
+      commentDiv.classList.add("commentContainer");
+
+      const commentText = document.createElement("span");
+      commentText.classList.add("commentText");
+      commentText.textContent = `${index + 1}. ${comment}`;
+
+      const deleteCommentButton = createDeleteButton("Delete", () => deleteComment(index), "small");
+      deleteCommentButton.classList.add("deleteCommentButton");
+
+      commentDiv.appendChild(commentText);
+      commentDiv.appendChild(deleteCommentButton);
+
       commentsDisplay.appendChild(commentDiv);
     });
   } else {
@@ -274,7 +472,6 @@ async function updateTaskPriority(newPriority) {
     if (!response.success) {
       alert(response.message || "Failed to update priority.");
     } else {
-      // Optionally, update the priority display or notify the user
       console.log("Priority updated successfully.");
     }
   } catch (error) {
@@ -284,13 +481,12 @@ async function updateTaskPriority(newPriority) {
 
 // ===== UPDATE TASK STATUS =====
 async function updateTaskStatus(newStatus) {
-  const isComplete = newStatus === "Finished";
   try {
-    const response = await window.electronAPI.updateTaskStatus(currentProjectId, currentTaskId, isComplete);
+    const response = await window.electronAPI.updateTaskStatus(currentProjectId, currentTaskId, newStatus);
+
     if (!response.success) {
       alert(response.message || "Failed to update status.");
     } else {
-      // Optionally, update the status display or notify the user
       console.log("Status updated successfully.");
     }
   } catch (error) {
@@ -316,29 +512,6 @@ async function deleteTask() {
   }
 }
 
-// ===== UPLOAD DOCUMENT =====
-async function uploadDocument() {
-  try {
-    const result = await window.electronAPI.openFileDialog();
-    if (result && result.filePaths && result.filePaths.length > 0) {
-      const filePath = result.filePaths[0];
-      const response = await window.electronAPI.uploadDocumentToTask(currentProjectId, currentTaskId, filePath);
-
-      if (response.success) {
-        alert("Document uploaded successfully.");
-        // Optionally, update the UI to reflect the uploaded document
-      } else {
-        alert(response.message || "Failed to upload document.");
-      }
-    } else {
-      console.log("File selection was canceled.");
-    }
-  } catch (error) {
-    console.error("Error uploading document:", error);
-    alert("Failed to upload document.");
-  }
-}
-
 // ===== DISPLAY ERROR MESSAGE =====
 function displayErrorMessage(message) {
   const header = document.getElementById("header");
@@ -356,7 +529,6 @@ function displayErrorMessage(message) {
 
 // ===== INITIALIZE =====
 document.addEventListener("DOMContentLoaded", () => {
-  // Render Task Details (Header, Body, Footer)
   renderTaskDetails();
 });
 
