@@ -7,27 +7,48 @@
       "startTime": "00:00:00",
       "endDate": null,
       "endTime": null,
-      "description": "Description of Project 1",
+      "description": "Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1",
       "tasks": [
-        {
-          "id": 101,
-          "title": "Task 1",
-          "description": "Description of Task 1",
-          "priority": "high",
-          "comments": ["Comment 1", "Comment 2"],
-          "documentSrc": "",
-          "complete": false,
-          "deadlineDate": "2024-12-31",
-          "deadlineTime": "23:59:59"
-        },
         {
           "id": 102,
           "title": "Task 2",
           "description": "Description of Task 2",
-          "priority": "medium",
-          "comments": ["Comment 1", "Comment 2"],
+          "priority": "high",
+          "comments": [
+            "Comment 1",
+            "Comment 2",
+            "halo"
+          ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
+          "deadlineDate": "2024-12-16",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 103,
+          "title": "Task 3",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 104,
+          "title": "Task 4",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         }
@@ -38,18 +59,24 @@
       "title": "Project 2",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:41:49",
       "description": "Description of Project 2",
       "tasks": [
         {
           "id": 201,
           "title": "Task 1",
           "description": "Description of Task 1",
-          "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
-          "documentSrc": "",
-          "complete": false,
+          "priority": "high",
+          "comments": [
+            "Comment 2",
+            "comment 3",
+            "comment 4",
+            "coment 5",
+            "oihoih"
+          ],
+          "documentSrc": "uploads/1734177283990_python-id.pdf",
+          "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         },
@@ -58,9 +85,12 @@
           "title": "Task 2",
           "description": "Description of Task 2",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         },
@@ -69,21 +99,69 @@
           "title": "Task 3",
           "description": "Description of Task 3",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 204,
+          "title": "11",
+          "description": "11",
+          "priority": "low",
+          "comments": [],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2024-12-14",
+          "deadlineTime": "01.47.24"
+        },
+        {
+          "id": 205,
+          "title": "",
+          "description": "",
+          "priority": "high",
+          "comments": [],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2024-12-14",
+          "deadlineTime": "01.49.41"
+        },
+        {
+          "id": 206,
+          "title": "KONTOL",
+          "description": "LU KONTOL",
+          "priority": "high",
+          "comments": [],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2024-12-14",
+          "deadlineTime": "01.58.35"
+        },
+        {
+          "id": 207,
+          "title": "",
+          "description": "",
+          "priority": "high",
+          "comments": [],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2024-12-14",
+          "deadlineTime": "02.00.01"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
       "id": 3,
       "title": "Project 3",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:37:13",
       "description": "Description of Project 3",
       "tasks": [
         {
@@ -91,13 +169,17 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
       "id": 4,
@@ -113,9 +195,12 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -126,8 +211,8 @@
       "title": "Project 5",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:42:12",
       "description": "Description of Project 5",
       "tasks": [
         {
@@ -135,9 +220,12 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -148,8 +236,8 @@
       "title": "Project 6",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:37:51",
       "description": "Description of Project 6",
       "tasks": [
         {
@@ -157,9 +245,63 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 1,
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
+        }
+      ],
+      "complete": 2
+    },
+    {
+      "id": 7,
+      "title": "Project 7",
+      "startDate": "2025-01-01",
+      "startTime": "00:00:00",
+      "endDate": null,
+      "endTime": null,
+      "description": "Description of Project 6",
+      "tasks": [
+        {
+          "id": 701,
+          "title": "Task 1",
+          "description": "Description of Task 1",
+          "priority": "low",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Project 7",
+      "startDate": "2025-01-01",
+      "startTime": "00:00:00",
+      "endDate": null,
+      "endTime": null,
+      "description": "Description of Project 6",
+      "tasks": [
+        {
+          "id": 701,
+          "title": "Task 1",
+          "description": "Description of Task 1",
+          "priority": "low",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }

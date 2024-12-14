@@ -1,0 +1,141 @@
+import { createButton } from "../components/buttonComponent.js";
+
+// Select the section for the new task form
+const formSection = document.querySelector('#new-task-form');
+const params = new URLSearchParams(window.location.search);
+const projectId = parseInt(params.get("projectId"), 10);
+
+// Ensure form section exists
+if (!formSection) {
+  console.error("Element with ID 'new-task-form' not found in the DOM.");
+  throw new Error("Missing #new-task-form element.");
+}
+
+// Create the form element
+const form = document.createElement('form');
+form.id = 'task-form';
+
+// Create the title input field
+const titleLabel = document.createElement('label');
+titleLabel.htmlFor = 'task-title';
+titleLabel.textContent = 'Title';
+
+const titleInput = document.createElement('input');
+titleInput.type = 'text';
+titleInput.id = 'task-title';
+titleInput.name = 'title';
+titleInput.placeholder = 'Enter task title';
+titleInput.required = true;
+
+// Create the description input field
+const descriptionLabel = document.createElement('label');
+descriptionLabel.htmlFor = 'task-description';
+descriptionLabel.textContent = 'Description';
+
+const descriptionInput = document.createElement('textarea');
+descriptionInput.id = 'task-description';
+descriptionInput.name = 'description';
+descriptionInput.placeholder = 'Enter task description';
+descriptionInput.rows = 5;
+descriptionInput.required = true;
+
+// Create the priority dropdown
+const priorityLabel = document.createElement('label');
+priorityLabel.htmlFor = 'task-priority';
+priorityLabel.textContent = 'Priority';
+
+const prioritySelect = document.createElement('select');
+prioritySelect.id = 'task-priority';
+prioritySelect.name = 'priority';
+
+const priorities = ['High', 'Medium', 'Low'];
+priorities.forEach((priority) => {
+  const option = document.createElement('option');
+  option.value = priority.toLowerCase();
+  option.textContent = priority;
+  prioritySelect.appendChild(option);
+});
+
+// Create the deadline input field
+const deadlineLabel = document.createElement('label');
+deadlineLabel.htmlFor = 'task-deadline';
+deadlineLabel.textContent = 'Deadline';
+
+const deadlineInput = document.createElement('input');
+deadlineInput.type = 'date';
+deadlineInput.id = 'task-deadline';
+deadlineInput.name = 'deadline';
+deadlineInput.required = true;
+
+// Add the form elements to the form
+form.appendChild(titleLabel);
+form.appendChild(titleInput);
+form.appendChild(descriptionLabel);
+form.appendChild(descriptionInput);
+form.appendChild(priorityLabel);
+form.appendChild(prioritySelect);
+form.appendChild(deadlineLabel);
+form.appendChild(deadlineInput);
+
+// Add the form to the form section
+formSection.appendChild(form);
+
+// Create the submit button
+const submitButton = createButton('Add Task', async () => {
+  const now = new Date();
+  const isoString = now.toISOString();
+  const [date] = isoString.split("T");
+  const time = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(now);
+
+  try {
+    const taskId = await newTaskId(projectId);
+
+    const task = {
+      id: taskId,
+      title: titleInput.value.trim(),
+      description: descriptionInput.value.trim(),
+      priority: prioritySelect.value,
+      comments: [],
+      documentSrc: "",
+      complete: 0,
+      deadlineDate: date,
+      deadlineTime: time,
+    };
+
+    const result = await window.electronAPI.addTask(projectId, task);
+
+    if (result.success) {
+      alert('Task added successfully!');
+      console.log('Redirecting to project page...');
+      window.location.href = `proyekpage.html?id=${projectId}`;
+    } else {
+      console.error('Failed to add task:', result.error);
+      alert(`Failed to add task: ${result.error}`);
+    }
+  } catch (error) {
+    console.error('Error adding task:', error);
+    alert('An error occurred while adding the task.');
+  }
+});
+
+// Add the button to the form
+form.appendChild(submitButton);
+
+function newTaskId(projectId) {
+  return window.electronAPI.getProjectData()
+    .then((data) => {
+      const project = data.projects.find((proj) => proj.id === projectId);
+
+      if (!project) {
+        console.error(`Project with ID "${projectId}" not found.`);
+        throw new Error(`Project with ID "${projectId}" not found.`);
+      }
+
+      const maxId = project.tasks.reduce((max, task) => (task.id > max ? task.id : max), 0);
+      return maxId + 1;
+    })
+    .catch((error) => {
+      console.error('Error fetching project data for new task ID:', error);
+      return 1; // Default ID jika ada error
+    });
+}

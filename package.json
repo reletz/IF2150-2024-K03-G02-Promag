@@ -2,7 +2,7 @@
   "name": "promag",
   "version": "1.0.0",
   "description": "Promag Gacor",
-  "main": "src/main.js",
+  "main": "src/backend/main.js",
   "scripts": {
     "start": "electron .",
     "dev": "nodemon --watch main.js --exec \"electron .\""
@@ -15,5 +15,6 @@
     "nodemon": "^3.1.7"
   },
   "dependencies": {
+    "async-mutex": "^0.5.0"
   }
 }

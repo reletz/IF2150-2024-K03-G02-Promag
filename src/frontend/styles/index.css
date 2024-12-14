@@ -1,0 +1,302 @@
+/* style.css */
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Global Styles */
+body.body-main {
+  font-family: "Montserrat", sans-serif;
+  background-color: #ffffff;
+  color: #57a99a;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 100vh;
+}
+
+body.body-proyekpage {
+  font-family: "Montserrat", sans-serif;
+  background-color: #57a99a;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 100vh;
+}
+
+/* Button Styles */
+.custom-button {
+  background-color: #d1eecc;
+  color: #000;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.custom-button:hover {
+  background-color: #bfdcae;
+}
+
+.custom-button.small {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.custom-button.medium {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.custom-button.large {
+  padding: 16px 32px;
+  font-size: 18px;
+}
+
+/* Project List Styles */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.first-row {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  max-width: 50%;
+  height: auto;
+}
+
+.project-rows {
+  flex: 6;
+  flex-direction: column;
+}
+
+.project-row {
+  display: flex;
+  flex: 3;
+}
+
+/* Pastikan kontainer proyek lebih lebar */
+.project-container {
+  flex: 2; /* Meningkatkan fleksibilitas dari 1 menjadi 2 */
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #57a99a; /* Background color */
+  border-radius: 10px; /* Rounded corners */
+  color: white; /* Text color */
+  font-family: inherit; /* Inherit font from .body-main */
+  /* Tambahkan lebar minimum jika diperlukan */
+  min-width: 300px;
+}
+
+/* Styling untuk Date Capsule */
+.date-capsule {
+  display: inline-block;
+  padding: 5px 20px;
+  border-radius: 20px;
+  background-color: #d1eecc; /* Warna latar */
+  color: #000000; /* Teks hitam */
+  margin-bottom: 10px;
+  font-size: 14px; /* Sesuaikan ukuran font */
+  font-weight: bold;
+  white-space: nowrap; /* Mencegah pemisahan baris */
+}
+
+
+/* Styling untuk Judul Proyek */
+.project-title {
+  margin-bottom: 5px; /* Mengurangi jarak bawah */
+  font-size: 24px; /* Menyesuaikan ukuran font */
+  color: #ffffff; /* Warna teks putih */
+  margin-top: 0; /* Memastikan judul lebih ke atas */
+}
+
+.project-content {
+  margin-bottom: 10px; /* Space between content and button */
+}
+
+.project-container h2 {
+  margin-top: 0;
+}
+
+#navigate-to-proyekpage-button {
+  margin-top: 10px;
+}
+
+/* Styling untuk deskripsi */
+.project-container p {
+  margin-bottom: 10px;
+}
+
+/* Container for Progress Bar and Button */
+.progress-button-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Wrapper for Progress Bar and Percentage */
+.progress-wrapper {
+  flex: 3;
+  position: relative;
+}
+
+/* Progress Bar Container */
+.progress-bar-container {
+  width: 100%;
+  background-color: #ccc;
+  border-radius: 5px;
+  height: 10px;
+  position: relative;
+}
+
+/* Progress Bar */
+.progress-bar {
+  height: 100%;
+  background-color: #4caf50; /* Warna hijau */
+  border-radius: 5px;
+}
+
+/* Progress Percentage Text */
+.progress-percentage {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  font-size: 12px;
+  color: #000000;
+}
+
+/* Button Styles within Progress Button Container */
+.progress-button-container .custom-button {
+  flex: 1;
+  max-width: 100px; /* Sesuaikan sesuai kebutuhan */
+}
+
+/* Pastikan tombol berada di dalam kontainer */
+.project-container .custom-button {
+  width: 100%;
+}
+
+/* Pastikan judul proyek lebih ke atas */
+.project-container h1 {
+  margin-top: 0;
+}
+
+/* Styling untuk Pagination Container */
+#pagination-container {
+  display: flex;
+  justify-content: space-between; /* Space between Back and Next */
+  align-items: center;
+  width: 300px; /* Adjust as needed */
+  margin-top: 20px;
+  padding: 0 20px; /* Padding on left and right */
+}
+
+/* Styling untuk Pagination Button */
+.pagination-button {
+  background-color: #d1eecc;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #bfdcae;
+}
+
+.pagination-button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+/* Styling untuk Pagination Row */
+.pagination-row {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Center the pagination container */
+}
+
+/* ...existing code... */
+
+.action-popup-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1001;
+}
+
+.action-popup {
+background-color: #57a99a;
+padding: 20px 30px;
+border-radius: 10px;
+width: 300px;
+text-align: center;
+position: relative;
+}
+
+.action-popup h1 {
+margin-top: 0;
+margin-bottom: 20px;
+color: #ffffff;
+}
+
+.action-popup p {
+margin: 10px 0;
+color: #ffffff;
+}
+
+.action-popup p:hover {
+text-decoration: underline;
+}
+
+.close-button {
+position: absolute;
+top: 10px;
+right: 15px;
+font-size: 24px;
+cursor: pointer;
+color: #000000;
+}
+
+/* ...existing code... */

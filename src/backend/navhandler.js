@@ -1,0 +1,129 @@
+const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require("electron");
+const { ensureUploadsDir } = require("./datahandler");
+const path = require("path");
+
+let mainWindow;
+
+// Create the main application window
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1366,
+    height: 768,
+    webPreferences: {
+      preload: path.join(__dirname, "..", "frontend", "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  // Load the main index.html page
+  mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "index.html"));
+
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
+}
+
+// Register global shortcuts and create the window when the app is ready
+app.whenReady().then(async () => {
+  await ensureUploadsDir(); // Ensure uploads directory is ready
+  createWindow();
+
+  // Register CommandOrControl+R to reload the main window
+  globalShortcut.register("CommandOrControl+R", () => {
+    if (mainWindow) {
+      mainWindow.reload();
+    }
+  });
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+// Unregister all shortcuts and quit the app when all windows are closed
+app.on("will-quit", () => {
+  globalShortcut.unregisterAll();
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
+
+
+// Navigation Handlers
+ipcMain.on("navigate-to-main", () => {
+  if (mainWindow) {
+    mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "index.html"));
+  }
+});
+
+ipcMain.on("navigate-to-proyekpage", (event, projectId) => {
+  if (mainWindow) {
+    mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "proyekpage.html"));
+  }
+});
+
+ipcMain.on("navigate-to-tugaspage", (event, projectId, taskId) => {
+  if (mainWindow) {
+    const tugasPagePath = path.join(__dirname, "..", "frontend", "pages", "tugaspage.html");
+    mainWindow.loadFile(tugasPagePath).then(() => {
+      // Optionally, communicate the projectId and taskId to the renderer
+      mainWindow.webContents.send("load-tugaspage", { projectId, taskId });
+    });
+  }
+});
+
+ipcMain.on("navigate-to-main", () => {
+  if (mainWindow) {
+    mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "index.html"));
+  }
+});
+
+ipcMain.on("navigate-to-proyekpage", (event, projectId) => {
+  if (mainWindow) {
+    mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "proyekpage.html"));
+  }
+});
+
+ipcMain.on("navigate-to-tugaspage", (event, projectId, taskId) => {
+  if (mainWindow) {
+    const tugasPagePath = path.join(__dirname, "..", "frontend", "pages", "tugaspage.html");
+    mainWindow.loadFile(tugasPagePath).then(() => {
+      mainWindow.webContents.send("load-tugaspage", { projectId, taskId });
+    });
+  }
+});
+
+ipcMain.on("navigate-to-create-tugaspage", (event, projectId) => {
+  if (mainWindow) {
+    const createTugasPagePath = path.join(__dirname, "..", "frontend", "pages", "addtaskpage.html");
+    mainWindow.loadFile(createTugasPagePath).then(() => {
+      mainWindow.webContents.send("load-create-tugaspage", projectId);
+    });
+  }
+});
+
+// IPC handler to get project data
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
+app.on('before-quit', () => {
+  console.log('Saved before app quit');
+});
+
+module.exports = { 
+  mainWindow,
+  createWindow,
+};

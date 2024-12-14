@@ -1,0 +1,74 @@
+/* Base Styles for Add Task Page */
+body.body-addtaskpage {
+    font-family: "Montserrat", sans-serif;
+    background: linear-gradient(135deg, #70c1b3, #a5d6a7);
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+/* General styles for the form container */
+#new-task-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #57A99A;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for form labels */
+#new-task-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Style for input fields and textarea */
+#new-task-form input, #new-task-form textarea, #new-task-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Style for the priority dropdown */
+#new-task-form select {
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* Style for the deadline input */
+#new-task-form input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Button styling */
+#new-task-form button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#new-task-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
