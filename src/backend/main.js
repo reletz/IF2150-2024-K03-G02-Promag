@@ -1,6 +1,12 @@
 const { app, BrowserWindow, ipcMain, globalShortcut } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const {
+  initializeJSONCache,
+  saveJSONCache,
+  addProject,
+  deleteProject,
+} = require('./handler');
 
 let mainWindow;
 
@@ -68,8 +74,19 @@ ipcMain.on("navigate-to-tugaspage", () => {
 });
 
 // IPC handler to get project data
-ipcMain.handle("get-project-data", async () => {
-  const dataPath = path.join(__dirname, "data.json");
-  const data = fs.readFileSync(dataPath, "utf8");
-  return JSON.parse(data);
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  saveJSONCache(); // Simpan cache sebelum crash
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled rejection at:', promise, 'reason:', reason);
+  saveJSONCache(); // Simpan cache sebelum crash
+  process.exit(1);
+});
+
+app.on('before-quit', () => {
+  saveJSONCache();
+  console.log('JSON cache saved before app quit');
 });

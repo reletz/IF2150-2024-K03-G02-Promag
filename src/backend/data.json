@@ -164,6 +164,28 @@
           "deadlineTime": "23:59:59"
         }
       ]
+    },
+    {
+      "id": 7,
+      "title": "Project 7",
+      "startDate": "2025-01-01",
+      "startTime": "00:00:00",
+      "endDate": null,
+      "endTime": null,
+      "description": "Description of Project 6",
+      "tasks": [
+        {
+          "id": 701,
+          "title": "Task 1",
+          "description": "Description of Task 1",
+          "priority": "low",
+          "comments": ["Comment 1", "Comment 2"],
+          "documentSrc": "",
+          "complete": false,
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
+        }
+      ]
     }
   ]
 }
