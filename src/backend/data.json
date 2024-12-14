@@ -28,12 +28,15 @@
           "title": "Task 2",
           "description": "Description of Task 2",
           "priority": "medium",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
           "complete": false,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
-        }, 
+        },
         {
           "id": 103,
           "title": "Task 3",
@@ -47,7 +50,7 @@
           "complete": false,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
-        }, 
+        },
         {
           "id": 104,
           "title": "Task 4",
@@ -61,7 +64,7 @@
           "complete": false,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
-        }, 
+        },
         {
           "id": 103,
           "title": "Task 3",
@@ -75,7 +78,7 @@
           "complete": false,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
-        }, 
+        },
         {
           "id": 104,
           "title": "Task 4",
@@ -106,7 +109,15 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "medium",
-          "comments": ["Comment 1", "Comment 2", "comment 3", "comment 4", "coment 5", "oihoih"],
+          "comments": [
+            "Comment 2",
+            "comment 3",
+            "comment 4",
+            "coment 5",
+            "oihoih",
+            "oihoih",
+            "fayad ajg"
+          ],
           "documentSrc": "uploads/1734177283990_python-id.pdf",
           "complete": false,
           "deadlineDate": "2025-01-15",
@@ -117,7 +128,10 @@
           "title": "Task 2",
           "description": "Description of Task 2",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
           "complete": false,
           "deadlineDate": "2025-01-15",
@@ -128,7 +142,10 @@
           "title": "Task 3",
           "description": "Description of Task 3",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
           "complete": false,
           "deadlineDate": "2025-01-15",
@@ -150,7 +167,10 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
           "complete": false,
           "deadlineDate": "2025-01-15",
@@ -172,7 +192,10 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
           "complete": false,
           "deadlineDate": "2025-01-15",
@@ -194,7 +217,10 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
           "complete": false,
           "deadlineDate": "2025-01-15",
@@ -216,7 +242,10 @@
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "low",
-          "comments": ["Comment 1", "Comment 2"],
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
           "documentSrc": "",
           "complete": false,
           "deadlineDate": "2025-01-15",

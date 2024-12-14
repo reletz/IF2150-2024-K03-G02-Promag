@@ -111,9 +111,8 @@ function displayHeader(project) {
 
   const description = document.createElement("p");
   const maxLength = 200;
-  description.textContent = project.description.length > maxLength
-    ? project.description.substring(0, maxLength) + '...'
-    : project.description;
+  description.textContent =
+    project.description.length > maxLength ? project.description.substring(0, maxLength) + "..." : project.description;
   header.appendChild(description);
 
   // ===== ADD PROGRESS BAR =====
@@ -125,7 +124,7 @@ function displayHeader(project) {
 
   // Calculate progress
   const totalTasks = project.tasks.length;
-  const completedTasks = project.tasks.filter(task => task.complete).length;
+  const completedTasks = project.tasks.filter((task) => task.complete).length;
   const progressPercent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
   progressBar.style.width = `${progressPercent}%`;
 
@@ -205,9 +204,7 @@ function displayTaskList(project) {
       taskInfo.appendChild(row);
 
       const taskDescription = document.createElement("p");
-      taskDescription.textContent = task.description.length > 200
-        ? task.description.substring(0, 200) + '...'
-        : task.description;
+      taskDescription.textContent = task.description.length > 200 ? task.description.substring(0, 200) + "..." : task.description;
       taskInfo.appendChild(taskDescription);
 
       // ===== Priority Status =====
@@ -263,25 +260,32 @@ function displayTaskList(project) {
 
       // Previous Button
       if (currentPage > 1) {
-        const prevButton = createButton("Previous", () => {
-          currentPage--;
-          displayTaskList(project);
-        }, "small");
+        const prevButton = createButton(
+          "Previous",
+          () => {
+            currentPage--;
+            displayTaskList(project);
+          },
+          "small"
+        );
         paginationContainer.appendChild(prevButton);
       }
 
       // Next Button
       if (currentPage < totalPages) {
-        const nextButton = createButton("Next", () => {
-          currentPage++;
-          displayTaskList(project);
-        }, "small");
+        const nextButton = createButton(
+          "Next",
+          () => {
+            currentPage++;
+            displayTaskList(project);
+          },
+          "small"
+        );
         paginationContainer.appendChild(nextButton);
       }
 
       taskList.appendChild(paginationContainer);
     }
-
   } else {
     const noTasks = document.createElement("p");
     noTasks.textContent = "No tasks for this project.";

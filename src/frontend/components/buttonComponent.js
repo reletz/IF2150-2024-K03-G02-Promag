@@ -15,6 +15,22 @@ export function createButton(text, onClick, size = "medium") {
   return button;
 }
 
+export function createLightButton(text, onClick, size = "medium") {
+  const button = document.createElement("button");
+  button.textContent = text;
+  button.classList.add("custom-light-button", size);
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+export function createDeleteButton(text, onClick, size = "medium") {
+  const button = document.createElement("button");
+  button.textContent = text;
+  button.classList.add("custom-delete-button", size);
+  button.addEventListener("click", onClick);
+  return button;
+}
+
 /**
  * Creates a styled dropdown select element.
  * @param {string} id - The dropdown ID.

@@ -219,6 +219,31 @@ ipcMain.handle("delete-task", async (event, { projectId, taskId }) => {
   return { success: false, message: "Project or Task not found." };
 });
 
+// Download doc
+ipcMain.handle("download-document", async (event, relativeFilePath) => {
+  try {
+    // Resolve the absolute path of the file
+    const absolutePath = path.join(__dirname, relativeFilePath);
+
+    // Show save dialog to choose download location
+    const { canceled, filePath: savePath } = await dialog.showSaveDialog({
+      title: "Save Document",
+      defaultPath: path.basename(relativeFilePath),
+    });
+
+    if (canceled || !savePath) {
+      return { success: false, message: "Save dialog was canceled." };
+    }
+
+    // Copy the file to the chosen location
+    await fs.copyFile(absolutePath, savePath);
+    return { success: true };
+  } catch (error) {
+    console.error("Error downloading document:", error);
+    return { success: false, message: "Failed to download document." };
+  }
+});
+
 // Upload Document to Task
 ipcMain.handle("upload-document", async (event, { projectId, taskId, filePath }) => {
   try {
@@ -252,5 +277,40 @@ ipcMain.handle("upload-document", async (event, { projectId, taskId, filePath })
   } catch (error) {
     console.error("Error uploading document:", error);
     return { success: false, message: "Failed to upload document." };
+  }
+});
+
+ipcMain.handle("delete-comment-from-task", async (event, projectId, taskId, commentIndex) => {
+  try {
+    const data = await loadData(); // Use loadData instead of getProjectData
+
+    const project = data.projects.find((proj) => proj.id === projectId);
+    if (!project) {
+      throw new Error("Project not found.");
+    }
+
+    const task = project.tasks.find((t) => t.id === taskId);
+    if (!task) {
+      throw new Error("Task not found.");
+    }
+
+    if (!Array.isArray(task.comments)) {
+      throw new Error("Comments data structure is invalid.");
+    }
+
+    if (commentIndex < 0 || commentIndex >= task.comments.length) {
+      throw new Error("Invalid comment index.");
+    }
+
+    // Remove the comment
+    task.comments.splice(commentIndex, 1);
+
+    // Save the updated data
+    await saveData(data); // Use saveData instead of saveProjectData
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return { success: false, message: error.message };
   }
 });
