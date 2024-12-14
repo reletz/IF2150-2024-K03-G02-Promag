@@ -2,16 +2,19 @@
 
 import { createButton } from "../components/buttonComponent.js";
 
+// ===== GLOBAL VARIABLES =====
+let currentProjectId = null;
+
 // ===== NAVIGATION APIs =====
 function navigateToMainPage() {
   window.electronAPI.navigateToMainPage();
 }
 
-function navigateToTugasPage(projectId, taskId = null) {
+function navigateToTugasPage(taskId = null) {
   if (taskId) {
-    window.location.href = `tugaspage.html?projectId=${projectId}&taskId=${taskId}`;
+    window.location.href = `tugaspage.html?projectId=${currentProjectId}&taskId=${taskId}`;
   } else {
-    window.location.href = `tugaspage.html?projectId=${projectId}`;
+    window.location.href = `tugaspage.html?projectId=${currentProjectId}`;
   }
 }
 
@@ -25,29 +28,33 @@ if (footer) {
   console.error("Footer Container not found.");
 }
 
-let currentProjectId = null;
-
 // ===== RENDER PROJECT DETAILS =====
 async function renderProjectDetails() {
+  // Parse passed projectID from the URL
   const params = new URLSearchParams(window.location.search);
   const projectId = parseInt(params.get("id"), 10);
 
+  // projectID validation
   if (isNaN(projectId)) {
     console.error("Invalid or missing project ID in the URL.");
     displayErrorMessage("Invalid project ID specified.");
     return;
   }
 
+  // Fetch data
   const data = await window.electronAPI.getProjectData();
 
+  // Fetch project with specified ID
   const project = data.projects.find((proj) => proj.id === projectId);
 
+  // Project existence validation
   if (!project) {
     console.error(`Project with ID "${projectId}" not found.`);
     displayErrorMessage("Project not found.");
     return;
   }
 
+  // Get latest task deadline from tasks
   const latestDeadline = getLatestTaskDeadline(project.tasks);
   if (latestDeadline) {
     project.endDate = latestDeadline.toISOString().split("T")[0];
@@ -168,7 +175,7 @@ function displayTaskList(project) {
       const taskButton = createButton(
         "Details",
         () => {
-          navigateToTugasPage(project.id, task.id);
+          navigateToTugasPage(task.id);
         },
         "small"
       );
