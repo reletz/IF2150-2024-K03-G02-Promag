@@ -173,6 +173,46 @@ ipcMain.handle("update-task-priority", async (event, { projectId, taskId, priori
   return { success: false, message: "Project or Task not found." };
 });
 
+ipcMain.handle("update-project-complete", async (event, projectId) => {
+  try {
+    const data = await loadData();
+    const project = data.projects.find((p) => p.id === projectId);
+    if (!project) {
+      return { success: false, message: "Project not found." };
+    }
+
+    const now = new Date();
+    project.endDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+    project.endTime = now.toTimeString().split(" ")[0]; // HH:MM:SS
+    project.complete = 2;
+
+    await saveData(data);
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating project completion:", error);
+    return { success: false, message: "Failed to update project completion." };
+  }
+});
+
+ipcMain.handle("update-project-end-date", async (event, { projectId, endDate, endTime }) => {
+  try {
+    const data = await loadData();
+    const project = data.projects.find(p => p.id === projectId);
+    if (!project) {
+      return { success: false, message: "Project not found." };
+    }
+
+    project.endDate = endDate;
+    project.endTime = endTime;
+
+    await saveData(data);
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating project's endDate and endTime:", error);
+    return { success: false, message: "Failed to update project's endDate and endTime." };
+  }
+});
+
 // Update Task Status
 ipcMain.handle("update-task-status", async (event, { projectId, taskId, newStatus }) => {
   try {

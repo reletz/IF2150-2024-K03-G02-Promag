@@ -155,8 +155,8 @@
       "title": "Project 2",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:41:49",
       "description": "Description of Project 2",
       "tasks": [
         {
@@ -205,15 +205,16 @@
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
       "id": 3,
       "title": "Project 3",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:37:13",
       "description": "Description of Project 3",
       "tasks": [
         {
@@ -226,11 +227,12 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": 0,
+          "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
       "id": 4,
@@ -262,8 +264,8 @@
       "title": "Project 5",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:42:12",
       "description": "Description of Project 5",
       "tasks": [
         {
@@ -276,7 +278,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": 0,
+          "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -287,8 +289,8 @@
       "title": "Project 6",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
-      "endDate": null,
-      "endTime": null,
+      "endDate": "2024-12-14",
+      "endTime": "00:37:51",
       "description": "Description of Project 6",
       "tasks": [
         {
@@ -301,11 +303,12 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": 0,
+          "complete": 1,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
       "id": 7,

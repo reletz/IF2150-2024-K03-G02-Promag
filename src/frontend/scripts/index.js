@@ -29,7 +29,7 @@ async function renderProjects(page = currentPage) {
   const projectsToDisplay = data.projects.slice(startIndex, endIndex);
 
   let row;
-  projectsToDisplay.forEach((project, index) => {
+  for (const [index, project] of projectsToDisplay.entries()) {
     if (index % 3 === 0) {
       row = document.createElement("div");
       row.className = "project-row";
@@ -43,6 +43,24 @@ async function renderProjects(page = currentPage) {
     const title = document.createElement("h1");
     title.textContent = project.title;
     title.className = "project-title";
+
+    // Calculate progress percentage
+    const totalTasks = project.tasks.length;
+    const completedTasks = project.tasks.filter((task) => task.complete === 2).length;
+    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+    // Update project endDate and endTime if all tasks are complete
+    if (Math.round(progressPercentage) === 100 && !project.endDate) {
+      const now = new Date();
+      project.endDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+      project.endTime = now.toTimeString().split(" ")[0]; // HH:MM:SS
+
+      // Update the project data in the backend
+      const updateResponse = await window.electronAPI.updateProjectEndDate(project.id, project.endDate, project.endTime);
+      if (!updateResponse.success) {
+        console.error("Failed to update project's endDate and endTime.");
+      }
+    }
 
     // Date Capsule (Start Date - End Date)
     const dateCapsule = document.createElement("div");
@@ -63,11 +81,6 @@ async function renderProjects(page = currentPage) {
 
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
-
-    // Calculate progress percentage
-    const totalTasks = project.tasks.length;
-    const completedTasks = project.tasks.filter((task) => task.complete === 2).length;
-    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     progressBar.style.width = `${progressPercentage}%`;
 
     progressBarContainer.appendChild(progressBar);
@@ -101,7 +114,7 @@ async function renderProjects(page = currentPage) {
     projectDiv.appendChild(progressButtonContainer);
 
     row.appendChild(projectDiv);
-  });
+  }
 
   // Render Pagination Controls
   renderPaginationControls(page);

@@ -18,4 +18,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("delete-comment-from-task", projectId, taskId, commentIndex),
   downloadDocument: (documentSrc) => ipcRenderer.invoke("download-document", documentSrc),
   deleteDocument: (projectId, taskId) => ipcRenderer.invoke("delete-document", { projectId, taskId }),
+  updateProjectComplete: (projectId) => ipcRenderer.invoke("update-project-complete", projectId),
+  updateProjectEndDate: (projectId, endDate, endTime) =>
+    ipcRenderer.invoke("update-project-end-date", { projectId, endDate, endTime }),
 });
