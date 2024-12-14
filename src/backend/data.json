@@ -19,7 +19,7 @@
             "Comment 2"
           ],
           "documentSrc": "uploads/1734194705949_python-id.pdf",
-          "complete": true,
+          "complete": 2,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         },
@@ -33,7 +33,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         },
@@ -47,7 +47,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         },
@@ -61,7 +61,35 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 105,
+          "title": "Task 5",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 106,
+          "title": "Task 6",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         },
@@ -75,7 +103,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         },
@@ -89,7 +117,35 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 105,
+          "title": "Task 5",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 106,
+          "title": "Task 6",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         }
@@ -117,7 +173,8 @@
             "oihoih",
             "fayad ajg"
           ],
-          "complete": false,
+          "documentSrc": "uploads/1734177283990_python-id.pdf",
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         },
@@ -131,7 +188,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         },
@@ -145,7 +202,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -170,7 +227,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -195,7 +252,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -220,7 +277,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -245,7 +302,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -270,7 +327,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -295,7 +352,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }

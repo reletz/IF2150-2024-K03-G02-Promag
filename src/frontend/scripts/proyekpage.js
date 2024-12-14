@@ -1,5 +1,12 @@
 import { createButton } from "../components/buttonComponent.js";
 
+// ===== HELPER FUNCTION TO FORMAT DATE =====
+function formatDate(dateString) {
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const date = new Date(dateString);
+  return date.toLocaleDateString('id-ID', options);
+}
+
 // ===== GLOBAL VARIABLES =====
 let currentProjectId = null;
 
@@ -16,19 +23,28 @@ function navigateToTugasPage(taskId = null) {
   }
 }
 
-// ===== BUTTON: NAVIGATE TO MAIN PAGE =====
+// ===== BUTTONS: NAVIGATE TO MAIN PAGE & MORE ACTION =====
 const footer = document.getElementById("footer");
+
+// Create More Action Button
+const moreActionButton = createButton("MORE ACTION", () => {
+  showActionPopup();
+}, "medium");
+
+// Create Back Button
 const backButton = createButton("BACK MAIN", navigateToMainPage, "medium");
 
-// Create Pagination Container
-const paginationContainer = document.createElement("div");
-paginationContainer.classList.add("pagination-container");
+// Create Footer Container
+const footerContainer = document.createElement("div");
+footerContainer.classList.add("footer-container");
 
-// Append Back Button to Pagination Container
-paginationContainer.appendChild(backButton);
+// Append Buttons to Footer Container
+footerContainer.appendChild(moreActionButton);
+footerContainer.appendChild(backButton);
 
+// Append Footer Container to Footer
 if (footer) {
-  footer.appendChild(paginationContainer);
+  footer.appendChild(footerContainer);
 } else {
   console.error("Footer Container not found.");
 }
@@ -97,11 +113,11 @@ function displayHeader(project) {
 
   const startDateCapsule = document.createElement("span");
   startDateCapsule.classList.add("date-capsule");
-  startDateCapsule.textContent = project.startDate;
+  startDateCapsule.textContent = formatDate(project.startDate);
 
   const endDateCapsule = document.createElement("span");
   endDateCapsule.classList.add("date-capsule");
-  endDateCapsule.textContent = project.endDate || "Ongoing";
+  endDateCapsule.textContent = project.endDate ? formatDate(project.endDate) : "Ongoing";
 
   projectHeader.appendChild(title);
   projectHeader.appendChild(startDateCapsule);
@@ -147,31 +163,15 @@ function displayHeader(project) {
 }
 
 // ===== DISPLAY TASK LIST =====
-let currentPage = 1;
-const tasksPerPage = 3;
-
-// ===== DISPLAY TASK LIST =====
 function displayTaskList(project) {
   const taskList = document.getElementById("task-list");
   taskList.innerHTML = "";
 
   if (project.tasks && project.tasks.length > 0) {
-    // ===== REMOVE TASKS HEADER =====
-    // const tasksHeader = document.createElement("h2");
-    // tasksHeader.textContent = "Tasks";
-    // taskList.appendChild(tasksHeader);
-
     const tasksContainer = document.createElement("div");
     tasksContainer.classList.add("tasks-container");
 
-    // Calculate pagination
-    const totalTasks = project.tasks.length;
-    const totalPages = Math.ceil(totalTasks / tasksPerPage);
-    const startIndex = (currentPage - 1) * tasksPerPage;
-    const endIndex = startIndex + tasksPerPage;
-    const tasksToDisplay = project.tasks.slice(startIndex, endIndex);
-
-    tasksToDisplay.forEach((task) => {
+    project.tasks.forEach((task) => {
       const taskItem = document.createElement("div");
       taskItem.classList.add("task-item");
 
@@ -196,10 +196,30 @@ function displayTaskList(project) {
       const remainingDays = calculateDaysLeft(task.deadlineDate);
       daysLeft.textContent = `${remainingDays} day${remainingDays !== 1 ? "s" : ""} left`;
 
+      // ===== Status =====
+      const statusDiv = document.createElement("div");
+      statusDiv.classList.add("status-capsule");
+      
+      // Updated Status Text Based on 'complete' Value
+      switch (task.complete) {
+        case 0:
+          statusDiv.textContent = "Not Started";
+          break;
+        case 1:
+          statusDiv.textContent = "On Progress";
+          break;
+        case 2:
+          statusDiv.textContent = "Done";
+          break;
+        default:
+          statusDiv.textContent = "Unknown";
+      }
+
       // Append Title, Deadline, and Days Left to Row
       row.appendChild(taskTitle);
       row.appendChild(deadlineDate);
       row.appendChild(daysLeft);
+      row.appendChild(statusDiv);
 
       taskInfo.appendChild(row);
 
@@ -252,40 +272,8 @@ function displayTaskList(project) {
 
     taskList.appendChild(tasksContainer);
 
-    // ===== ADD PAGINATION BUTTONS =====
-    if (totalPages > 1) {
-      // Remove existing pagination buttons
-      paginationContainer.innerHTML = "";
-      paginationContainer.appendChild(backButton);
-
-      // Previous Button
-      if (currentPage > 1) {
-        const prevButton = createButton(
-          "Previous",
-          () => {
-            currentPage--;
-            displayTaskList(project);
-          },
-          "small"
-        );
-        paginationContainer.appendChild(prevButton);
-      }
-
-      // Next Button
-      if (currentPage < totalPages) {
-        const nextButton = createButton(
-          "Next",
-          () => {
-            currentPage++;
-            displayTaskList(project);
-          },
-          "small"
-        );
-        paginationContainer.appendChild(nextButton);
-      }
-
-      taskList.appendChild(paginationContainer);
-    }
+    // ===== REMOVE PAGINATION BUTTONS =====
+    // Pagination is removed to allow scrolling
   } else {
     const noTasks = document.createElement("p");
     noTasks.textContent = "No tasks for this project.";
@@ -312,6 +300,64 @@ function displayErrorMessage(message) {
   errorMsg.style.color = "red";
 
   header.appendChild(errorMsg);
+}
+
+// ===== ACTION POPUP =====
+function showActionPopup() {
+  // Create Overlay
+  const overlay = document.createElement("div");
+  overlay.classList.add("action-popup-overlay");
+
+  // Create Popup Container
+  const popup = document.createElement("div");
+  popup.classList.add("action-popup");
+
+  // Create Close Button
+  const closeButton = document.createElement("span");
+  closeButton.classList.add("close-button");
+  closeButton.innerHTML = "&times;";
+  closeButton.onclick = () => {
+    document.body.removeChild(overlay);
+  };
+
+  // Create Header
+  const header = document.createElement("h1");
+  header.textContent = "Action";
+
+  // Create Action Items
+  const action1 = document.createElement("p");
+  action1.textContent = "Set Priority";
+  action1.onclick = () => {
+    // Implement Set Priority Action
+    alert("Set Priority Clicked");
+  };
+
+  const action2 = document.createElement("p");
+  action2.textContent = "Set Status";
+  action2.onclick = () => {
+    // Implement Set Status Action
+    alert("Set Status Clicked");
+  };
+
+  const action3 = document.createElement("p");
+  action3.textContent = "Set Deadline";
+  action3.onclick = () => {
+    // Implement Set Deadline Action
+    alert("Set Deadline Clicked");
+  };
+
+  // Append Elements to Popup
+  popup.appendChild(closeButton);
+  popup.appendChild(header);
+  popup.appendChild(action1);
+  popup.appendChild(action2);
+  popup.appendChild(action3);
+
+  // Append Popup to Overlay
+  overlay.appendChild(popup);
+
+  // Append Overlay to Body
+  document.body.appendChild(overlay);
 }
 
 // ===== INITIALIZE =====
