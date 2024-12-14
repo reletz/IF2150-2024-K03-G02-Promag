@@ -106,7 +106,6 @@ ipcMain.on("navigate-to-main", () => {
 ipcMain.on("navigate-to-proyekpage", (event, projectId) => {
   if (mainWindow) {
     mainWindow.loadFile(path.join(__dirname, "..", "frontend", "pages", "proyekpage.html"));
-    // It's assumed that proyekpage.html will handle fetching projectId from URL or renderer
   }
 });
 
@@ -205,29 +204,38 @@ ipcMain.handle("add-task", async (event, projectId, task) => {
 
 // Delete Task
 ipcMain.handle("delete-task", async (event, { projectId, taskId }) => {
+  console.log("Received IDs:", { projectId, taskId }); // Debug IDs
   const data = await loadData();
+  console.log("Current Data:", JSON.stringify(data, null, 2)); // Debug data
+
   const project = data.projects.find((p) => p.id === projectId);
-  if (project) {
-    const taskIndex = project.tasks.findIndex((t) => t.id === taskId);
-    if (taskIndex !== -1) {
-      const [deletedTask] = project.tasks.splice(taskIndex, 1);
+  if (!project) {
+    console.error(`Project with ID ${projectId} not found.`);
+    return { success: false, message: "Project not found." };
+  }
 
-      // Optionally, delete the uploaded document if exists
-      if (deletedTask.documentSrc) {
-        const docPath = path.join(uploadsDir, path.basename(deletedTask.documentSrc));
-        try {
-          await fs.unlink(docPath);
-          console.log(`Deleted document at ${docPath}`);
-        } catch (err) {
-          console.error(`Error deleting document at ${docPath}:`, err);
-        }
-      }
+  const taskIndex = project.tasks.findIndex((t) => t.id === taskId);
+  if (taskIndex === -1) {
+    console.error(`Task with ID ${taskId} not found in project ${projectId}.`);
+    return { success: false, message: "Task not found." };
+  }
 
-      await saveData(data);
-      return { success: true };
+  const [deletedTask] = project.tasks.splice(taskIndex, 1);
+  console.log("Deleted Task:", deletedTask); // Debug deleted task
+
+  // Handle document deletion
+  if (deletedTask.documentSrc) {
+    const docPath = path.join(uploadsDir, path.basename(deletedTask.documentSrc));
+    try {
+      await fs.unlink(docPath);
+      console.log(`Deleted document at ${docPath}`);
+    } catch (err) {
+      console.error(`Error deleting document at ${docPath}:`, err);
     }
   }
-  return { success: false, message: "Project or Task not found." };
+
+  await saveData(data);
+  return { success: true };
 });
 
 // Upload Document to Task

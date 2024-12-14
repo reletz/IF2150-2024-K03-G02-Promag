@@ -178,7 +178,11 @@ function displayFooter(task) {
   const deleteTugasDiv = document.createElement("div");
   deleteTugasDiv.classList.add("deleteTugas");
 
-  const deleteButton = createButton("DELETE TASK", deleteTask, "medium");
+  const deleteButton = createButton("DELETE TASK", () => {
+    showConfirmModal("Are you sure you want to delete this task?", async () => {
+      await deleteTask(); // Panggil fungsi delete setelah konfirmasi
+    });
+  }, "medium");
   deleteTugasDiv.appendChild(deleteButton);
 
   // ===== UPLOAD DOCUMENT BUTTON =====
@@ -200,6 +204,31 @@ function displayFooter(task) {
   footerRow.appendChild(backButtonContainer);
 
   footer.appendChild(footerRow);
+}
+
+// Show the Confirm Modal
+function showConfirmModal(message, onConfirm) {
+  console.log("Modal displayed with message:", message); // Debug log
+  const modal = document.getElementById("confirm-modal");
+  const confirmButton = document.getElementById("confirm-button");
+  const cancelButton = document.getElementById("cancel-button");
+
+  modal.style.display = "flex"; // Tampilkan modal dengan flex
+
+  // Update pesan modal
+  const modalMessage = modal.querySelector("p");
+  modalMessage.textContent = message;
+
+  // Event listener tombol cancel
+  cancelButton.onclick = () => {
+    modal.style.display = "none"; // Sembunyikan modal
+  };
+
+  // Event listener tombol confirm
+  confirmButton.onclick = () => {
+    modal.style.display = "none"; // Sembunyikan modal
+    onConfirm(); // Jalankan aksi konfirmasi
+  };
 }
 
 // ===== ADD COMMENT =====
@@ -271,13 +300,11 @@ async function updateTaskStatus(newStatus) {
 
 // ===== DELETE TASK =====
 async function deleteTask() {
-  const confirmDelete = confirm("Are you sure you want to delete this task?");
-  if (!confirmDelete) return;
-
   try {
     const response = await window.electronAPI.deleteTask(currentProjectId, currentTaskId);
     if (response.success) {
       alert("Task deleted successfully.");
+      hideDeleteModal(); // Sembunyikan modal setelah sukses
       navigateBackToProjectPage();
     } else {
       alert(response.message || "Failed to delete task.");
@@ -285,6 +312,7 @@ async function deleteTask() {
   } catch (error) {
     console.error("Error deleting task:", error);
     alert("Failed to delete task.");
+    hideDeleteModal(); // Pastikan modal tetap ditutup jika terjadi error
   }
 }
 
@@ -331,3 +359,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Render Task Details (Header, Body, Footer)
   renderTaskDetails();
 });
+
+function showDeleteModal() {
+  const confirmModal = document.getElementById("confirm-modal");
+  confirmModal.style.display = "block"; // Tampilkan modal
+}
+
+function hideDeleteModal() {
+  const confirmModal = document.getElementById("confirm-modal");
+  confirmModal.style.display = "none"; // Sembunyikan modal
+}

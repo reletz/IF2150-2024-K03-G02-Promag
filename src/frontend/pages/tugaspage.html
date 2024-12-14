@@ -5,6 +5,7 @@
     <title>Promag: Task Page</title>
     <link rel="stylesheet" href="../styles/style.css" />
     <link rel="stylesheet" href="../styles/tugaspage.css" />
+    <link rel="stylesheet" href="../styles/confirm.css" />
   </head>
   <body class="body-tugaspage">
     <!-- ===== HEADER ===== -->
@@ -18,5 +19,15 @@
 
     <!-- ===== Scripts ===== -->
     <script type="module" src="../scripts/tugaspage.js"></script>
+    <div id="confirm-modal" style="display: none" class="modal">
+      <div class="modal-content">
+        <h2>Confirm Action</h2>
+        <p>Are you sure you want to delete this task?</p>
+        <div class="modal-buttons">
+          <button id="cancel-button" class="back-button">BACK</button>
+          <button id="confirm-button" class="delete-button">DELETE</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

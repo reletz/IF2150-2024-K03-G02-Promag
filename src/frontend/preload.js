@@ -12,8 +12,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   deleteProject: (projectId) => ipcRenderer.invoke('delete-project', projectId),
   editProject: (updatedProject) => ipcRenderer.invoke('edit-project', updatedProject),
 
-  addTask: (projectId, newTask) => ipcRenderer.invoke('add-task', projectId, newTask),
-  deleteTask: (projectId, taskId) => ipcRenderer.invoke('delete-task', projectId, taskId),
+  addTask: (projectId, newTask) => ipcRenderer.invoke('add-task', { projectId, newTask }),
+  deleteTask: (projectId, taskId) => ipcRenderer.invoke('delete-task', { projectId, taskId }),
   addCommentToTask: (projectId, taskId, comment) => ipcRenderer.invoke('add-comment', { projectId, taskId, comment }),
   updateTaskPriority: (projectId, taskId, priority) => ipcRenderer.invoke('update-task-priority', { projectId, taskId, priority }),
   updateTaskStatus: (projectId, taskId, isComplete) => ipcRenderer.invoke('update-task-status', { projectId, taskId, isComplete }),

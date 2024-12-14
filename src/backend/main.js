@@ -1,7 +1,6 @@
 // src/backend/main.js
-
 const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = require("electron");
-const { createWindow, ensureUploadsDir } = require('./handler');
+const { createWindow, ensureUploadsDir, mainWindow } = require('./handler');
 const path = require("path");
 
 // Register global shortcuts and create the window when the app is ready
