@@ -58,42 +58,26 @@ async function renderTaskDetails() {
 function displayHeader(task) {
   const header = document.getElementById("header");
 
-  const headerRow = document.createElement("div");
-  headerRow.classList.add("row");
+  // Clear any existing content
+  header.innerHTML = "";
 
-  const deadlineCapsule = document.createElement("div");
-  deadlineCapsule.classList.add("deadlineCapsule");
-  deadlineCapsule.id = "deadlineCapsule";
+  const headerTitle = document.createElement("h1");
+  headerTitle.textContent = task.title;
 
-  const priorityDropdown = document.createElement("div");
-  priorityDropdown.classList.add("priorityDropdown");
-  priorityDropdown.id = "priorityDropdown";
-
-  const statusDisplay = document.createElement("div");
-  statusDisplay.classList.add("statusDisplay");
-  statusDisplay.id = "statusDisplay";
-
-  const tugasTitle = document.createElement("div");
-  tugasTitle.classList.add("tugasTitle");
-  tugasTitle.id = "tugasTitle";
-
-  headerRow.appendChild(deadlineCapsule);
-  headerRow.appendChild(priorityDropdown);
-  headerRow.appendChild(statusDisplay);
-  headerRow.appendChild(tugasTitle);
-
-  header.appendChild(headerRow);
-
-  // Task Title
-  const title = document.createElement("h1");
-  title.textContent = task.title;
-  tugasTitle.appendChild(title);
+  header.appendChild(headerTitle);
 
   // Deadline Capsule
+  const deadlineCapsule = document.createElement("div");
+  deadlineCapsule.classList.add("deadline-capsule");
+  // Format deadline date and time
   const deadline = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
   deadlineCapsule.textContent = `Deadline: ${deadline.toLocaleDateString()} ${deadline.toLocaleTimeString()}`;
+  header.appendChild(deadlineCapsule);
 
   // Priority Dropdown
+  const priorityDropdown = document.createElement("div");
+  priorityDropdown.classList.add("priorityDropdown");
+
   const priorities = ["High", "Medium", "Low"];
   const prioritySelect = createDropdown(
     "prioritySelect",
@@ -105,8 +89,12 @@ function displayHeader(task) {
     updateTaskPriority(newPriority);
   });
   priorityDropdown.appendChild(prioritySelect);
+  header.appendChild(priorityDropdown);
 
   // Status Display
+  const statusDisplay = document.createElement("div");
+  statusDisplay.classList.add("statusDisplay");
+
   const statuses = ["Not Started", "On Progress", "Finished"];
   const statusSelect = createDropdown("statusSelect", statuses, task.complete ? "Finished" : "On Progress");
   statusSelect.addEventListener("change", (e) => {
@@ -114,6 +102,7 @@ function displayHeader(task) {
     updateTaskStatus(newStatus);
   });
   statusDisplay.appendChild(statusSelect);
+  header.appendChild(statusDisplay);
 }
 
 // ===== DISPLAY BODY =====
@@ -124,7 +113,6 @@ function displayBody(task) {
   const commentsDisplay = document.createElement("div");
   commentsDisplay.classList.add("commentsDisplay");
   commentsDisplay.id = "commentsDisplay";
-  bodySection.appendChild(commentsDisplay);
 
   if (task.comments && task.comments.length > 0) {
     task.comments.forEach((comment, index) => {
@@ -138,6 +126,8 @@ function displayBody(task) {
     noComments.textContent = "No comments yet.";
     commentsDisplay.appendChild(noComments);
   }
+
+  bodySection.appendChild(commentsDisplay);
 
   // ===== ADD COMMENT =====
   const insertComment = document.createElement("div");
@@ -178,38 +168,38 @@ function displayBody(task) {
 function displayFooter(task) {
   const footer = document.getElementById("footer");
 
+  // Clear any existing content
+  footer.innerHTML = "";
+
   const footerRow = document.createElement("div");
   footerRow.classList.add("row");
 
+  // ===== DELETE TASK BUTTON =====
   const deleteTugasDiv = document.createElement("div");
   deleteTugasDiv.classList.add("deleteTugas");
-  deleteTugasDiv.id = "deleteTugas";
 
-  const uploadDocumentDiv = document.createElement("div");
-  uploadDocumentDiv.classList.add("uploadDocument");
-  uploadDocumentDiv.id = "uploadDocument";
-
-  footerRow.appendChild(deleteTugasDiv);
-  footerRow.appendChild(uploadDocumentDiv);
-
-  // Back Button Container
-  const backButtonContainer = document.createElement("div");
-  backButtonContainer.id = "backButtonContainer";
-  footerRow.appendChild(backButtonContainer);
-
-  footer.appendChild(footerRow);
-
-  // ===== DELETE TASK BUTTON =====
   const deleteButton = createButton("DELETE TASK", deleteTask, "medium");
   deleteTugasDiv.appendChild(deleteButton);
 
   // ===== UPLOAD DOCUMENT BUTTON =====
+  const uploadDocumentDiv = document.createElement("div");
+  uploadDocumentDiv.classList.add("uploadDocument");
+
   const uploadButton = createButton("UPLOAD DOCUMENT", uploadDocument, "medium");
   uploadDocumentDiv.appendChild(uploadButton);
 
   // ===== BACK TO PROJECT BUTTON =====
+  const backButtonContainer = document.createElement("div");
+  backButtonContainer.id = "backButtonContainer";
+
   const backButton = createButton("BACK TO PROJECT", navigateBackToProjectPage, "medium");
   backButtonContainer.appendChild(backButton);
+
+  footerRow.appendChild(deleteTugasDiv);
+  footerRow.appendChild(uploadDocumentDiv);
+  footerRow.appendChild(backButtonContainer);
+
+  footer.appendChild(footerRow);
 }
 
 // ===== ADD COMMENT =====
@@ -254,6 +244,9 @@ async function updateTaskPriority(newPriority) {
     const response = await window.electronAPI.updateTaskPriority(currentProjectId, currentTaskId, newPriority);
     if (!response.success) {
       alert(response.message || "Failed to update priority.");
+    } else {
+      // Optionally, update the priority display or notify the user
+      console.log("Priority updated successfully.");
     }
   } catch (error) {
     console.error("Error updating priority:", error);
@@ -267,6 +260,9 @@ async function updateTaskStatus(newStatus) {
     const response = await window.electronAPI.updateTaskStatus(currentProjectId, currentTaskId, isComplete);
     if (!response.success) {
       alert(response.message || "Failed to update status.");
+    } else {
+      // Optionally, update the status display or notify the user
+      console.log("Status updated successfully.");
     }
   } catch (error) {
     console.error("Error updating status:", error);
@@ -323,6 +319,9 @@ function displayErrorMessage(message) {
   const errorMsg = document.createElement("p");
   errorMsg.textContent = message;
   errorMsg.style.color = "red";
+  errorMsg.style.fontSize = "18px";
+  errorMsg.style.textAlign = "center";
+  errorMsg.style.marginTop = "20px";
 
   header.appendChild(errorMsg);
 }
