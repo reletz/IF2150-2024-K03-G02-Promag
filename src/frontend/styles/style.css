@@ -249,7 +249,7 @@ body.body-proyekpage {
   font-weight: bold;
   color: #ffffff;
   text-align: center;
-  background-color: #57A99A; /* Grey background */
+  background-color: #57a99a; /* Grey background */
   margin-right: 8px;
   margin-left: 8px;
 }
@@ -262,7 +262,7 @@ body.body-proyekpage {
   font-weight: bold;
   color: #ffffff;
   text-align: center;
-  background-color: #57A99A; /* Blue background */
+  background-color: #57a99a; /* Blue background */
 }
 
 .task-actions .custom-button {
@@ -306,24 +306,126 @@ body.body-proyekpage {
   background-color: #3f6c67;
 }
 
-/* Preserve Existing Project Classes */
-.project-row {
+/* TugasPage Specific Styles */
+
+/* Body Section */
+#body-section {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px 20px;
   display: flex;
-  flex: 3;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.project-container {
-  flex: 1;
-  margin: 10px;
-  border: 1px solid #ccc;
+/* Comments Display */
+.commentsDisplay {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment {
   padding: 10px;
-  box-sizing: border-box;
-  background-color: #57a99a; /* Background color */
-  border-radius: 10px; /* Rounded corners */
-  color: white; /* Text color */
-  font-family: inherit; /* Inherit font from .body-main */
+  border-bottom: 1px solid #ccc;
 }
 
-.project-content {
-  margin-bottom: 10px; /* Space between content and button */
+.insertComment textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  font-size: 14px;
+}
+
+.addCommentButton {
+  text-align: right;
+}
+
+/* Header Section for TugasPage */
+#header {
+  background-color: #57a99a; /* Example background color */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#header #deadlineCapsule {
+  background-color: #ff9800;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#setPriorityStatusDropdown {
+  margin-top: 10px;
+}
+
+#priorityDropdown select {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#statusDisplay select {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Task Title */
+#tugasTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Delete Task and Upload Document Containers */
+.deleteTugas,
+.uploadDocument {
+  margin: 10px;
+}
+
+/* Additional Styles for Upload Document */
+.uploadDocument button {
+  background-color: #2196f3;
+}
+
+.uploadDocument button:hover {
+  background-color: #1976d2;
+}
+
+/* Additional Styles for Delete Task */
+.deleteTugas button {
+  background-color: #f44336;
+}
+
+.deleteTugas button:hover {
+  background-color: #d32f2f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .project-row,
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-actions {
+    align-items: flex-start;
+  }
+
+  #header,
+  #project-details,
+  #task-list,
+  #body-section,
+  #footer {
+    padding: 10px 10px;
+  }
 }
