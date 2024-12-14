@@ -7,8 +7,79 @@
       "startTime": "00:00:00",
       "endDate": null,
       "endTime": null,
-      "description": "Description of Project 1",
-      "tasks": []
+      "description": "Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1 Description of Project 1",
+      "tasks": [
+        {
+          "id": 102,
+          "title": "Task 2",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 103,
+          "title": "Task 3",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 104,
+          "title": "Task 4",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 105,
+          "title": "Task 5",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 106,
+          "title": "Task 6",
+          "description": "Description of Task 2",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-02-15",
+          "deadlineTime": "23:59:59"
+        }
+      ]
     },
     {
       "id": 2,
@@ -18,7 +89,54 @@
       "endDate": null,
       "endTime": null,
       "description": "Description of Project 2",
-      "tasks": []
+      "tasks": [
+        {
+          "id": 201,
+          "title": "Task 1",
+          "description": "Description of Task 1",
+          "priority": "medium",
+          "comments": [
+            "Comment 1",
+            "Comment 2",
+            "comment 3",
+            "comment 4",
+            "coment 5",
+            "oihoih"
+          ],
+          "documentSrc": "uploads/1734177283990_python-id.pdf",
+          "complete": 0,
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 202,
+          "title": "Task 2",
+          "description": "Description of Task 2",
+          "priority": "low",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
+        },
+        {
+          "id": 203,
+          "title": "Task 3",
+          "description": "Description of Task 3",
+          "priority": "low",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
+        }
+      ]
     },
     {
       "id": 3,
@@ -28,7 +146,22 @@
       "endDate": null,
       "endTime": null,
       "description": "Description of Project 3",
-      "tasks": []
+      "tasks": [
+        {
+          "id": 301,
+          "title": "Task 1",
+          "description": "Description of Task 1",
+          "priority": "low",
+          "comments": [
+            "Comment 1",
+            "Comment 2"
+          ],
+          "documentSrc": "",
+          "complete": 0,
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
+        }
+      ]
     },
     {
       "id": 4,
@@ -49,7 +182,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -74,7 +207,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -99,7 +232,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
@@ -124,7 +257,7 @@
             "Comment 2"
           ],
           "documentSrc": "",
-          "complete": false,
+          "complete": 0,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }

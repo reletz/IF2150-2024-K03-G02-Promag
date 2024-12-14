@@ -1,6 +1,11 @@
-// src/frontend/scripts/proyekpage.js
-
 import { createButton } from "../components/buttonComponent.js";
+
+// ===== HELPER FUNCTION TO FORMAT DATE =====
+function formatDate(dateString) {
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const date = new Date(dateString);
+  return date.toLocaleDateString('id-ID', options);
+}
 
 // ===== NAVIGATION APIs =====
 function navigateToMainPage() {
@@ -15,12 +20,28 @@ function navigateToTugasPage(projectId, taskId = null) {
   }
 }
 
-// ===== BUTTON: NAVIGATE TO MAIN PAGE =====
+// ===== BUTTONS: NAVIGATE TO MAIN PAGE & MORE ACTION =====
 const footer = document.getElementById("footer");
-const backButton = createButton("BACK", navigateToMainPage, "medium");
 
+// Create More Action Button
+const moreActionButton = createButton("MORE ACTION", () => {
+  showActionPopup();
+}, "medium");
+
+// Create Back Button
+const backButton = createButton("BACK MAIN", navigateToMainPage, "medium");
+
+// Create Footer Container
+const footerContainer = document.createElement("div");
+footerContainer.classList.add("footer-container");
+
+// Append Buttons to Footer Container
+footerContainer.appendChild(moreActionButton);
+footerContainer.appendChild(backButton);
+
+// Append Footer Container to Footer
 if (footer) {
-  footer.appendChild(backButton);
+  footer.appendChild(footerContainer);
 } else {
   console.error("Footer Container not found.");
 }
@@ -77,33 +98,70 @@ function getLatestTaskDeadline(tasks) {
 function displayHeader(project) {
   const header = document.getElementById("header");
 
+  const projectHeader = document.createElement("div");
+  projectHeader.classList.add("project-header");
+
   const title = document.createElement("h1");
   title.textContent = project.title;
 
-  const startDate = document.createElement("p");
-  startDate.textContent = `Start Date: ${project.startDate}`;
+  const startDateCapsule = document.createElement("span");
+  startDateCapsule.classList.add("date-capsule");
+  startDateCapsule.textContent = formatDate(project.startDate);
 
-  const endDate = document.createElement("p");
-  endDate.textContent = `End Date: ${project.endDate || "Ongoing"}`;
+  const endDateCapsule = document.createElement("span");
+  endDateCapsule.classList.add("date-capsule");
+  endDateCapsule.textContent = project.endDate ? formatDate(project.endDate) : "Ongoing";
+
+  projectHeader.appendChild(title);
+  projectHeader.appendChild(startDateCapsule);
+  projectHeader.appendChild(endDateCapsule);
+
+  header.appendChild(projectHeader);
 
   const description = document.createElement("p");
-  description.textContent = project.description;
-
-  header.appendChild(title);
-  header.appendChild(startDate);
-  header.appendChild(endDate);
+  const maxLength = 200;
+  description.textContent = project.description.length > maxLength
+    ? project.description.substring(0, maxLength) + '...'
+    : project.description;
   header.appendChild(description);
+
+  // ===== ADD PROGRESS BAR =====
+  const progressBarContainer = document.createElement("div");
+  progressBarContainer.classList.add("progress-bar-container");
+
+  const progressBar = document.createElement("div");
+  progressBar.classList.add("progress-bar");
+
+  // Calculate progress
+  const totalTasks = project.tasks.length;
+  const completedTasks = project.tasks.filter(task => task.complete).length;
+  const progressPercent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+  progressBar.style.width = `${progressPercent}%`;
+
+  progressBarContainer.appendChild(progressBar);
+  header.appendChild(progressBarContainer);
+
+  // ===== ADD PROGRESS LABELS =====
+  const progressLabels = document.createElement("div");
+  progressLabels.classList.add("progress-labels");
+
+  const progressText = document.createElement("span");
+  progressText.textContent = "Progress";
+
+  const progressPercentage = document.createElement("span");
+  progressPercentage.textContent = `${progressPercent}%`;
+
+  progressLabels.appendChild(progressText);
+  progressLabels.appendChild(progressPercentage);
+  header.appendChild(progressLabels);
 }
 
 // ===== DISPLAY TASK LIST =====
 function displayTaskList(project) {
   const taskList = document.getElementById("task-list");
+  taskList.innerHTML = "";
 
   if (project.tasks && project.tasks.length > 0) {
-    const tasksHeader = document.createElement("h2");
-    tasksHeader.textContent = "Tasks";
-    taskList.appendChild(tasksHeader);
-
     const tasksContainer = document.createElement("div");
     tasksContainer.classList.add("tasks-container");
 
@@ -132,16 +190,37 @@ function displayTaskList(project) {
       const remainingDays = calculateDaysLeft(task.deadlineDate);
       daysLeft.textContent = `${remainingDays} day${remainingDays !== 1 ? "s" : ""} left`;
 
+      // ===== Status =====
+      const statusDiv = document.createElement("div");
+      statusDiv.classList.add("status-capsule");
+      
+      // Updated Status Text Based on 'complete' Value
+      switch (task.complete) {
+        case 0:
+          statusDiv.textContent = "Not Started";
+          break;
+        case 1:
+          statusDiv.textContent = "On Progress";
+          break;
+        case 2:
+          statusDiv.textContent = "Done";
+          break;
+        default:
+          statusDiv.textContent = "Unknown";
+      }
+
       // Append Title, Deadline, and Days Left to Row
       row.appendChild(taskTitle);
       row.appendChild(deadlineDate);
       row.appendChild(daysLeft);
+      row.appendChild(statusDiv);
 
       taskInfo.appendChild(row);
 
       const taskDescription = document.createElement("p");
-      taskDescription.textContent = task.description;
-
+      taskDescription.textContent = task.description.length > 200
+        ? task.description.substring(0, 200) + '...'
+        : task.description;
       taskInfo.appendChild(taskDescription);
 
       // ===== Priority Status =====
@@ -188,6 +267,9 @@ function displayTaskList(project) {
     });
 
     taskList.appendChild(tasksContainer);
+
+    // ===== REMOVE PAGINATION BUTTONS =====
+    // Pagination is removed to allow scrolling
   } else {
     const noTasks = document.createElement("p");
     noTasks.textContent = "No tasks for this project.";
@@ -214,6 +296,64 @@ function displayErrorMessage(message) {
   errorMsg.style.color = "red";
 
   header.appendChild(errorMsg);
+}
+
+// ===== ACTION POPUP =====
+function showActionPopup() {
+  // Create Overlay
+  const overlay = document.createElement("div");
+  overlay.classList.add("action-popup-overlay");
+
+  // Create Popup Container
+  const popup = document.createElement("div");
+  popup.classList.add("action-popup");
+
+  // Create Close Button
+  const closeButton = document.createElement("span");
+  closeButton.classList.add("close-button");
+  closeButton.innerHTML = "&times;";
+  closeButton.onclick = () => {
+    document.body.removeChild(overlay);
+  };
+
+  // Create Header
+  const header = document.createElement("h1");
+  header.textContent = "Action";
+
+  // Create Action Items
+  const action1 = document.createElement("p");
+  action1.textContent = "Set Priority";
+  action1.onclick = () => {
+    // Implement Set Priority Action
+    alert("Set Priority Clicked");
+  };
+
+  const action2 = document.createElement("p");
+  action2.textContent = "Set Status";
+  action2.onclick = () => {
+    // Implement Set Status Action
+    alert("Set Status Clicked");
+  };
+
+  const action3 = document.createElement("p");
+  action3.textContent = "Set Deadline";
+  action3.onclick = () => {
+    // Implement Set Deadline Action
+    alert("Set Deadline Clicked");
+  };
+
+  // Append Elements to Popup
+  popup.appendChild(closeButton);
+  popup.appendChild(header);
+  popup.appendChild(action1);
+  popup.appendChild(action2);
+  popup.appendChild(action3);
+
+  // Append Popup to Overlay
+  overlay.appendChild(popup);
+
+  // Append Overlay to Body
+  document.body.appendChild(overlay);
 }
 
 // ===== INITIALIZE =====
