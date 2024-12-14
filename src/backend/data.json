@@ -2,7 +2,9 @@
   "projects": [
     {
       "title": "Project 1",
-      "startTime": "2024-01-01T00:00:00Z",
+      "startDate": "2024-01-01",
+      "startTime": "00:00:00",
+      "endDate": null,
       "endTime": null,
       "description": "Description of Project 1",
       "tasks": [
@@ -13,7 +15,8 @@
           "comments": "Comment 1",
           "documentSrc": "path/to/document1.pdf",
           "complete": false,
-          "deadline": "2024-12-31T23:59:59Z"
+          "deadlineDate": "2024-12-31",
+          "deadlineTime": "23:59:59"
         },
         {
           "title": "Task 2",
@@ -22,13 +25,16 @@
           "comments": "",
           "documentSrc": "",
           "complete": false,
-          "deadline": "2024-12-31T23:59:59Z"
+          "deadlineDate": "2024-12-31",
+          "deadlineTime": "23:59:59"
         }
       ]
     },
     {
       "title": "Project 2",
-      "startTime": "2025-01-01T00:00:00Z",
+      "startDate": "2025-01-01",
+      "startTime": "00:00:00",
+      "endDate": null,
       "endTime": null,
       "description": "Description of Project 2",
       "tasks": [
@@ -39,7 +45,8 @@
           "comments": "",
           "documentSrc": "",
           "complete": false,
-          "deadline": "2025-01-15T23:59:59Z"
+          "deadlineDate": "2025-01-15",
+          "deadlineTime": "23:59:59"
         }
       ]
     }

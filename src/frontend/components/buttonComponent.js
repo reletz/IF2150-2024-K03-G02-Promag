@@ -1,5 +1,3 @@
-// components/Button.js
-
 /**
  * Creates a styled button with specified text, click handler, and optional size.
  *
