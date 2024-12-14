@@ -1,6 +1,7 @@
 {
   "projects": [
     {
+      "id": 1,
       "title": "Project 1",
       "startDate": "2024-01-01",
       "startTime": "00:00:00",
@@ -9,6 +10,7 @@
       "description": "Description of Project 1",
       "tasks": [
         {
+          "id": 101,
           "title": "Task 1",
           "description": "Description of Task 1",
           "priority": "high",
@@ -19,18 +21,20 @@
           "deadlineTime": "23:59:59"
         },
         {
+          "id": 102,
           "title": "Task 2",
           "description": "Description of Task 2",
           "priority": "medium",
           "comments": ["Comment 1", "Comment 2"],
           "documentSrc": "",
           "complete": false,
-          "deadlineDate": "2024-12-31",
+          "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         }
       ]
     },
     {
+      "id": 2,
       "title": "Project 2",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
