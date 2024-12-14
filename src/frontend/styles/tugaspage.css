@@ -156,7 +156,7 @@ body.body-tugaspage {
   width: 100%;
   min-height: 80px;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 20px;
   border: 1px solid #ccc;
   resize: vertical;
   box-sizing: border-box;
@@ -314,13 +314,14 @@ body.body-tugaspage {
   background-color: #ffffff; /* White background for comments */
   color: #000000; /* Black text */
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 25px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Comment Text */
 .commentText {
   flex: 1;
+  padding-left: 12px;
 }
 
 /* Delete Comment Button */
@@ -351,3 +352,78 @@ body.body-tugaspage {
   }
 }
 
+/* tugaspage.css */
+
+/* Footer Row Styling */
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribute space between elements */
+  width: 100%;
+}
+
+/* Delete Task Button */
+.deleteTaskButton {
+  background-color: red; /* Red background */
+  color: white; /* White text for contrast */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.deleteTaskButton:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Add Document Button */
+.addDocumentButton {
+  background-color: #d1eecc;
+  color: black; /* Black text for better readability */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.addDocumentButton:hover {
+  background-color: #bfdcae;
+}
+
+/* Delete Document Button */
+.deleteDocumentButton {
+  background-color: red; /* Red background */
+  color: white; /* White text for contrast */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+
+.deleteDocumentButton:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Uploaded Document Display */
+.uploadedDocument {
+  margin-left: 20px;
+}
+
+.uploadedDocument a {
+  color: black; /* Black font for better readability */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.uploadedDocument a:hover {
+  color: #458b7f;
+}

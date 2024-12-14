@@ -225,10 +225,13 @@ ipcMain.handle("download-document", async (event, relativeFilePath) => {
     // Resolve the absolute path of the file
     const absolutePath = path.join(__dirname, relativeFilePath);
 
+    // Check if the file exists
+    await fs.access(absolutePath);
+
     // Show save dialog to choose download location
     const { canceled, filePath: savePath } = await dialog.showSaveDialog({
       title: "Save Document",
-      defaultPath: path.basename(relativeFilePath),
+      defaultPath: path.basename(absolutePath),
     });
 
     if (canceled || !savePath) {
@@ -241,6 +244,47 @@ ipcMain.handle("download-document", async (event, relativeFilePath) => {
   } catch (error) {
     console.error("Error downloading document:", error);
     return { success: false, message: "Failed to download document." };
+  }
+});
+
+// ===== IPC Handler for Deleting Document =====
+ipcMain.handle("delete-document", async (event, { projectId, taskId }) => {
+  try {
+    const data = await loadData(); // Load existing data
+
+    const project = data.projects.find((p) => p.id === projectId);
+    if (!project) {
+      return { success: false, message: "Project not found." };
+    }
+
+    const task = project.tasks.find((t) => t.id === taskId);
+    if (!task) {
+      return { success: false, message: "Task not found." };
+    }
+
+    if (!task.documentSrc) {
+      return { success: false, message: "No document to delete." };
+    }
+
+    const absoluteDocPath = path.join(__dirname, task.documentSrc);
+
+    // Check if the file exists
+    await fs.access(absoluteDocPath);
+
+    // Delete the file
+    await fs.unlink(absoluteDocPath);
+    console.log(`Deleted document at ${absoluteDocPath}`);
+
+    // Remove the documentSrc from the task
+    delete task.documentSrc;
+
+    // Save the updated data
+    await saveData(data);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    return { success: false, message: "Failed to delete document." };
   }
 });
 

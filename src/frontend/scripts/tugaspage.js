@@ -153,6 +153,9 @@ function displayHeader(task) {
 function displayBody(task) {
   const bodySection = document.getElementById("body-section");
 
+  // Clear existing content if any
+  bodySection.innerHTML = "";
+
   // ===== COMMENTS DISPLAY =====
   const commentsDisplay = document.createElement("div");
   commentsDisplay.classList.add("commentsDisplay");
@@ -224,7 +227,7 @@ function displayFooter(task) {
   footer.innerHTML = "";
 
   const footerRow = document.createElement("div");
-  footerRow.classList.add("row");
+  footerRow.classList.add("row", "footerRow"); // Added 'footerRow' class for specific styling
 
   // ===== DELETE TASK BUTTON =====
   const deleteTugasDiv = document.createElement("div");
@@ -233,16 +236,45 @@ function displayFooter(task) {
   const deleteButton = createLightButton("DELETE TASK", deleteTask, "medium");
   deleteTugasDiv.appendChild(deleteButton);
 
-  // ===== UPLOAD DOCUMENT BUTTON =====
-  const uploadDocumentDiv = document.createElement("div");
-  uploadDocumentDiv.classList.add("uploadDocument");
+  // ===== DOCUMENT BUTTON =====
+  const documentDiv = document.createElement("div");
+  documentDiv.classList.add("documentDiv");
 
-  const uploadButton = createLightButton("ADD DOCUMENT", uploadDocument, "medium");
-  uploadDocumentDiv.appendChild(uploadButton);
+  let documentButton;
+  if (task.documentSrc) {
+    // If document is uploaded, show "DELETE DOCUMENT" button
+    documentButton = createDeleteButton("DELETE DOCUMENT", () => deleteDocument(task.documentSrc), "medium");
+    documentButton.classList.add("deleteDocumentButton");
+  } else {
+    // If no document, show "ADD DOCUMENT" button
+    documentButton = createLightButton("ADD DOCUMENT", uploadDocument, "medium");
+    documentButton.classList.add("addDocumentButton");
+  }
+
+  documentDiv.appendChild(documentButton);
+
+  // ===== UPLOADED DOCUMENT DISPLAY =====
+  const uploadedDocumentDiv = document.createElement("div");
+  uploadedDocumentDiv.classList.add("uploadedDocument");
+
+  if (task.documentSrc) {
+    const uploadedFileLink = document.createElement("a");
+    uploadedFileLink.href = "#";
+
+    // Extract the filename using JavaScript string methods
+    const fileName = task.documentSrc.split("/").pop();
+    uploadedFileLink.textContent = fileName;
+    uploadedFileLink.style.color = "black"; // Set font color to black for readability
+
+    uploadedFileLink.addEventListener("click", () => downloadDocument(task.documentSrc));
+
+    uploadedDocumentDiv.appendChild(uploadedFileLink);
+  }
 
   // ===== APPEND TO FOOTER ROW =====
   footerRow.appendChild(deleteTugasDiv);
-  footerRow.appendChild(uploadDocumentDiv);
+  footerRow.appendChild(documentDiv);
+  footerRow.appendChild(uploadedDocumentDiv); // Append uploaded document to the footer row
 
   footer.appendChild(footerRow);
 }
@@ -287,6 +319,73 @@ async function deleteComment(commentIndex) {
   }
 }
 
+// ===== DOWNLOAD DOCUMENT =====
+async function downloadDocument(documentSrc) {
+  try {
+    const response = await window.electronAPI.downloadDocument(documentSrc);
+
+    if (response.success) {
+      alert("Document downloaded successfully.");
+    } else {
+      alert(response.message || "Failed to download document.");
+    }
+  } catch (error) {
+    console.error("Error downloading document:", error);
+    alert("Failed to download document.");
+  }
+}
+
+// ===== DELETE DOCUMENT =====
+async function deleteDocument(documentSrc) {
+  const confirmDelete = confirm("Are you sure you want to delete this document?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await window.electronAPI.deleteDocument(currentProjectId, currentTaskId);
+
+    if (response.success) {
+      alert("Document deleted successfully.");
+      // Refresh the footer to show "ADD DOCUMENT" button
+      const data = await window.electronAPI.getProjectData();
+      const project = data.projects.find((proj) => proj.id === currentProjectId);
+      const task = project.tasks.find((t) => t.id === currentTaskId);
+      displayFooter(task);
+    } else {
+      alert(response.message || "Failed to delete document.");
+    }
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    alert("Failed to delete document.");
+  }
+}
+
+// ===== UPLOAD DOCUMENT =====
+async function uploadDocument() {
+  try {
+    const result = await window.electronAPI.openFileDialog();
+    if (result && result.filePaths && result.filePaths.length > 0) {
+      const filePath = result.filePaths[0];
+      const response = await window.electronAPI.uploadDocumentToTask(currentProjectId, currentTaskId, filePath);
+
+      if (response.success) {
+        alert("Document uploaded successfully.");
+        // Update the UI to reflect the uploaded document
+        const data = await window.electronAPI.getProjectData();
+        const project = data.projects.find((proj) => proj.id === currentProjectId);
+        const task = project.tasks.find((t) => t.id === currentTaskId);
+        displayFooter(task);
+      } else {
+        alert(response.message || "Failed to upload document.");
+      }
+    } else {
+      console.log("File selection was canceled.");
+    }
+  } catch (error) {
+    console.error("Error uploading document:", error);
+    alert("Failed to upload document.");
+  }
+}
+
 // ===== UPDATE COMMENTS DISPLAY =====
 function updateCommentsDisplay(task) {
   const commentsDisplay = document.getElementById("commentsDisplay");
@@ -301,7 +400,7 @@ function updateCommentsDisplay(task) {
       commentText.classList.add("commentText");
       commentText.textContent = `${index + 1}. ${comment}`;
 
-      const deleteCommentButton = createButton("Delete", () => deleteComment(index), "small");
+      const deleteCommentButton = createDeleteButton("Delete", () => deleteComment(index), "small");
       deleteCommentButton.classList.add("deleteCommentButton");
 
       commentDiv.appendChild(commentText);
@@ -363,29 +462,6 @@ async function deleteTask() {
   } catch (error) {
     console.error("Error deleting task:", error);
     alert("Failed to delete task.");
-  }
-}
-
-// ===== UPLOAD DOCUMENT =====
-async function uploadDocument() {
-  try {
-    const result = await window.electronAPI.openFileDialog();
-    if (result && result.filePaths && result.filePaths.length > 0) {
-      const filePath = result.filePaths[0];
-      const response = await window.electronAPI.uploadDocumentToTask(currentProjectId, currentTaskId, filePath);
-
-      if (response.success) {
-        alert("Document uploaded successfully.");
-        // Optionally, update the UI to reflect the uploaded document
-      } else {
-        alert(response.message || "Failed to upload document.");
-      }
-    } else {
-      console.log("File selection was canceled.");
-    }
-  } catch (error) {
-    console.error("Error uploading document:", error);
-    alert("Failed to upload document.");
   }
 }
 

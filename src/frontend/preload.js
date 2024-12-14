@@ -17,5 +17,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   openFileDialog: () => ipcRenderer.invoke("dialog:openFile"),
   deleteCommentFromTask: (projectId, taskId, commentIndex) =>
     ipcRenderer.invoke("delete-comment-from-task", projectId, taskId, commentIndex),
-  downloadDocument: (filePath) => ipcRenderer.invoke("download-document", filePath),
+  downloadDocument: (documentSrc) => ipcRenderer.invoke("download-document", documentSrc),
+  deleteDocument: (projectId, taskId) => ipcRenderer.invoke("delete-document", { projectId, taskId }),
 });
