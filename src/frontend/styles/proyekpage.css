@@ -1,0 +1,193 @@
+body.body-proyekpage {
+  font-family: "Montserrat", sans-serif;
+  background-color: #57a99a;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 100vh;
+}
+
+/* Project Details Styles */
+#project-details {
+  width: 100%;
+  margin: 0;
+  padding: 40px 20px;
+  background-color: #57a99a; /* Project details background color */
+  color: #ffffff; /* Project details text color */
+  border-radius: 0;
+  box-shadow: none;
+  min-height: 100vh;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#header {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px 20px;
+  text-align: left; /* Left align text */
+}
+
+#header h1 {
+  font-size: 36px;
+  margin-bottom: 5px; /* Minimized margin */
+  color: #ffffff; /* White text for the header */
+}
+
+#header p {
+  font-size: 18px;
+  margin-top: 0; /* Removed top margin */
+  margin-bottom: 5px; /* Minimized margin */
+  color: #ffffff; /* White text for the header */
+}
+
+#task-list {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px 20px;
+}
+
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #d1eecc; /* Task background color */
+  padding: 20px;
+  border-radius: 65px; /* Fully rounded container */
+  color: #000000; /* Black text for better readability */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px; /* Left padding */
+  text-align: left;
+}
+
+.task-info .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-info h3 {
+  font-size: 20px;
+}
+
+.task-info p {
+  margin-top: 0px; /* Space between row and description */
+  font-size: 16px;
+}
+
+.task-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 20px; /* Right padding */
+  padding-right: 30px; /* Right padding */
+}
+
+.priority-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.priority-high {
+  background-color: red;
+}
+
+.priority-medium {
+  background-color: orange;
+}
+
+.priority-low {
+  background-color: blue;
+}
+
+.deadline-capsule {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  background-color: #57a99a; /* Grey background */
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+.days-left-capsule {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  background-color: #57a99a; /* Blue background */
+}
+
+.task-actions .custom-button {
+  background-color: #57a99a; /* Button background color */
+  color: #ffffff; /* Button text color */
+  margin-top: 5px; /* Space between days left and button */
+}
+
+.task-actions .custom-button:hover {
+  background-color: #3f6c67; /* Darker than #57A99A */
+}
+
+/* Go to Tugas Page Button */
+#task-list .custom-button.medium {
+  background-color: #57a99a;
+  color: #ffffff;
+  margin-top: 20px;
+}
+
+#task-list .custom-button.medium:hover {
+  background-color: #3f6c67;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .project-row,
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-actions {
+    align-items: flex-start;
+  }
+
+  #header,
+  #project-details,
+  #task-list,
+  #body-section,
+  #footer {
+    padding: 10px 10px;
+  }
+}

@@ -1,5 +1,3 @@
-// src/frontend/scripts/index.js
-
 import { createButton } from "../components/buttonComponent.js";
 
 function navigateToProyekPage(projectId) {
@@ -10,6 +8,7 @@ async function renderProjects() {
   const data = await window.electronAPI.getProjectData();
 
   const container = document.getElementById("project-container");
+  container.innerHTML = ''; // Bersihkan konten sebelumnya
   let row;
   data.projects.forEach((project, index) => {
     if (index % 3 === 0) {
@@ -21,39 +20,66 @@ async function renderProjects() {
     const projectDiv = document.createElement("div");
     projectDiv.className = "project-container";
 
-    const projectContentDiv = document.createElement("div");
-    projectContentDiv.className = "project-content";
-
+    // Judul Proyek
     const title = document.createElement("h1");
     title.textContent = project.title;
+    title.className = "project-title";
 
-    const startDate = document.createElement("p");
-    startDate.textContent = `Start Date: ${project.startDate}`;
+    // Date Capsule (Start Date - End Date)
+    const dateCapsule = document.createElement("div");
+    dateCapsule.className = "date-capsule";
+    dateCapsule.textContent = `${project.startDate} - ${project.endDate ? project.endDate : "Ongoing"}`;
 
-    const startTime = document.createElement("p");
-    startTime.textContent = `Start Time: ${project.startTime}`;
-
-    const endDate = document.createElement("p");
-    endDate.textContent = `End Date: ${project.endDate || "Ongoing"}`;
-
-    const endTime = document.createElement("p");
-    endTime.textContent = `End Time: ${project.endTime || ""}`;
-
+    // Deskripsi dengan pembatasan 30 karakter
     const description = document.createElement("p");
-    description.textContent = project.description;
+    let truncatedDescription = project.description;
+    if (truncatedDescription.length > 30) {
+      truncatedDescription = truncatedDescription.substring(0, 30) + '...';
+    }
+    description.textContent = truncatedDescription;
 
-    projectContentDiv.appendChild(title);
-    projectContentDiv.appendChild(startDate);
-    projectContentDiv.appendChild(startTime);
-    projectContentDiv.appendChild(endDate);
-    projectContentDiv.appendChild(endTime);
-    projectContentDiv.appendChild(description);
+    // Progress Bar
+    const progressBarContainer = document.createElement("div");
+    progressBarContainer.className = "progress-bar-container";
 
-    // Pass the project.id using an arrow function to preserve the current project's ID
-    const button = createButton("Details", () => navigateToProyekPage(project.id), "medium");
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar";
 
-    projectDiv.appendChild(projectContentDiv);
-    projectDiv.appendChild(button);
+    // Hitung persentase progress
+    const totalTasks = project.tasks.length;
+    const completedTasks = project.tasks.filter(task => task.complete).length;
+    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+    progressBar.style.width = `${progressPercentage}%`;
+
+    progressBarContainer.appendChild(progressBar);
+
+    // Persentase Progress
+    const progressPercentageText = document.createElement("span");
+    progressPercentageText.className = "progress-percentage";
+    progressPercentageText.textContent = `${Math.round(progressPercentage)}%`;
+
+    // Tombol Detail
+    const button = createButton("Detail", () => navigateToProyekPage(project.id), "medium");
+
+    // Container untuk Progress Bar dan Button
+    const progressButtonContainer = document.createElement("div");
+    progressButtonContainer.className = "progress-button-container";
+
+    // Tambahkan Progress Bar dan Persentase ke dalam Wrapper
+    const progressWrapper = document.createElement("div");
+    progressWrapper.className = "progress-wrapper";
+    progressWrapper.appendChild(progressBarContainer);
+    progressWrapper.appendChild(progressPercentageText);
+
+    // Susun Progress dan Button
+    progressButtonContainer.appendChild(progressWrapper);
+    progressButtonContainer.appendChild(button);
+
+    // Susun elemen ke dalam projectDiv
+    projectDiv.appendChild(title);
+    projectDiv.appendChild(dateCapsule);
+    projectDiv.appendChild(description);
+    projectDiv.appendChild(progressButtonContainer);
 
     row.appendChild(projectDiv);
   });
