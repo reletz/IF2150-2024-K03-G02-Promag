@@ -1,4 +1,4 @@
-import { createButton } from "../components/Button.js";
+import { createButton } from "../components/buttonComponent.js";
 
 function navigateToMainPage() {
   window.electronAPI.navigateToMainPage();
