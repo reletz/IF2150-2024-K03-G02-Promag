@@ -147,7 +147,8 @@
           "deadlineDate": "2025-02-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 0
     },
     {
       "id": 2,
@@ -201,30 +202,6 @@
           "complete": 2,
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
-        },
-        {
-          "id": 204,
-          "title": "TEST NEW TITLE",
-          "description": "TEST NEW DESC",
-          "priority": "high",
-          "comments": [],
-          "documentSrc": "",
-          "complete": 0,
-          "deadlineDate": "2024-12-20",
-          "deadlineTime": "23.57.27"
-        },
-        {
-          "id": 205,
-          "title": "ohj0",
-          "description": "iuh",
-          "priority": "medium",
-          "comments": [
-            "mm"
-          ],
-          "documentSrc": "",
-          "complete": 0,
-          "deadlineDate": "2024-12-20",
-          "deadlineTime": "23.57.59"
         }
       ],
       "complete": 2
@@ -278,7 +255,8 @@
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
       "id": 5,
@@ -303,7 +281,8 @@
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
       "id": 6,
@@ -354,11 +333,12 @@
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     },
     {
-      "id": 7,
-      "title": "Project 7",
+      "id": 8,
+      "title": "Project8 8",
       "startDate": "2025-01-01",
       "startTime": "00:00:00",
       "endDate": null,
@@ -379,7 +359,8 @@
           "deadlineDate": "2025-01-15",
           "deadlineTime": "23:59:59"
         }
-      ]
+      ],
+      "complete": 2
     }
   ]
 }

@@ -72,13 +72,24 @@ priorities.forEach((priority) => {
 // Create the deadline input field
 const deadlineLabel = document.createElement("label");
 deadlineLabel.htmlFor = "task-deadline";
-deadlineLabel.textContent = "Deadline";
+deadlineLabel.textContent = "Deadline (Date)";
 
 const deadlineInput = document.createElement("input");
 deadlineInput.type = "date";
 deadlineInput.id = "task-deadline";
 deadlineInput.name = "deadline";
 deadlineInput.required = true;
+
+// Create the deadline time input field
+const deadlineTimeLabel = document.createElement("label");
+deadlineTimeLabel.htmlFor = "task-deadline-time";
+deadlineTimeLabel.textContent = "Deadline (Time)";
+
+const deadlineTimeInput = document.createElement("input");
+deadlineTimeInput.type = "time";
+deadlineTimeInput.id = "task-deadline-time";
+deadlineTimeInput.name = "deadlineTime";
+deadlineTimeInput.required = true;
 
 // Add the form elements to the form
 form.appendChild(titleLabel);
@@ -89,6 +100,8 @@ form.appendChild(priorityLabel);
 form.appendChild(prioritySelect);
 form.appendChild(deadlineLabel);
 form.appendChild(deadlineInput);
+form.appendChild(deadlineTimeLabel);
+form.appendChild(deadlineTimeInput);
 
 // Add the form to the form section
 formSection.appendChild(form);
@@ -99,12 +112,12 @@ const submitButton = createButton(
   async () => {
     console.log("Add Task button clicked"); // Log button click
 
-    const now = new Date();
-    const isoString = now.toISOString();
-    const [date] = isoString.split("T");
-    const time = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(now);
+    const date = deadlineInput.value;
+    let time = deadlineTimeInput.value || "23:59:59";
 
-    console.log("Project ID:", projectId); // Log projectId
+    if (time.length === 5) {
+      time += ":59";
+    }
 
     try {
       const taskId = await newTaskId(projectId);
@@ -122,10 +135,7 @@ const submitButton = createButton(
         deadlineTime: time,
       };
 
-      console.log("Task Object:", task); // Log task object
-
       const result = await window.electronAPI.addTask(projectId, task);
-      console.log("Add Task Result:", result); // Log the entire result object
 
       if (result.success) {
         console.log("Task added successfully. Redirecting to project page...");
