@@ -1,15 +1,21 @@
 import { createButton, createDeleteButton } from "../components/buttonComponent.js";
 
+// Function to navigate to the project page
 function navigateToProyekPage(projectId) {
   window.location.href = `proyekpage.html?id=${projectId}`;
 }
 
-function navigateBackToProjectPage() {
+// Function to navigate back to the project page with validation
+async function navigateBackToProjectPage() {
   if (!isNaN(projectId)) {
     window.location.href = `proyekpage.html?id=${projectId}`;
   } else {
     console.error("Current Project ID is not set or invalid.");
-    alert("Cannot navigate back. Project ID is missing or invalid.");
+    await window.electronAPI.showMessageBox({
+      type: "error",
+      title: "Navigation Error",
+      message: "Cannot navigate back. Project ID is missing or invalid.",
+    });
   }
 }
 
@@ -21,6 +27,11 @@ const projectId = parseInt(params.get("projectId"), 10);
 // Ensure form section exists
 if (!formSection) {
   console.error("Element with ID 'new-task-form' not found in the DOM.");
+  window.electronAPI.showMessageBox({
+    type: "error",
+    title: "Form Error",
+    message: "Missing #new-task-form element.",
+  });
   throw new Error("Missing #new-task-form element.");
 }
 
@@ -106,23 +117,6 @@ form.appendChild(deadlineTimeInput);
 // Add the form to the form section
 formSection.appendChild(form);
 
-// Function to check form validity and toggle the submit button
-function toggleSubmitButton() {
-  if (form.checkValidity()) {
-    submitButton.disabled = false;
-  } else {
-    submitButton.disabled = true;
-  }
-}
-
-// List of required inputs
-const requiredInputs = [titleInput, descriptionInput, prioritySelect, deadlineInput, deadlineTimeInput];
-
-// Add event listeners to each required input
-requiredInputs.forEach((input) => {
-  input.addEventListener("input", toggleSubmitButton);
-});
-
 // Create the submit button with automatic navigation upon success
 const submitButton = createButton(
   "Add Task",
@@ -132,11 +126,11 @@ const submitButton = createButton(
     // Validate the form before proceeding
     if (!form.checkValidity()) {
       await window.electronAPI.showMessageBox({
-        type: 'warning',
-        title: 'Incomplete Fields',
-        message: 'Please fill in all required fields before adding the task.',
+        type: "warning",
+        title: "Incomplete Fields",
+        message: "Please fill in all required fields before adding the task.",
       });
-      form.reportValidity();
+      form.reportValidity(); // Show validation messages
       return;
     }
 
@@ -166,21 +160,34 @@ const submitButton = createButton(
       const result = await window.electronAPI.addTask(projectId, task);
 
       if (result.success) {
-        console.log("Task added successfully. Redirecting to project page...");
+        await window.electronAPI.showMessageBox({
+          type: "info",
+          title: "Success",
+          message: "Task added successfully.",
+        });
         navigateBackToProjectPage(); // Automatically navigate without alert
       } else {
         console.error("Failed to add task:", result.error);
-        alert(`Failed to add task: ${result.error}`);
+        await window.electronAPI.showMessageBox({
+          type: "error",
+          title: "Error",
+          message: `Failed to add task: ${result.error}`,
+        });
       }
     } catch (error) {
       console.error("Error adding task:", error);
-      alert("An error occurred while adding the task.");
+      await window.electronAPI.showMessageBox({
+        type: "error",
+        title: "Error",
+        message: "An error occurred while adding the task.",
+      });
     }
   },
   "small"
 );
 submitButton.type = "button"; // Ensure it's a button, not a submit
-submitButton.disabled = true; // Disable button initially
+// Ensure the button is enabled by default
+// submitButton.disabled = true; // Remove or comment out this line if present
 
 const backButton = createButton("Batal", () => navigateToProyekPage(projectId), "small");
 backButton.classList.add("deleteCommentButton");
@@ -197,22 +204,30 @@ buttonContainer.appendChild(backButton);
 form.appendChild(buttonContainer);
 
 // Function to generate a new task ID
-function newTaskId(projectId) {
-  return window.electronAPI
-    .getProjectData()
-    .then((data) => {
-      const project = data.projects.find((proj) => proj.id === projectId);
+async function newTaskId(projectId) {
+  try {
+    const data = await window.electronAPI.getProjectData();
+    const project = data.projects.find((proj) => proj.id === projectId);
 
-      if (!project) {
-        console.error(`Project with ID "${projectId}" not found.`);
-        throw new Error(`Project with ID "${projectId}" not found.`);
-      }
+    if (!project) {
+      console.error(`Project with ID "${projectId}" not found.`);
+      await window.electronAPI.showMessageBox({
+        type: "error",
+        title: "Project Not Found",
+        message: `Project with ID "${projectId}" not found.`,
+      });
+      throw new Error(`Project with ID "${projectId}" not found.`);
+    }
 
-      const maxId = project.tasks.reduce((max, task) => (task.id > max ? task.id : max), 0);
-      return maxId + 1;
-    })
-    .catch((error) => {
-      console.error("Error fetching project data for new task ID:", error);
-      return 1; // Default ID if there's an error
+    const maxId = project.tasks.reduce((max, task) => (task.id > max ? task.id : max), 0);
+    return maxId + 1;
+  } catch (error) {
+    console.error("Error fetching project data for new task ID:", error);
+    await window.electronAPI.showMessageBox({
+      type: "error",
+      title: "ID Generation Error",
+      message: "An error occurred while generating a new Task ID.",
     });
+    return 1; // Default ID if there's an error
+  }
 }
