@@ -435,3 +435,15 @@ ipcMain.handle("add-task", async (event, projectId, task) => {
     return { success: false, error: error.message };
   }
 });
+
+ipcMain.handle('show-message-box', async (event, options) => {
+  const result = await dialog.showMessageBox({
+    type: options.type || 'info',
+    buttons: options.buttons || ['OK'],
+    defaultId: options.defaultId || 0,
+    title: options.title || '',
+    message: options.message || '',
+    detail: options.detail || '',
+  });
+  return result;
+});

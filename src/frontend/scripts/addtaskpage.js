@@ -106,17 +106,45 @@ form.appendChild(deadlineTimeInput);
 // Add the form to the form section
 formSection.appendChild(form);
 
+// Function to check form validity and toggle the submit button
+function toggleSubmitButton() {
+  if (form.checkValidity()) {
+    submitButton.disabled = false;
+  } else {
+    submitButton.disabled = true;
+  }
+}
+
+// List of required inputs
+const requiredInputs = [titleInput, descriptionInput, prioritySelect, deadlineInput, deadlineTimeInput];
+
+// Add event listeners to each required input
+requiredInputs.forEach((input) => {
+  input.addEventListener("input", toggleSubmitButton);
+});
+
 // Create the submit button with automatic navigation upon success
 const submitButton = createButton(
   "Add Task",
   async () => {
     console.log("Add Task button clicked"); // Log button click
 
+    // Validate the form before proceeding
+    if (!form.checkValidity()) {
+      await window.electronAPI.showMessageBox({
+        type: 'warning',
+        title: 'Incomplete Fields',
+        message: 'Please fill in all required fields before adding the task.',
+      });
+      form.reportValidity();
+      return;
+    }
+
     const date = deadlineInput.value;
     let time = deadlineTimeInput.value || "23:59:59";
 
     if (time.length === 5) {
-      time += ":59";
+      time += ":00"; // Ensure time is in "HH:MM:SS" format
     }
 
     try {
@@ -152,6 +180,7 @@ const submitButton = createButton(
   "small"
 );
 submitButton.type = "button"; // Ensure it's a button, not a submit
+submitButton.disabled = true; // Disable button initially
 
 const backButton = createButton("Batal", () => navigateToProyekPage(projectId), "small");
 backButton.classList.add("deleteCommentButton");
@@ -167,6 +196,7 @@ buttonContainer.appendChild(backButton);
 // Add the container to the form
 form.appendChild(buttonContainer);
 
+// Function to generate a new task ID
 function newTaskId(projectId) {
   return window.electronAPI
     .getProjectData()

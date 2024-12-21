@@ -23,4 +23,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   updateProjectEndDate: (projectId, endDate, endTime) =>
     ipcRenderer.invoke("update-project-end-date", { projectId, endDate, endTime }),
   addTask: (projectId, task) => ipcRenderer.invoke("add-task", projectId, task),
+  showMessageBox: (options) => ipcRenderer.invoke('show-message-box', options),
 });
