@@ -75,7 +75,7 @@ function displayHeader(task) {
   const deadlineCapsule = document.createElement("span");
   deadlineCapsule.classList.add("date-capsule");
   const deadlineDate = new Date(`${task.deadlineDate}T${task.deadlineTime}`);
-  deadlineCapsule.textContent = `Deadline: ${deadlineDate.toLocaleDateString()} ${deadlineDate.toLocaleTimeString()}`;
+  deadlineCapsule.textContent = `${deadlineDate.toLocaleDateString()} ${deadlineDate.toLocaleTimeString()}`;
 
   deadline.appendChild(deadlineCapsule);
 
@@ -254,9 +254,8 @@ function displayFooter(task) {
   const deleteTugasDiv = document.createElement("div");
   deleteTugasDiv.classList.add("deleteTugas");
 
-  const deleteButton = createLightButton("DELETE TASK", deleteTask, "medium");
-  deleteButton.style.backgroundColor = "red"; // Red background
-  deleteButton.style.color = "white"; // White text
+  const deleteButton = createLightButton("DELETE TASK", deleteTask, "small");
+  // deleteButton.classList.add("deleteCommentButton");
   deleteTugasDiv.appendChild(deleteButton);
 
   // ===== DOCUMENT BUTTON =====
@@ -266,11 +265,11 @@ function displayFooter(task) {
   let documentButton;
   if (task.documentSrc) {
     // If document is uploaded, show "DELETE DOCUMENT" button
-    documentButton = createDeleteButton("DELETE DOCUMENT", () => deleteDocument(task.documentSrc), "medium");
-    documentButton.classList.add("deleteDocumentButton");
+    documentButton = createLightButton("DELETE DOCUMENT", () => deleteDocument(task.documentSrc), "small");
+    // documentButton.classList.add("deleteCommentButton");
   } else {
     // If no document, show "ADD DOCUMENT" button
-    documentButton = createLightButton("ADD DOCUMENT", uploadDocument, "medium");
+    documentButton = createLightButton("ADD DOCUMENT", uploadDocument, "small");
     documentButton.classList.add("addDocumentButton");
   }
 

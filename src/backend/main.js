@@ -121,6 +121,16 @@ ipcMain.on("navigate-to-tugaspage", (event, projectId, taskId) => {
   }
 });
 
+ipcMain.on("navigate-to-createtugaspage", (event, projectId) => {
+  if (mainWindow) {
+    const createTugasPath = path.join(__dirname, "..", "frontend", "pages", "addtaskpage.html");
+    mainWindow.loadFile(createTugasPath).then(() => {
+      // Optionally, communicate the projectId and taskId to the renderer
+      mainWindow.webContents.send("load-createtugaspage", { projectId, taskId });
+    });
+  }
+});
+
 // Dialog Handler
 ipcMain.handle("dialog:openFile", async () => {
   const result = await dialog.showOpenDialog({
@@ -407,5 +417,21 @@ ipcMain.handle("delete-comment-from-task", async (event, projectId, taskId, comm
   } catch (error) {
     console.error("Error deleting comment:", error);
     return { success: false, message: error.message };
+  }
+});
+
+ipcMain.handle("add-task", async (event, projectId, task) => {
+  try {
+    const data = await loadData();
+    const project = data.projects.find(p => p.id === projectId);
+    if (!project) {
+      throw new Error("Project not found.");
+    }
+    project.tasks.push(task);
+    await saveData(data);
+    return { success: true };
+  } catch (error) {
+    console.error("Error in add-task handler:", error);
+    return { success: false, error: error.message };
   }
 });

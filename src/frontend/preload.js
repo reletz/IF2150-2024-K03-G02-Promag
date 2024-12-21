@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   navigateToMainPage: () => ipcRenderer.send("navigate-to-main"),
   navigateToProyekPage: (projectId) => ipcRenderer.send("navigate-to-proyekpage", projectId),
   navigateToTugasPage: (projectId, taskId) => ipcRenderer.send("navigate-to-tugaspage", projectId, taskId),
+  navigateToCreateTugasPage: (projectId) => ipcRenderer.send("navigate-to-createtugaspage", projectId),
   getProjectData: () => ipcRenderer.invoke("get-project-data"),
   addCommentToTask: (projectId, taskId, comment) => ipcRenderer.invoke("add-comment", { projectId, taskId, comment }),
   updateTaskPriority: (projectId, taskId, priority) =>
@@ -21,4 +22,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   updateProjectComplete: (projectId) => ipcRenderer.invoke("update-project-complete", projectId),
   updateProjectEndDate: (projectId, endDate, endTime) =>
     ipcRenderer.invoke("update-project-end-date", { projectId, endDate, endTime }),
+  addTask: (projectId, task) => ipcRenderer.invoke("add-task", projectId, task),
 });

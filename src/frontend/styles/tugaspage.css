@@ -189,7 +189,7 @@ body.body-tugaspage {
   color: #000000; /* Black text for better readability */
   padding: 10px 20px;
   border: none;
-  border-radius: 12px;
+  border-radius: 999px;
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
@@ -329,7 +329,7 @@ body.body-tugaspage {
   background-color: #ff4d4d; /* Red background */
   color: #ffffff; /* White text */
   border: none;
-  border-radius: 8px;
+  border-radius: 9999px;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 12px;

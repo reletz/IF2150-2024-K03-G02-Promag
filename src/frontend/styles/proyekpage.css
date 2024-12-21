@@ -69,6 +69,16 @@ body.body-proyekpage {
   margin-bottom: 5px; /* Space between header and task list */
 }
 
+#footer {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px 20px;
+  text-align: left; /* Left align text */
+
+  /* ===== ADDED ===== */
+  margin-bottom: 5px; /* Space between header and task list */
+}
+
 #header h1 {
   font-size: 36px;
   margin-bottom: 5px; /* Minimized margin */
@@ -90,6 +100,31 @@ body.body-proyekpage {
   margin-top: -5px; /* Set distance from progress bar to task list */
   overflow-y: auto; /* Allow vertical scrolling if needed */
   /* Removed max-height to allow unlimited scrolling */
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between; /* Space between left and right groups */
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  padding: 10px;
+  margin: 0 auto; /* Center the container horizontally */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+/* Left Group Styles */
+.footer-container .left-group {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between the "More Action" and "Add Task" buttons */
+}
+
+/* Right Group Styles */
+.footer-container .right-group {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Push the "Back" button group to the far right */
 }
 
 .tasks-container {
@@ -162,15 +197,15 @@ body.body-proyekpage {
 }
 
 .priority-high {
-  background-color: #FF6264;
+  background-color: #ff6264;
 }
 
 .priority-medium {
-  background-color: #FFC862;
+  background-color: #ffc862;
 }
 
 .priority-low {
-  background-color: #007AFF;
+  background-color: #007aff;
 }
 
 .deadline-capsule {
@@ -269,18 +304,6 @@ body.body-proyekpage {
   font-weight: bold;
 }
 
-/* Pagination Container Styles */
-.footer-container {
-  display: flex;
-  justify-content: space-between; /* Space between More Action and Back Main */
-  align-items: center;
-  width: 100%;
-  max-width: 1000px;
-  padding: 0 20px;
-  margin-top: 20px;
-  margin-bottom: 30px; /* 30px spacing from the bottom */
-}
-
 .footer-container .custom-button {
   padding: 8px 16px;
   font-size: 14px;
@@ -355,7 +378,7 @@ body.body-proyekpage {
 }
 
 .status-on-progress {
-  background-color: #FFC862;
+  background-color: #ffc862;
 }
 
 .status-done {
@@ -424,13 +447,22 @@ body.body-proyekpage {
     padding: 10px 10px;
   }
 
-  .footer-container {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
   .action-popup {
     width: 80%;
   }
+}
+
+.deleteCommentButton {
+  background-color: #ff4d4d; /* Red background */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 9999px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.deleteCommentButton:hover {
+  background-color: #e60000; /* Darker red on hover */
 }

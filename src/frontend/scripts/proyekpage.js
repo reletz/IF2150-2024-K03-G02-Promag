@@ -23,24 +23,57 @@ function navigateToTugasPage(taskId = null) {
   }
 }
 
+function navigateToCreateTugasPage(currentProjectId) {
+  window.location.href = `addtaskpage.html?projectId=${currentProjectId}`;
+}
+
 // ===== BUTTONS: NAVIGATE TO MAIN PAGE & MORE ACTION =====
 const footer = document.getElementById("footer");
 
-// Create More Action Button
-const moreActionButton = createButton("More Action", () => {
-  showActionPopup();
-}, "medium");
-
 // Create Back Button
-const backButton = createButton("Back Main", navigateToMainPage, "medium");
+const backButton = createButton("BACK", navigateToMainPage, "medium");
 
+// Create Task Button
+const createTaskButton = createButton(
+  "+",
+  () => {
+    navigateToCreateTugasPage(currentProjectId);
+  },
+  "medium"
+);
+
+// Create More Action Button
+const moreActionButton = createButton(
+  "More Action",
+  () => {
+    showActionPopup();
+  },
+  "medium"
+);
+
+// Create Footer Container
 // Create Footer Container
 const footerContainer = document.createElement("div");
 footerContainer.classList.add("footer-container");
 
-// Append Buttons to Footer Container
-footerContainer.appendChild(moreActionButton);
-footerContainer.appendChild(backButton);
+// Create Left Group Container
+const leftGroup = document.createElement("div");
+leftGroup.classList.add("left-group");
+
+// Append More Action and Create Task Buttons to Left Group
+leftGroup.appendChild(moreActionButton);
+leftGroup.appendChild(createTaskButton);
+
+// Create Right Group Container
+const rightGroup = document.createElement("div");
+rightGroup.classList.add("right-group");
+
+// Append Back Button to Right Group
+rightGroup.appendChild(backButton);
+
+// Append Left and Right Groups to Footer Container
+footerContainer.appendChild(leftGroup);
+footerContainer.appendChild(rightGroup);
 
 // Append Footer Container to Footer
 if (footer) {
@@ -143,7 +176,7 @@ function displayHeader(project) {
 
   // Hitung progress
   const totalTasks = project.tasks.length;
-  const completedTasks = project.tasks.filter((task) => task.complete).length;
+  const completedTasks = project.tasks.filter((task) => task.complete === 2).length;
   const progressPercent = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
   progressBar.style.width = `${progressPercent}%`;
 
