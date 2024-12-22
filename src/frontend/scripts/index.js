@@ -4,6 +4,13 @@ let currentPage = 1;
 const itemsPerPage = 6;
 let totalPages = 1;
 
+// ===== HELPER FUNCTION TO FORMAT DATE =====
+function formatDate(dateString) {
+  const options = { day: "numeric", month: "long", year: "numeric" };
+  const date = new Date(dateString);
+  return date.toLocaleDateString("id-ID", options);
+}
+
 function navigateToProyekPage(projectId) {
   window.location.href = `proyekpage.html?id=${projectId}`;
 }
@@ -58,7 +65,7 @@ async function renderProjects(page = 1) {
     // Date Capsule (Start Date - End Date)
     const dateCapsule = document.createElement("div");
     dateCapsule.className = "date-capsule";
-    dateCapsule.textContent = `${project.startDate} - ${project.endDate ? project.endDate : "Ongoing"}`;
+    dateCapsule.textContent = `${formatDate(project.startDate)} - ${project.endDate ? formatDate(project.endDate) : "Ongoing"}`;
 
     // Description with 30 characters limit
     const description = document.createElement("p");
