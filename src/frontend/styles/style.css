@@ -33,7 +33,7 @@ body.body-main {
 .custom-button.small {
   background-color: #57a99a; /* Updated to light green background */
   color: #ffffff; /* White text */
-  padding: 8px 16px;
+  padding: 6px 16px;
   border: none;
   border-radius: 999px;
   cursor: pointer;

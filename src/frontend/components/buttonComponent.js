@@ -7,10 +7,16 @@
  * @param {string} size - The size variant (e.g., 'small', 'medium', 'large').
  * @returns {HTMLButtonElement} - The created button element.
  */
+// buttonComponent.js
+
 export function createButton(text, onClick, size = "medium") {
   const button = document.createElement("button");
   button.textContent = text;
-  button.classList.add("custom-button", size);
+
+  // Split the size string into individual classes
+  const sizeClasses = size.split(" ");
+  button.classList.add("custom-button", ...sizeClasses);
+
   button.addEventListener("click", onClick);
   return button;
 }

@@ -292,7 +292,7 @@ function displayTaskList(project) {
         () => {
           navigateToTugasPage(task.id);
         },
-        "small"
+        "small details-button"
       );
 
       // ===== Task Actions =====

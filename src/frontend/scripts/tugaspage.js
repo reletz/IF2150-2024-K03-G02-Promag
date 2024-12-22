@@ -255,7 +255,7 @@ function displayFooter(task) {
   deleteTugasDiv.classList.add("deleteTugas");
 
   const deleteButton = createLightButton("DELETE TASK", deleteTask, "small");
-  // deleteButton.classList.add("deleteCommentButton");
+  deleteButton.classList.add("deleteTaskButton");
   deleteTugasDiv.appendChild(deleteButton);
 
   // ===== DOCUMENT BUTTON =====

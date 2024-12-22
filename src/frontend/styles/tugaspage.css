@@ -3,7 +3,8 @@
 /* Body Styles */
 body.body-tugaspage {
   font-family: "Montserrat", sans-serif;
-  background: linear-gradient(135deg, #68aea2, #57A99A);
+  /* background: linear-gradient(135deg, #68aea2, #57A99A); */
+  background: linear-gradient(135deg, rgb(159, 206, 197, 0.6), rgb(87, 169, 154, 0.8));
   color: #ffffff;
   margin: 0;
   padding: 0;
@@ -27,7 +28,7 @@ textarea::placeholder {
   padding: 20px 20px;
   margin-top: 2%;
   text-align: left; /* Left align text */
-  color: #ffffff; /* White text for the header */
+  color: #000000; /* White text for the header */
   box-sizing: border-box;
 
   display: flex;
@@ -58,10 +59,11 @@ textarea::placeholder {
   display: inline-block;
   padding: 5px 15px;
   border-radius: 20px;
-  background-color: #d1eecc;
-  color: #000000;
+  background-color: #57a99a;
+  color: #ffffff;
   font-size: 14px;
   font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Priority Dropdown Styles */
@@ -106,7 +108,7 @@ textarea::placeholder {
 .title h1 {
   font-size: 36px;
   margin: 0;
-  color: #ffffff; /* White text for the header */
+  color: #000000; /* White text for the header */
 }
 
 /* Description Styles */
@@ -114,13 +116,13 @@ textarea::placeholder {
   font-size: 18px;
   margin-top: 0; /* Removed top margin */
   margin-bottom: 5px; /* Minimized margin */
-  color: #ffffff; /* White text for the header */
+  color: #000000; /* White text for the header */
 }
 
 /* Body Section Styles */
 #body-section {
   width: 100%;
-  max-width: 960px;
+  max-width: 965px;
   padding: 20px 20px;
   background-color: #d1eecc; /* Body background color */
   color: #000000; /* Black text for better readability */
@@ -130,6 +132,7 @@ textarea::placeholder {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Comments Display */
@@ -223,14 +226,6 @@ textarea::placeholder {
   justify-content: flex-start; /* Align items to the left */
   align-items: center;
   gap: 20px; /* Added gap for spacing between buttons */
-}
-
-/* Delete Task Section */
-.deleteTugas {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .deleteTugas .custom-button.medium {
@@ -366,10 +361,9 @@ textarea::placeholder {
   width: 100%;
 }
 
-/* Delete Task Button */
 .deleteTaskButton {
-  background-color: red; /* Red background */
-  color: white; /* White text for contrast */
+  background-color: #d1eecc;
+  color: black; /* Black text for better readability */
   padding: 12px 24px;
   border: none;
   border-radius: 9999px; /* Rounded corners */
@@ -377,13 +371,13 @@ textarea::placeholder {
   font-size: 16px;
   font-weight: 700;
   transition: background-color 0.15s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .deleteTaskButton:hover {
-  background-color: #cc0000; /* Darker red on hover */
+  background-color: #bfdcae;
 }
 
-/* Add Document Button */
 .addDocumentButton {
   background-color: #d1eecc;
   color: black; /* Black text for better readability */
@@ -394,6 +388,7 @@ textarea::placeholder {
   font-size: 16px;
   font-weight: 700;
   transition: background-color 0.15s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .addDocumentButton:hover {
