@@ -52,7 +52,6 @@ const moreActionButton = createButton(
 );
 
 // Create Footer Container
-// Create Footer Container
 const footerContainer = document.createElement("div");
 footerContainer.classList.add("footer-container");
 
