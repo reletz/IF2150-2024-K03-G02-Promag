@@ -91,6 +91,10 @@ deadlineInput.id = "task-deadline";
 deadlineInput.name = "deadline";
 deadlineInput.required = true;
 
+// **Set the minimum date to today to disable past dates**
+const today = new Date().toISOString().split("T")[0];
+deadlineInput.setAttribute("min", today);
+
 // Create the deadline time input field
 const deadlineTimeLabel = document.createElement("label");
 deadlineTimeLabel.htmlFor = "task-deadline-time";

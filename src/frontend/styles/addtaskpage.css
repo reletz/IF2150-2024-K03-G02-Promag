@@ -1,5 +1,6 @@
 /* Base Styles for Add Task Page */
 body.body-addtaskpage {
+  width: 100%;
   font-family: "Montserrat", sans-serif;
   background: linear-gradient(135deg, #70c1b3, #a5d6a7);
   color: #ffffff;
@@ -14,12 +15,13 @@ body.body-addtaskpage {
 
 /* General styles for the form container */
 #new-task-form {
-  max-width: 600px;
+  width: 100%;
+  max-width: 50%;
   margin: 0 auto;
   padding: 20px;
   background-color: #57a99a;
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Style for form labels */
@@ -37,9 +39,10 @@ body.body-addtaskpage {
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 20px;
   font-size: 16px;
   box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Style for the priority dropdown */
@@ -53,8 +56,21 @@ body.body-addtaskpage {
 #new-task-form input[type="date"] {
   padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 20px;
   font-size: 16px;
+}
+
+/* Style for textarea placeholders */
+#new-task-form textarea::placeholder {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Vendor prefixes for broader browser support */
+#new-task-form textarea::-webkit-input-placeholder,
+#new-task-form textarea::-moz-placeholder,
+#new-task-form textarea:-ms-input-placeholder,
+#new-task-form textarea::-ms-input-placeholder {
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Button styling */

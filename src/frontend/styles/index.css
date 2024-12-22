@@ -16,8 +16,7 @@
 /* Global Styles */
 body.body-main {
   font-family: "Montserrat", sans-serif;
-  background-color: #ffffff;
-  color: #57a99a;
+  background: linear-gradient(135deg, rgb(159, 206, 197, 0.6), rgb(87, 169, 154, 0.8));
   margin: 0;
   padding: 0;
 
@@ -54,11 +53,31 @@ body.body-proyekpage {
   cursor: pointer;
   font-size: 16px;
   font-weight: 700;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Added shadow */
 }
 
 .custom-button:hover {
   background-color: #bfdcae;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.pagination-button {
+  background-color: #d1eecc;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9999px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Added shadow */
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #bfdcae;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
 .custom-button.small {
@@ -84,6 +103,8 @@ body.body-proyekpage {
 }
 
 .first-row {
+  margin-top: 3%;
+  margin-bottom: 1%;
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -108,15 +129,16 @@ body.body-proyekpage {
 .project-container {
   flex: 2; /* Meningkatkan fleksibilitas dari 1 menjadi 2 */
   margin: 10px;
-  border: 1px solid #ccc;
-  padding: 10px;
+  border: 1px;
+  padding: 20px;
   box-sizing: border-box;
   background-color: #57a99a; /* Background color */
-  border-radius: 10px; /* Rounded corners */
+  border-radius: 25px; /* Rounded corners */
   color: white; /* Text color */
   font-family: inherit; /* Inherit font from .body-main */
   /* Tambahkan lebar minimum jika diperlukan */
   min-width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Styling untuk Date Capsule */
@@ -131,7 +153,6 @@ body.body-proyekpage {
   font-weight: bold;
   white-space: nowrap; /* Mencegah pemisahan baris */
 }
-
 
 /* Styling untuk Judul Proyek */
 .project-title {
@@ -183,7 +204,7 @@ body.body-proyekpage {
 /* Progress Bar */
 .progress-bar {
   height: 100%;
-  background-color: #4caf50; /* Warna hijau */
+  background-color: #429c45; /* Warna hijau */
   border-radius: 5px;
 }
 
@@ -254,49 +275,47 @@ body.body-proyekpage {
 /* ...existing code... */
 
 .action-popup-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0, 0, 0, 0.5);
-display: flex;
-justify-content: center;
-align-items: center;
-z-index: 1001;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
 }
 
 .action-popup {
-background-color: #57a99a;
-padding: 20px 30px;
-border-radius: 10px;
-width: 300px;
-text-align: center;
-position: relative;
+  background-color: #57a99a;
+  padding: 20px 30px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  position: relative;
 }
 
 .action-popup h1 {
-margin-top: 0;
-margin-bottom: 20px;
-color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #ffffff;
 }
 
 .action-popup p {
-margin: 10px 0;
-color: #ffffff;
+  margin: 10px 0;
+  color: #ffffff;
 }
 
 .action-popup p:hover {
-text-decoration: underline;
+  text-decoration: underline;
 }
 
 .close-button {
-position: absolute;
-top: 10px;
-right: 15px;
-font-size: 24px;
-cursor: pointer;
-color: #000000;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000000;
 }
-
-/* ...existing code... */

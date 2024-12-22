@@ -3,7 +3,7 @@
 /* Body Styles */
 body.body-tugaspage {
   font-family: "Montserrat", sans-serif;
-  background-color: #57a99a;
+  background: linear-gradient(135deg, #68aea2, #57A99A);
   color: #ffffff;
   margin: 0;
   padding: 0;
@@ -16,13 +16,17 @@ body.body-tugaspage {
   min-height: 100vh;
 }
 
+textarea::placeholder {
+  font-family: "Montserrat", sans-serif;
+}
+
 /* Header Styles */
 #header {
   width: 100%;
   max-width: 1000px;
   padding: 20px 20px;
+  margin-top: 2%;
   text-align: left; /* Left align text */
-  background-color: #57a99a; /* Consistent header background */
   color: #ffffff; /* White text for the header */
   box-sizing: border-box;
 
@@ -116,12 +120,12 @@ body.body-tugaspage {
 /* Body Section Styles */
 #body-section {
   width: 100%;
-  max-width: 1000px;
+  max-width: 960px;
   padding: 20px 20px;
   background-color: #d1eecc; /* Body background color */
   color: #000000; /* Black text for better readability */
   box-sizing: border-box;
-  border-radius: 35px;
+  border-radius: 30px;
 
   display: flex;
   flex-direction: column;
@@ -204,7 +208,7 @@ body.body-tugaspage {
   width: 100%;
   max-width: 1000px;
   padding: 20px 20px;
-  background-color: #57a99a; /* Footer background color */
+  margin-bottom: 3%;
   color: #ffffff; /* Footer text color */
   box-sizing: border-box;
 
